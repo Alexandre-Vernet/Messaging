@@ -940,6 +940,13 @@
                     </div><!-- .nk-chat-head -->
                     <div class="nk-chat-panel" data-simplebar>
 
+
+
+
+
+
+
+
                       <div *ngFor="let message of messages">
                         <div *ngIf="message.user != 'Alex'">
 
@@ -977,7 +984,7 @@
                               </div>
                               <ul class="chat-meta">
                                 <li> {{message.user}} </li>
-                                <li> {{formatDate(message.date)}} </li>
+                                <!-- <li> {{formatDate(message.date)}} </li> -->
                               </ul>
                             </div>
                           </div>
@@ -1016,12 +1023,18 @@
                               </div>
                               <ul class="chat-meta">
                                 <li> {{message.user}} </li>
-                                <li> {{formatDate(message.date)}}</li>
+                                <!-- <li> {{formatDate(message.date)}}</li> -->
                               </ul>
                             </div>
                           </div>
                         </div>
                       </div>
+
+
+
+
+
+
 
 
 
@@ -1044,7 +1057,7 @@
                       <div class="nk-chat-editor-form">
                         <div class="form-control-wrap">
                           <textarea class="form-control form-control-simple no-resize" rows="1" id="default-textarea"
-                            placeholder="Type your message..."></textarea>
+                            placeholder="Type your message..." [(ngModel)]="message"></textarea>
                         </div>
                       </div>
                       <ul class="nk-chat-editor-tools g-2">
@@ -1053,8 +1066,8 @@
                               class="icon ni ni-happyf-fill"></em></a>
                         </li>
                         <li>
-                          <button class="btn btn-round btn-primary btn-icon"><em
-                              class="icon ni ni-send-alt"></em></button>
+                          <button class="btn btn-round btn-primary btn-icon"><em class="icon ni ni-send-alt"
+                              (click)="sendMessage()"></em></button>
                         </li>
                       </ul>
                     </div>
@@ -1164,22 +1177,6 @@
 
                 </div>
               </div>
-              <!-- footer @s -->
-              <div class="nk-footer">
-                <div class="container wide-xl">
-                  <div class="nk-footer-wrap g-2">
-                    <div class="nk-footer-copyright"> &copy; 2020 DashLite. Template by <a href="#">Softnio</a>
-                    </div>
-                    <div class="nk-footer-links">
-                      <ul class="nav nav-sm">
-                        <li class="nav-item"><a class="nav-link" href="#">Terms</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Privacy</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- footer @e -->
             </div>
           </div>
         </div>
