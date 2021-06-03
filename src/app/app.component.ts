@@ -8,7 +8,7 @@ import firebase from 'firebase';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  message: any;
+  message: String = '';
   messages: { user: String; message: String }[] = [];
 
   firestore: any;
@@ -52,23 +52,25 @@ export class AppComponent implements OnInit {
   };
 
   sendMessage = () => {
-    // Store message
-    this.firestore
-      .collection('messages')
-      .add({
-        user: 'Toto',
-        message: this.message,
-        date: new Date(),
-      })
-      .then((docRef: { id: string }) => {
-        console.log('Message successfull posted with id' + docRef.id);
-      })
-      .catch((err: any) => {
-        console.log(err);
-      });
+    if (this.message.length > 0) {
+      // Store message
+      this.firestore
+        .collection('messages')
+        .add({
+          user: 'Toto',
+          message: this.message,
+          date: new Date(),
+        })
+        .then((docRef: { id: string }) => {
+          console.log('Message successfull posted with id' + docRef.id);
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
 
-    // Clear input
-    this.message = '';
+      // Clear input
+      this.message = '';
+    }
   };
 
   formatDate = (message: Date): string => {
