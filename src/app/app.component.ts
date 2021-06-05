@@ -1,16 +1,13 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
-import { MessagesService } from './Services/messages/messages.service';
 import firebase from 'firebase';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  message: String = '';
-  messages: { user: String; message: String }[] = [];
-
   firestore: any;
 
   constructor() {
@@ -30,55 +27,5 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.firestore = firebase.firestore();
-
-    this.getMessages();
   }
-
-  getMessages = () => {
-    this.firestore
-      .collection('messages')
-      .get()
-      .then((querySnapshot: any) => {
-        querySnapshot.forEach((doc: any) => {
-          let message: String = doc.data();
-
-          this.messages.push({
-            user: doc.get('user'),
-            message: doc.get('message'),
-            // date: doc.get('date'),
-          });
-        });
-      });
-  };
-
-  sendMessage = () => {
-    if (this.message.length > 0) {
-      // Store message
-      this.firestore
-        .collection('messages')
-        .add({
-          user: 'Toto',
-          message: this.message,
-          date: new Date(),
-        })
-        .then((docRef: { id: string }) => {
-          console.log('Message successfull posted with id' + docRef.id);
-        })
-        .catch((err: any) => {
-          console.log(err);
-        });
-
-      // Clear input
-      this.message = '';
-    }
-  };
-
-  formatDate = (message: Date): string => {
-    let day = message.getDate();
-    let month = message.getMonth();
-    let hours = message.getHours();
-    let minutes = message.getMinutes();
-
-    return day + ' / ' + month + ' at ' + hours + ' : ' + minutes;
-  };
 }
