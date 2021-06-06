@@ -55,12 +55,7 @@ export class SignUpComponent implements OnInit {
       .catch((error) => {
         console.log(error.message);
 
-        switch (error.message) {
-          case 'The email address is already in use by another account.':
-            this.firebaseError =
-              'The email address is already in use by another account.';
-            break;
-        }
+        this.firebaseError = error.message;
       });
   };
 }

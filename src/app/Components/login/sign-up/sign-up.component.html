@@ -39,7 +39,7 @@
                     <div *ngIf="form.get('email')?.errors?.email">
                       Email address is badly formatted
                     </div>
-                    <div *ngIf="firebaseError === 'The email address is already in use by another account.'">
+                    <div *ngIf="firebaseError !== ''">
                       {{firebaseError}}
                     </div>
                   </div>
