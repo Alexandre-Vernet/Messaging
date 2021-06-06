@@ -8,6 +8,7 @@ import { ForgotPasswordComponent } from './Components/login/forgot-password/forg
 import { ErrorComponent } from './Components/error/error.component';
 
 const routes: Routes = [
+  { path: '', component: HomeComponent },
   { path: 'home', component: HomeComponent },
   { path: 'sign-in', component: SignInComponent },
   { path: 'sign-up', component: SignUpComponent },
