@@ -15,6 +15,8 @@ import firebase from 'firebase';
   styleUrls: ['./sign-up.component.scss'],
 })
 export class SignUpComponent implements OnInit {
+  firebaseError: string = '';
+
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [
@@ -27,24 +29,21 @@ export class SignUpComponent implements OnInit {
     ]),
   });
 
-  constructor(private fb: FormBuilder) {}
+  constructor() {}
 
   ngOnInit() {}
 
-  signUp() {
+  signUp = () => {
     /**
-     * The email address is already in use by another account.
-     * Password should be at least 6 characters
-     * The email address is badly formatted.
+     * ! firebase errors :
+     * ? The email address is already in use by another account.
      */
 
     console.log(this.form.value);
 
     const email = this.form.value['email'];
     const password = this.form.value['password'];
-    const confirmPassword = this.form.value['confirmPassword'];
-    if (password !== confirmPassword) {
-    }
+
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -54,7 +53,14 @@ export class SignUpComponent implements OnInit {
         // ...
       })
       .catch((error) => {
-        alert(error.message);
+        console.log(error.message);
+
+        switch (error.message) {
+          case 'The email address is already in use by another account.':
+            this.firebaseError =
+              'The email address is already in use by another account.';
+            break;
+        }
       });
-  }
+  };
 }
