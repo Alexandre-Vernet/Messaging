@@ -34,23 +34,19 @@ export class SignUpComponent implements OnInit {
   ngOnInit() {}
 
   signUp = () => {
-    /**
-     * ! firebase errors :
-     * ? The email address is already in use by another account.
-     */
-
     console.log(this.form.value);
 
+    // Get email & pswd
     const email = this.form.value['email'];
     const password = this.form.value['password'];
 
+    // Sign-up
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
         // Signed in
         var user = userCredential.user;
-        // ...
       })
       .catch((error) => {
         console.log(error.message);

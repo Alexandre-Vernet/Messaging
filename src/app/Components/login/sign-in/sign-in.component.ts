@@ -39,7 +39,6 @@ export class SignInComponent implements OnInit {
 
         // Redirect to home
         this.router.navigate(['/home']);
-        // ...
       })
       .catch((error) => {
         console.log(error.message);
