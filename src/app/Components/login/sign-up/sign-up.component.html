@@ -21,7 +21,7 @@
                   </div>
                 </div>
               </div>
-              <form [formGroup]="form" (ngSubmit)="signUp()">
+              <form [formGroup]="form" (ngSubmit)="form.valid && signUp()">
 
                 <!-- Email -->
                 <div class="form-group">
