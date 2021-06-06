@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import firebase from 'firebase';
+
+declare var $: any;
+
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
@@ -53,18 +56,21 @@ export class SignInComponent implements OnInit {
 
   resetPassword = () => {
     const emailAddress = this.formReset.value['emailReset'];
-    console.log(emailAddress);
 
+    // Send email reset password
     firebase
       .auth()
       .sendPasswordResetEmail(emailAddress)
-      .then(function () {
-        // Email sent.
-        console.log('success !');
+      .then(() => {
+        // Email sent
+        $('#modalSuccessResetPassword').modal('show');
+
+        $('#modalResetPassword').modal('hide');
       })
-      .catch(function (error) {
-        // An error happened.
-        console.log(error);
+      .catch((error) => {
+        this.firebaseError = error;
+
+        $('#modalFailResetPassword').modal('show');
       });
   };
 }

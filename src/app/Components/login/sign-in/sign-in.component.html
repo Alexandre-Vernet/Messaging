@@ -50,7 +50,7 @@
                                     <div class="form-label-group">
                                         <label class="form-label" for="password">Password</label>
                                         <a class="link link-primary link-sm" data-toggle="modal"
-                                            data-target="#modal">Forgot password ?</a>
+                                            data-target="#modalResetPassword">Forgot password ?</a>
                                     </div>
                                     <div class="form-control-wrap">
                                         <a href="#" class="form-icon form-icon-right passcode-switch">
@@ -102,7 +102,7 @@
 
 
 <!-- Modal Form -->
-<div class="modal fade" tabindex="-1" id="modal">
+<div class="modal fade" tabindex="-1" id="modalResetPassword">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -117,16 +117,18 @@
                         <label class="form-label" for="email">Email address</label>
                         <div class="form-control-wrap">
                             <input type="email" formControlName="emailReset" placeholder="bob.razowski@gmail.com"
-                                class="form-control">
+                                class="form-control"
+                                [ngClass]="{'is-invalid': formReset.get('emailReset')?.touched && formReset.get('emailReset')?.invalid}">
+
 
 
                             <div *ngIf="formReset.get('emailReset')?.touched && formReset.get('emailReset')?.invalid"
                                 class="invalid-feedback">
                                 <div *ngIf="formReset.get('emailReset')?.errors?.required">
-                                    emailReset is required
+                                    Email address is required
                                 </div>
                                 <div *ngIf="formReset.get('emailReset')?.errors?.email">
-                                    emailReset address is badly formatted
+                                    Email address is badly formatted
                                 </div>
                             </div>
                         </div>
@@ -136,6 +138,54 @@
                             reset</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal success reset password -->
+<div class="modal fade" tabindex="-1" id="modalSuccessResetPassword">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross"></em></a>
+            <div class="modal-body modal-body-lg text-center">
+                <div class="nk-modal">
+                    <em class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-check bg-success"></em>
+                    <h4 class="nk-modal-title">Success</h4>
+                    <div class="nk-modal-text">
+                        <div class="caption-text">E-mail has been sent to <strong> {{formReset.value['emailReset']}}
+                            </strong>
+                        </div>
+                    </div>
+                    <div class="nk-modal-action">
+                        <a href="#" class="btn btn-lg btn-mw btn-primary" data-dismiss="modal">OK</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal fail to send email reset -->
+<div class="modal fade" tabindex="-1" id="modalFailResetPassword">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body modal-body-lg text-center">
+                <div class="nk-modal">
+                    <em class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-cross bg-danger"></em>
+                    <h4 class="nk-modal-title">Failure</h4>
+                    <div class="nk-modal-text">
+                        <p class="lead">We are sorry, we were unable to process your reset password. Please try after
+                            sometimes.</p>
+                        <p class="text-soft"> {{firebaseError}} </p>
+
+                    </div>
+                    <div class="nk-modal-action mt-5">
+                        <a href="#" class="btn btn-lg btn-mw btn-light" data-dismiss="modal">Return</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
