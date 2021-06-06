@@ -21,13 +21,27 @@
                   </div>
                 </div>
               </div>
-              <form (ngSubmit)="signUp(f)" #f="ngForm">
+              <form [formGroup]="form" (ngSubmit)="signUp()">
+
+                <!-- Email -->
                 <div class="form-group">
                   <label class="form-label" for="name">Email</label>
-                  <input type="text" class="form-control form-control-lg" ngModel name="email"
-                    placeholder="bob.razowski@gmail.com">
+                  <input type="text" class="form-control form-control-lg" formControlName="email"
+                    placeholder="bob.razowski@gmail.com"
+                    [ngClass]="{'is-invalid': form.get('email')?.touched && form.get('email')?.invalid}">
+
+
+                  <div *ngIf="form.get('email')?.touched && form.get('email')?.invalid" class="invalid-feedback">
+                    <div *ngIf="form.get('email')?.errors?.required">
+                      Email is required
+                    </div>
+                    <div *ngIf="form.get('email')?.errors?.email">
+                      Email address is badly formatted
+                    </div>
+                  </div>
                 </div>
 
+                <!-- Password -->
                 <div class="form-group">
                   <label class="form-label" for="password">Password</label>
                   <div class="form-control-wrap">
@@ -35,15 +49,45 @@
                       <em class="passcode-icon icon-show icon ni ni-eye"></em>
                       <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
                     </a>
-                    <input type="password" class="form-control form-control-lg" ngModel name="password"
-                      placeholder="bob123">
+                    <input type="password" class="form-control form-control-lg" formControlName="password"
+                      placeholder="bob123"
+                      [ngClass]="{'is-invalid': form.get('password')?.touched && form.get('password')?.invalid}">
+
+
+                    <div *ngIf="form.get('password')?.touched && form.get('password')?.invalid"
+                      class="invalid-feedback">
+                      <div *ngIf="form.get('password')?.errors?.required">
+                        Password is required
+                      </div>
+                      <div *ngIf="form.get('password')?.errors?.minlength">
+                        Password should be at least 6 characters
+                      </div>
+                    </div>
                   </div>
                 </div>
+
+
+                <!-- Confirm password -->
                 <div class="form-group">
                   <label class="form-label" for="confirmPassword">Confirm password</label>
-                  <input type="password" class="form-control form-control-lg" ngModel name="confirmPassword"
-                    placeholder="bob123">
+                  <input type="password" class="form-control form-control-lg" formControlName="confirmPassword"
+                    placeholder="bob123"
+                    [ngClass]="{'is-invalid': form.get('confirmPassword')?.touched && form.get('confirmPassword')?.invalid}">
+
+
+                  <div *ngIf="form.get('confirmPassword')?.touched && form.get('confirmPassword')?.invalid"
+                    class="invalid-feedback">
+                    <div *ngIf="form.get('confirmPassword')?.errors?.required">
+                      Confirm password is required
+                    </div>
+                    <div *ngIf="form.get('confirmPassword')?.errors?.minlength">
+                      Confirm password should be at least 6 characters
+                    </div>
+                  </div>
                 </div>
+
+
+                <!-- Privacy policy -->
                 <div class="form-group">
                   <div class="custom-control custom-control-xs custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="checkbox">
@@ -51,10 +95,14 @@
                         Policy</a> &amp; <a href="#"> Terms.</a></label>
                   </div>
                 </div>
+
+                <!-- Submit -->
                 <div class="form-group">
-                  <button class="btn btn-lg btn-primary btn-block">Sign-up</button>
+                  <button [disabled]="!form.valid" class="btn btn-lg btn-primary btn-block">Sign-up</button>
                 </div>
               </form>
+
+
               <div class="form-note-s2 text-center pt-4"> Already have an account ? <a
                   [routerLink]=" ['/sign-in'] "><strong>Sign in instead</strong></a>
               </div>
