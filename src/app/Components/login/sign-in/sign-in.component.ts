@@ -18,6 +18,10 @@ export class SignInComponent implements OnInit {
     ]),
   });
 
+  formReset = new FormGroup({
+    emailReset: new FormControl('', [Validators.required, Validators.email]),
+  });
+
   constructor(private router: Router) {}
 
   ngOnInit() {}
@@ -44,6 +48,23 @@ export class SignInComponent implements OnInit {
         console.log(error.message);
 
         this.firebaseError = error.message;
+      });
+  };
+
+  resetPassword = () => {
+    const emailAddress = this.formReset.value['emailReset'];
+    console.log(emailAddress);
+
+    firebase
+      .auth()
+      .sendPasswordResetEmail(emailAddress)
+      .then(function () {
+        // Email sent.
+        console.log('success !');
+      })
+      .catch(function (error) {
+        // An error happened.
+        console.log(error);
       });
   };
 }

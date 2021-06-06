@@ -49,8 +49,8 @@
                                 <div class="form-group">
                                     <div class="form-label-group">
                                         <label class="form-label" for="password">Password</label>
-                                        <a class="link link-primary link-sm"
-                                            href="html/pages/auths/auth-reset-v2.html">Forgot Code ?</a>
+                                        <a class="link link-primary link-sm" data-toggle="modal"
+                                            data-target="#modal">Forgot password ?</a>
                                     </div>
                                     <div class="form-control-wrap">
                                         <a href="#" class="form-icon form-icon-right passcode-switch">
@@ -98,4 +98,45 @@
         <!-- content @e -->
     </div>
     <!-- main @e -->
+</div>
+
+
+<!-- Modal Form -->
+<div class="modal fade" tabindex="-1" id="modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reset password</h5>
+                <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                    <em class="icon ni ni-cross"></em>
+                </a>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="formReset" (ngSubmit)="formReset.valid && resetPassword()">
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email address</label>
+                        <div class="form-control-wrap">
+                            <input type="email" formControlName="emailReset" placeholder="bob.razowski@gmail.com"
+                                class="form-control">
+
+
+                            <div *ngIf="formReset.get('emailReset')?.touched && formReset.get('emailReset')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngIf="formReset.get('emailReset')?.errors?.required">
+                                    emailReset is required
+                                </div>
+                                <div *ngIf="formReset.get('emailReset')?.errors?.email">
+                                    emailReset address is badly formatted
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button [disabled]="!formReset.valid" type="submit" class="btn btn-lg btn-primary">Send link
+                            reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
