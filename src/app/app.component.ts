@@ -34,7 +34,18 @@ export class AppComponent implements OnInit {
         let email = this.cookieService.get('email');
         let password = this.cookieService.get('password');
 
-        if (!email || !password) this.router.navigate(['sign-in']);
-        else this.router.navigate(['home']);
+        if (email && password) {
+            firebase
+                .auth()
+                .signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    // Set cookie
+                    this.cookieService.set('email', email, 365);
+                    this.cookieService.set('password', password, 365);
+
+                    // Redirect to home
+                    this.router.navigate(['/home']);
+                });
+        } else this.router.navigate(['sign-in']);
     }
 }
