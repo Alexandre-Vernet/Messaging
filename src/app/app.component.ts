@@ -31,9 +31,10 @@ export class AppComponent implements OnInit {
         this.firebase = firebase.firestore();
 
         // Get cookie
-        let user = this.cookieService.get('email');
+        let email = this.cookieService.get('email');
+        let password = this.cookieService.get('password');
 
-        if (!user) this.router.navigate(['sign-in']);
+        if (!email || !password) this.router.navigate(['sign-in']);
         else this.router.navigate(['home']);
     }
 }

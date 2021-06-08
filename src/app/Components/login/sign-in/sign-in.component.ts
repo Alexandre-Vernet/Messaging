@@ -47,6 +47,7 @@ export class SignInComponent implements OnInit {
             .then((userCredential) => {
                 // Set cookie
                 this.cookieService.set('email', email, 365);
+                this.cookieService.set('password', password, 365);
 
                 // Redirect to home
                 this.router.navigate(['/home']);
