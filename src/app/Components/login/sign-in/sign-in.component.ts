@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import firebase from 'firebase';
 import { CookieService } from 'ngx-cookie-service';
+import { AuthenticationService } from 'src/app/Services/firebase/authentication/authentication.service';
 
 declare var $: any;
 
@@ -29,7 +30,11 @@ export class SignInComponent implements OnInit {
         ]),
     });
 
-    constructor(private router: Router, private cookieService: CookieService) {}
+    constructor(
+        private router: Router,
+        private cookieService: CookieService,
+        private auth: AuthenticationService
+    ) {}
 
     ngOnInit() {}
 

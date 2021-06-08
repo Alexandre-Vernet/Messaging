@@ -8,7 +8,7 @@ import { CookieService } from 'ngx-cookie-service';
     styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit {
-    user: any;
+    user: any = {};
 
     constructor(private cookieService: CookieService) {}
 
@@ -21,12 +21,14 @@ export class NavbarComponent implements OnInit {
             .auth()
             .signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
-                console.log(userCredential.user?.displayName);
+                // Set cookie
+                this.cookieService.set('email', email, 365);
+                this.cookieService.set('password', password, 365);
 
-                let user = firebase.auth().currentUser;
-                if (user != null) console.log(user.displayName);
-
-                // if (user != null) this.user['displayName'] = user.displayName;
+                this.user['email'] = userCredential.user?.email;
             });
+
+        var user = firebase.auth().currentUser?.email;
+        console.log(user);
     }
 }
