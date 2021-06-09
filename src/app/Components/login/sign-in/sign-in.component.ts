@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import firebase from 'firebase';
-import { CookieService } from 'ngx-cookie-service';
 import { AuthenticationService } from 'src/app/Services/firebase/authentication/authentication.service';
+import { CookieService } from 'ngx-cookie-service';
 
 declare var $: any;
 
@@ -14,6 +12,7 @@ declare var $: any;
 })
 export class SignInComponent implements OnInit {
     firebaseError: string = '';
+    email!: string;
 
     form = new FormGroup({
         email: new FormControl('', [Validators.required, Validators.email]),
@@ -31,56 +30,29 @@ export class SignInComponent implements OnInit {
     });
 
     constructor(
-        private router: Router,
-        private cookieService: CookieService,
-        private auth: AuthenticationService
+        private auth: AuthenticationService,
+        private cookieService: CookieService
     ) {}
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.email = this.cookieService.get('email');
+    }
 
     signIn = () => {
-        console.log(this.form.value);
-
         // Get email & pswd
         const email = this.form.value['email'];
         const password = this.form.value['password'];
 
         // Sign-in
-        firebase
-            .auth()
-            .signInWithEmailAndPassword(email, password)
-            .then((userCredential) => {
-                // Set cookie
-                this.cookieService.set('email', email, 365);
-                this.cookieService.set('password', password, 365);
+        this.auth.signIn(email, password);
 
-                // Redirect to home
-                this.router.navigate(['/home']);
-            })
-            .catch((error) => {
-                console.log(error.message);
-
-                this.firebaseError = error.message;
-            });
+        this.firebaseError = this.auth.getError();
     };
 
     resetPassword = () => {
         const emailAddress = this.formReset.value['emailReset'];
 
         // Send email reset password
-        firebase
-            .auth()
-            .sendPasswordResetEmail(emailAddress)
-            .then(() => {
-                // Email sent
-                $('#modalSuccessResetPassword').modal('show');
-
-                $('#modalResetPassword').modal('hide');
-            })
-            .catch((error) => {
-                this.firebaseError = error;
-
-                $('#modalFailResetPassword').modal('show');
-            });
+        this.auth.resetPassword(emailAddress);
     };
 }

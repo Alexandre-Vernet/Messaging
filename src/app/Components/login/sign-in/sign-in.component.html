@@ -26,7 +26,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="name">Email</label>
                                     <input type="text" class="form-control form-control-lg" formControlName="email"
-                                        placeholder="bob.razowski@gmail.com"
+                                        placeholder="bob.razowski@gmail.com" [(ngModel)]="email"
                                         [ngClass]="{'is-invalid': form.get('email')?.touched && form.get('email')?.invalid || firebaseError !== ''}">
 
 
@@ -38,7 +38,7 @@
                                         <div *ngIf="form.get('email')?.errors?.email">
                                             Email address is badly formatted
                                         </div>
-                                        <div *ngIf="firebaseError! !== ''">
+                                        <div *ngIf="firebaseError != ''">
                                             {{firebaseError}}
                                         </div>
                                     </div>

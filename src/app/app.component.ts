@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import firebase from 'firebase';
 import { CookieService } from 'ngx-cookie-service';
+import { AuthenticationService } from './Services/firebase/authentication/authentication.service';
 
 @Component({
     selector: 'app-root',
@@ -12,7 +13,11 @@ import { CookieService } from 'ngx-cookie-service';
 export class AppComponent implements OnInit {
     firebase: any;
 
-    constructor(private router: Router, private cookieService: CookieService) {
+    constructor(
+        private router: Router,
+        private cookieService: CookieService,
+        private auth: AuthenticationService
+    ) {
         // Firebase
         const firebaseConfig = {
             apiKey: 'AIzaSyAhod5EQ_wRW3eEz8Zsaw3Ya6WCQ9sldlg',
@@ -28,6 +33,7 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
+        // Init firestore
         this.firebase = firebase.firestore();
 
         // Get cookie
@@ -35,17 +41,7 @@ export class AppComponent implements OnInit {
         let password = this.cookieService.get('password');
 
         if (email && password) {
-            firebase
-                .auth()
-                .signInWithEmailAndPassword(email, password)
-                .then(() => {
-                    // Set cookie
-                    this.cookieService.set('email', email, 365);
-                    this.cookieService.set('password', password, 365);
-
-                    // Redirect to home
-                    this.router.navigate(['/home']);
-                });
+            this.auth.signIn(email, password);
         } else this.router.navigate(['sign-in']);
     }
 }
