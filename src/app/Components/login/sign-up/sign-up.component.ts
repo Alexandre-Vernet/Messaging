@@ -11,6 +11,8 @@ export class SignUpComponent implements OnInit {
     firebaseError: string = '';
 
     form = new FormGroup({
+        firstName: new FormControl('', [Validators.required]),
+        lastName: new FormControl('', [Validators.required]),
         email: new FormControl('', [Validators.required, Validators.email]),
         password: new FormControl('', [
             Validators.required,
@@ -27,11 +29,13 @@ export class SignUpComponent implements OnInit {
     ngOnInit() {}
 
     signUp = () => {
-        // Get email & pswd
+        // Get informations
+        const firstName = this.form.value['firstName'];
+        const lastName = this.form.value['lastName'];
         const email = this.form.value['email'];
         const password = this.form.value['password'];
 
         // Sign-up
-        this.auth.signUp(email, password);
+        this.auth.signUp(firstName, lastName, email, password);
     };
 }

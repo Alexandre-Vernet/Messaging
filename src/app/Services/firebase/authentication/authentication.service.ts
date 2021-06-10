@@ -29,6 +29,10 @@ export class AuthenticationService {
         this.error = error;
     };
 
+    /**
+     * @param email in database
+     * @param password in database
+     */
     signIn = (email: string, password: string): string => {
         firebase
             .auth()
@@ -52,7 +56,35 @@ export class AuthenticationService {
         return 'ok';
     };
 
-    signUp = (email: string, password: string) => {
+    /**
+     * @param firstName first name
+     * @param lastName last name
+     * @param email link to Auth firebase email
+     * @param password crypted
+     */
+    signUp = (
+        firstName: string,
+        lastName: string,
+        email: string,
+        password: string
+    ) => {
+        // Store informations of user
+        firebase
+            .firestore()
+            .collection('users')
+            .add({
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+            })
+            .then((docRef) => {
+                console.log('Document written with ID: ', docRef.id);
+            })
+            .catch((error) => {
+                console.error('Error adding document: ', error);
+            });
+
+        // Store login
         firebase
             .auth()
             .createUserWithEmailAndPassword(email, password)
@@ -71,6 +103,9 @@ export class AuthenticationService {
             });
     };
 
+    /**
+     * @param emailAddress is the email address who receive link to reset password
+     */
     resetPassword = (emailAddress: string) => {
         firebase
             .auth()
@@ -86,6 +121,9 @@ export class AuthenticationService {
             });
     };
 
+    /**
+     * Sign out the user
+     */
     signOut = () => {
         // Delete cookie
         this.cookieService.delete('password');
