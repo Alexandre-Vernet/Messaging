@@ -46,7 +46,6 @@ export class AuthenticationService {
                     .get()
                     .then((doc) => {
                         if (doc.exists) {
-                            console.log(doc.data());
                             this.user['firstName'] = doc.data()?.firstName;
                             this.user['lastName'] = doc.data()?.lastName;
                             this.user['email'] = doc.data()?.email;

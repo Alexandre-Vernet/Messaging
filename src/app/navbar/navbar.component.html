@@ -145,7 +145,8 @@
                     <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
                         <div class="user-card">
                             <div class="user-avatar">
-                                <span>AB</span>
+                                <span>{{auth.getUser().firstName.charAt(0) +
+                                    auth.getUser().lastName.charAt(0)}}</span>
                             </div>
                             <div class="user-info">
                                 <span class="lead-text"> {{auth.getUser().firstName + " " +
