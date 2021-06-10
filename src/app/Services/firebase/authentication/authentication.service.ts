@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import firebase from 'firebase';
 import { CookieService } from 'ngx-cookie-service';
-import { SignInComponent } from 'src/app/Components/login/sign-in/sign-in.component';
 
 @Injectable({
     providedIn: 'root',
@@ -15,10 +14,6 @@ export class AuthenticationService {
 
     getUser = () => {
         return this.user;
-    };
-
-    setUser = (user: any) => {
-        this.user['user'] = user;
     };
 
     getError = () => {
@@ -37,13 +32,29 @@ export class AuthenticationService {
         firebase
             .auth()
             .signInWithEmailAndPassword(email, password)
-            .then((userCredential) => {
+            .then(() => {
                 // Set cookie
                 this.cookieService.set('email', email, 365);
                 this.cookieService.set('password', password, 365);
 
-                // Save email
-                this.setUser(userCredential.user?.email);
+                let userId: any = firebase.auth().currentUser?.uid;
+
+                firebase
+                    .firestore()
+                    .collection('users')
+                    .doc(userId)
+                    .get()
+                    .then((doc) => {
+                        if (doc.exists) {
+                            console.log(doc.data());
+                            this.user['firstName'] = doc.data()?.firstName;
+                            this.user['lastName'] = doc.data()?.lastName;
+                            this.user['email'] = doc.data()?.email;
+                        } else console.log('Cant get user infos');
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
 
                 // Redirect to home
                 this.router.navigate(['/home']);
@@ -68,38 +79,36 @@ export class AuthenticationService {
         email: string,
         password: string
     ) => {
-        // Store informations of user
-        firebase
-            .firestore()
-            .collection('users')
-            .add({
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-            })
-            .then((docRef) => {
-                console.log('Document written with ID: ', docRef.id);
-            })
-            .catch((error) => {
-                console.error('Error adding document: ', error);
-            });
-
-        // Store login
+        // Create user with email & pswd
         firebase
             .auth()
             .createUserWithEmailAndPassword(email, password)
-            .then((userCredential) => {
-                // Set cookie
-                this.cookieService.set('email', email, 365);
-                this.cookieService.set('password', password, 365);
+            .then(() => {
+                let userId: any = firebase.auth().currentUser?.uid;
 
-                // Redirect to home
-                this.router.navigate(['/home']);
+                // Store informations of user
+                firebase
+                    .firestore()
+                    .collection('users')
+                    .doc(userId)
+                    .set({
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email,
+                    })
+                    .then(() => {
+                        console.log('User data has been saved !');
+
+                        this.signIn(email, password);
+                    })
+                    .catch((error) => {
+                        console.log(error.message);
+
+                        // this.firebaseError = error.message;
+                    });
             })
             .catch((error) => {
-                console.log(error.message);
-
-                // this.firebaseError = error.message;
+                console.error('Error in creation of the user', error);
             });
     };
 

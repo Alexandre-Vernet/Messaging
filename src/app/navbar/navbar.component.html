@@ -148,8 +148,9 @@
                                 <span>AB</span>
                             </div>
                             <div class="user-info">
-                                <span class="lead-text">Abu Bin Ishtiyak</span>
-                                <span class="sub-text"> {{auth.getUser().user}} </span>
+                                <span class="lead-text"> {{auth.getUser().firstName + " " +
+                                    auth.getUser().lastName}}</span>
+                                <span class="sub-text"> {{auth.getUser().email}} </span>
                             </div>
                             <div class="user-action">
                                 <a class="btn btn-icon mr-n2" href="html/user-profile-setting.html"><em
