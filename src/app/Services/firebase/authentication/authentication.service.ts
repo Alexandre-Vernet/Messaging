@@ -28,7 +28,7 @@ export class AuthenticationService {
      * @param email in database
      * @param password in database
      */
-    signIn = (email: string, password: string): string => {
+    signIn = (email: string, password: string) => {
         firebase
             .auth()
             .signInWithEmailAndPassword(email, password)
@@ -62,8 +62,6 @@ export class AuthenticationService {
                 console.log(error.message);
                 this.setError(error.message);
             });
-
-        return 'ok';
     };
 
     /**
