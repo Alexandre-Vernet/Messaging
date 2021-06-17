@@ -40,8 +40,11 @@ export class AppComponent implements OnInit {
         let email = this.cookieService.get('email');
         let password = this.cookieService.get('password');
 
+        // Check connection
         if (email && password) {
             this.auth.signIn(email, password);
-        } else this.router.navigate(['sign-in']);
+        } else {
+            this.router.navigate(['sign-in']);
+        }
     }
 }

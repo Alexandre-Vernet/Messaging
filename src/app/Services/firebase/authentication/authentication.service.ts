@@ -59,8 +59,9 @@ export class AuthenticationService {
                         console.log(error);
                     });
 
-                // Redirect to home
-                this.router.navigate(['/home']);
+                // Redirect to next page
+                let url = window.location.pathname;
+                this.router.navigate([url]);
             })
             .catch((error) => {
                 console.log(error.message);
