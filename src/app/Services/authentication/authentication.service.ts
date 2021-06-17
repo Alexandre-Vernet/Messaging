@@ -100,6 +100,7 @@ export class AuthenticationService {
                         firstName: firstName,
                         lastName: lastName,
                         email: email,
+                        dateCreation: new Date(),
                     })
                     .then(() => {
                         // User data has been created
