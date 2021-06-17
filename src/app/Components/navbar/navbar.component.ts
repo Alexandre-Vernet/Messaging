@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import firebase from 'firebase';
 import { CookieService } from 'ngx-cookie-service';
-import { AuthenticationService } from '../Services/firebase/authentication/authentication.service';
+import { AuthenticationService } from '../../Services/firebase/authentication/authentication.service';
 
 @Component({
     selector: 'app-navbar',

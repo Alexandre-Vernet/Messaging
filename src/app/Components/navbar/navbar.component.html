@@ -141,13 +141,13 @@
                     <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
                         <div class="user-card">
                             <div class="user-avatar">
-                                <span>{{auth.getUser().firstName.charAt(0) +
-                                    auth.getUser().lastName.charAt(0)}}</span>
+                                <span>{{auth.user.firstName.charAt(0) +
+                                    auth.user.lastName.charAt(0)}}</span>
                             </div>
                             <div class="user-info">
-                                <span class="lead-text"> {{auth.getUser().firstName + " " +
-                                    auth.getUser().lastName}}</span>
-                                <span class="sub-text"> {{auth.getUser().email}} </span>
+                                <span class="lead-text"> {{auth.user.firstName + " " +
+                                    auth.user.lastName}}</span>
+                                <span class="sub-text"> {{auth.user.email}} </span>
                             </div>
                             <div class="user-action">
                                 <a class="btn btn-icon mr-n2" href="html/user-profile-setting.html"><em
@@ -157,7 +157,7 @@
                     </div>
                     <div class="dropdown-inner">
                         <ul class="link-list">
-                            <li><a href="html/user-profile-regular.html"><em class="icon ni ni-user-alt"></em><span>View
+                            <li><a [routerLink]=" ['/view-profile']"><em class="icon ni ni-user-alt"></em><span>View
                                         Profile</span></a></li>
                             <li><a href="html/user-profile-setting.html"><em
                                         class="icon ni ni-setting-alt"></em><span>Account Setting</span></a></li>

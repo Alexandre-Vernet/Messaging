@@ -7,14 +7,18 @@ import { CookieService } from 'ngx-cookie-service';
     providedIn: 'root',
 })
 export class AuthenticationService {
-    user: any = {};
+    _user: any = {};
     error!: string;
 
     constructor(private router: Router, private cookieService: CookieService) {}
 
-    getUser = () => {
-        return this.user;
-    };
+    get user(): any {
+        return this._user;
+    }
+
+    set user(value: any) {
+        this._user = value;
+    }
 
     getError = () => {
         return this.error;
