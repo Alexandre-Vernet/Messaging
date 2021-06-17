@@ -19,7 +19,9 @@ export class UserProfileComponent implements OnInit {
         this.user = this.auth.user;
     }
 
-    updateProfile = () => {};
+    updateProfile = () => {
+        this.auth.updateProfile();
+    };
     deleteAccount = () => {
         this.auth.deleteAccount();
     };

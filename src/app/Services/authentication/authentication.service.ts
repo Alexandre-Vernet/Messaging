@@ -140,6 +140,8 @@ export class AuthenticationService {
             });
     };
 
+    updateProfile = () => {};
+
     /**
      * Sign out the user
      */
