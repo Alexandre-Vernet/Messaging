@@ -285,47 +285,46 @@
                             </ul><!-- .nav-tabs -->
                             <div class="tab-content">
                                 <div class="tab-pane active" id="personal">
-                                    <div class="row gy-4">
 
-                                        <!-- First name -->
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="full-name">First Name</label>
-                                                <input type="text" class="form-control form-control-lg" id="full-name"
-                                                    value=" {{user.firstName}} " placeholder="Enter first name">
+                                    <form [formGroup]="form" ngSubmit="updateProfile()">
+                                        <div class="row gy-4">
+
+
+                                            <!-- First name -->
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="full-name">First Name</label>
+                                                    <input type="text" class="form-control form-control-lg"
+                                                        id="full-name" value=" {{user.firstName}} "
+                                                        placeholder="Enter first name" formControlName="firstName">
+                                                </div>
+                                            </div>
+
+                                            <!-- Last name -->
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="display-name">Last Name</label>
+                                                    <input type="text" class="form-control form-control-lg"
+                                                        id="display-name" value=" {{user.lastName}} "
+                                                        placeholder="Enter last name" formControlName="lastName">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12">
+                                                <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
+                                                    <li>
+                                                        <button class="btn btn-lg btn-primary" [disabled]="!form.valid"
+                                                            type="submit">Update
+                                                            Profile</button>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" data-dismiss="modal"
+                                                            class="link link-light">Cancel</a>
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </div>
-
-                                        <!-- Last name -->
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="display-name">Last Name</label>
-                                                <input type="text" class="form-control form-control-lg"
-                                                    id="display-name" value=" {{user.lastName}} "
-                                                    placeholder="Enter last name">
-                                            </div>
-                                        </div>
-
-                                        <!-- Date of birth -->
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="birth-day">Date of Birth</label>
-                                                <input type="text" class="form-control form-control-lg date-picker"
-                                                    id="birth-day" placeholder="Enter your name">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12">
-                                            <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
-                                                <li>
-                                                    <a href="#" class="btn btn-lg btn-primary">Update Profile</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" data-dismiss="modal" class="link link-light">Cancel</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div><!-- .tab-pane -->
                                 <div class="tab-pane" id="address">
                                     <div class="row gy-4">
@@ -397,7 +396,8 @@
                                         personal data</p>
                                 </div>
                                 <div class="nk-modal-action mt-5">
-                                    <a href="#" class="btn btn-lg btn-mw btn-light" data-dismiss="modal">Delete
+                                    <a href="#" (click)="deleteAccount()" class="btn btn-lg btn-mw btn-light"
+                                        data-dismiss="modal">Delete
                                         definitely my account</a>
                                 </div>
                             </div>

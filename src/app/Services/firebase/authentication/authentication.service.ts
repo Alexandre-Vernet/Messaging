@@ -37,11 +37,13 @@ export class AuthenticationService {
             .auth()
             .signInWithEmailAndPassword(email, password)
             .then(() => {
+                // User in logged in
+
                 // Set cookie
                 this.cookieService.set('email', email, 365);
                 this.cookieService.set('password', password, 365);
 
-                let userId: any = firebase.auth().currentUser?.uid;
+                let userId = firebase.auth().currentUser?.uid;
 
                 firebase
                     .firestore()
@@ -61,7 +63,7 @@ export class AuthenticationService {
 
                 // Redirect to next page
                 let url = window.location.pathname;
-                this.router.navigate([url]);
+                this.router.navigate(['/home']);
             })
             .catch((error) => {
                 console.log(error.message);
@@ -86,6 +88,7 @@ export class AuthenticationService {
             .auth()
             .createUserWithEmailAndPassword(email, password)
             .then(() => {
+                // User has been created
                 let userId: any = firebase.auth().currentUser?.uid;
 
                 // Store informations of user
@@ -99,18 +102,23 @@ export class AuthenticationService {
                         email: email,
                     })
                     .then(() => {
+                        // User data has been created
                         console.log('User data has been saved !');
 
                         this.signIn(email, password);
                     })
                     .catch((error) => {
-                        console.log(error.message);
+                        console.log(
+                            `Error in creation of the data of the user ${error.message}`
+                        );
 
                         // this.firebaseError = error.message;
                     });
             })
             .catch((error) => {
-                console.error('Error in creation of the user', error);
+                console.error(
+                    `Error in creation of the user : ${error.message}`
+                );
             });
     };
 
@@ -144,7 +152,38 @@ export class AuthenticationService {
             .auth()
             .signOut()
             .then(() => {
+                // Disconnected
                 this.router.navigate(['/sign-in']);
+            });
+    };
+
+    deleteAccount = () => {
+        let userId = firebase.auth().currentUser?.uid;
+
+        firebase
+            .firestore()
+            .collection('users')
+            .doc(userId)
+            .delete()
+            .then(() => {
+                console.log('All data of the user has been deleted');
+
+                firebase
+                    .auth()
+                    .currentUser?.delete()
+                    .then(() => {
+                        // User deleted.
+                        console.log('User has been deleted');
+
+                        // Go to sign up
+                        this.router.navigate(['/sign-up']);
+                    })
+                    .catch((error) => {
+                        console.log(`Error while deleting the user : ${error}`);
+                    });
+            })
+            .catch((error) => {
+                console.error(`Error deleting data of user : ${error}`);
             });
     };
 }

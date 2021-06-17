@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/Services/firebase/authentication/authentication.service';
 
 @Component({
@@ -8,9 +9,18 @@ import { AuthenticationService } from 'src/app/Services/firebase/authentication/
 })
 export class UserProfileComponent implements OnInit {
     user: any = {};
+    form: FormGroup = new FormGroup({
+        firstName: new FormControl('', [Validators.required]),
+        lastName: new FormControl('', [Validators.required]),
+    });
     constructor(private auth: AuthenticationService) {}
 
     ngOnInit(): void {
         this.user = this.auth.user;
     }
+
+    updateProfile = () => {};
+    deleteAccount = () => {
+        this.auth.deleteAccount();
+    };
 }
