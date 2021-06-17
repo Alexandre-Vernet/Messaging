@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthenticationService } from 'src/app/Services/firebase/authentication/authentication.service';
+import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
 import { CookieService } from 'ngx-cookie-service';
 
 declare var $: any;
