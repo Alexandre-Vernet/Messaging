@@ -63,7 +63,8 @@ export class AuthenticationService {
 
                             // Redirect to next page
                             let url = window.location.pathname;
-                            this.router.navigate(['/home']);
+                            if (url != '/sign-in') this.router.navigate([url]);
+                            else this.router.navigate(['/home']);
                         } else console.log('Cant get user infos');
                     })
                     .catch((error) => {
