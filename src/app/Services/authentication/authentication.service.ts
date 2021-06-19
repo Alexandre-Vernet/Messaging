@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import firebase from 'firebase';
 import { CookieService } from 'ngx-cookie-service';
+import { SignInComponent } from 'src/app/Components/login/sign-in/sign-in.component';
 
 @Injectable({
     providedIn: 'root',
 })
 export class AuthenticationService {
     _user: any = {};
-    error!: string;
+    _firebaseError: string = '';
 
     constructor(private router: Router, private cookieService: CookieService) {}
 
@@ -20,13 +21,13 @@ export class AuthenticationService {
         this._user = value;
     }
 
-    getError = () => {
-        return this.error;
-    };
+    get firebaseError(): string {
+        return this._firebaseError;
+    }
 
-    setError = (error: any) => {
-        this.error = error;
-    };
+    set firebaseError(value: string) {
+        this._firebaseError = value;
+    }
 
     /**
      * @param email in database
@@ -39,10 +40,6 @@ export class AuthenticationService {
             .then(() => {
                 // User is logged in
 
-                // Set cookie
-                this.cookieService.set('email', email, 365);
-                this.cookieService.set('password', password, 365);
-
                 let userId = firebase.auth().currentUser?.uid;
 
                 firebase
@@ -52,22 +49,30 @@ export class AuthenticationService {
                     .get()
                     .then((doc) => {
                         if (doc.exists) {
+                            // Set cookie
+                            this.cookieService.set('email', email, 365);
+                            this.cookieService.set('password', password, 365);
+
+                            // Set data
                             this.user['firstName'] = doc.data()?.firstName;
                             this.user['lastName'] = doc.data()?.lastName;
                             this.user['email'] = doc.data()?.email;
+
+                            // Clear error
+                            this.firebaseError = '';
+
+                            // Redirect to next page
+                            let url = window.location.pathname;
+                            this.router.navigate(['/home']);
                         } else console.log('Cant get user infos');
                     })
                     .catch((error) => {
                         console.log(error);
                     });
-
-                // Redirect to next page
-                let url = window.location.pathname;
-                this.router.navigate(['/home']);
             })
             .catch((error) => {
                 console.log(error.message);
-                this.setError(error.message);
+                this.firebaseError = error.message;
             });
     };
 
@@ -106,6 +111,9 @@ export class AuthenticationService {
                         // User data has been created
                         console.log('User data has been saved !');
 
+                        // Clear error
+                        this.firebaseError = '';
+
                         this.signIn(email, password);
                     })
                     .catch((error) => {
@@ -113,13 +121,14 @@ export class AuthenticationService {
                             `Error in creation of the data of the user ${error.message}`
                         );
 
-                        // this.firebaseError = error.message;
+                        this.firebaseError = error.message;
                     });
             })
             .catch((error) => {
                 console.error(
                     `Error in creation of the user : ${error.message}`
                 );
+                this.firebaseError = error.message;
             });
     };
 
@@ -168,12 +177,14 @@ export class AuthenticationService {
                         console.log(
                             `Error in creation of the data of the user ${error.message}`
                         );
+                        this.firebaseError = error.message;
                     });
 
                 this.router.navigate(['home']);
             })
             .catch((error) => {
                 console.log(error.message);
+                this.firebaseError = error.message;
             });
     };
 

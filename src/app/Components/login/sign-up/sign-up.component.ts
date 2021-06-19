@@ -24,7 +24,7 @@ export class SignUpComponent implements OnInit {
         ]),
     });
 
-    constructor(private auth: AuthenticationService) {}
+    constructor(public auth: AuthenticationService) {}
 
     ngOnInit() {}
 

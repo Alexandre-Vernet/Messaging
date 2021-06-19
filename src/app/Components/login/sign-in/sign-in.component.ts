@@ -11,9 +11,7 @@ declare var $: any;
     styleUrls: ['./sign-in.component.scss'],
 })
 export class SignInComponent implements OnInit {
-    firebaseError: string = '';
     email!: string;
-
     form = new FormGroup({
         email: new FormControl('', [Validators.required, Validators.email]),
         password: new FormControl('', [
@@ -30,7 +28,7 @@ export class SignInComponent implements OnInit {
     });
 
     constructor(
-        private auth: AuthenticationService,
+        public auth: AuthenticationService,
         private cookieService: CookieService
     ) {}
 
@@ -45,8 +43,6 @@ export class SignInComponent implements OnInit {
 
         // Sign-in
         this.auth.signIn(email, password);
-
-        this.firebaseError = this.auth.getError();
     };
 
     googleSignUp = () => {

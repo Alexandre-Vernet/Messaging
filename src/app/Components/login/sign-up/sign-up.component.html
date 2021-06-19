@@ -35,15 +35,12 @@
                                                 <div class="form-control-wrap">
                                                     <input type="text" class="form-control form-control-lg"
                                                         name="firstName" formControlName="firstName" placeholder="Bob"
-                                                        [ngClass]="{'is-invalid': form.get('firstName')?.touched && form.get('firstName')?.invalid || firebaseError !== ''}">
+                                                        [ngClass]="{'is-invalid': form.get('firstName')?.touched && form.get('firstName')?.invalid}">
 
-                                                    <div *ngIf="form.get('firstName')?.touched && form.get('firstName')?.invalid || firebaseError !== ''"
+                                                    <div *ngIf="form.get('firstName')?.touched && form.get('firstName')?.invalid"
                                                         class="invalid-feedback">
                                                         <div *ngIf="form.get('firstName')?.errors?.required">
                                                             First name is required
-                                                        </div>
-                                                        <div *ngIf="firebaseError !== ''">
-                                                            {{firebaseError}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -59,15 +56,12 @@
                                                     <input type="text" class="form-control form-control-lg"
                                                         name="lastName" formControlName="lastName"
                                                         placeholder="Razowski"
-                                                        [ngClass]="{'is-invalid': form.get('lastName')?.touched && form.get('lastName')?.invalid || firebaseError !== ''}">
+                                                        [ngClass]="{'is-invalid': form.get('lastName')?.touched && form.get('lastName')?.invalid}">
 
-                                                    <div *ngIf="form.get('lastName')?.touched && form.get('lastName')?.invalid || firebaseError !== ''"
+                                                    <div *ngIf="form.get('lastName')?.touched && form.get('lastName')?.invalid"
                                                         class="invalid-feedback">
                                                         <div *ngIf="form.get('lastName')?.errors?.required">
                                                             Last name is required
-                                                        </div>
-                                                        <div *ngIf="firebaseError !== ''">
-                                                            {{firebaseError}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -81,9 +75,9 @@
                                                 <label class="form-label" for="name">Email</label>
                                                 <input type="email" class="form-control form-control-lg"
                                                     formControlName="email" placeholder="bob.razowski@gmail.com"
-                                                    [ngClass]="{'is-invalid': form.get('email')?.touched && form.get('email')?.invalid || firebaseError !== ''}">
+                                                    [ngClass]="{'is-invalid': form.get('email')?.touched && form.get('email')?.invalid || auth.firebaseError !== ''}">
 
-                                                <div *ngIf="form.get('email')?.touched && form.get('email')?.invalid || firebaseError !== ''"
+                                                <div *ngIf="form.get('email')?.touched && form.get('email')?.invalid || auth.firebaseError !== ''"
                                                     class="invalid-feedback">
                                                     <div *ngIf="form.get('email')?.errors?.required">
                                                         Email is required
@@ -91,8 +85,8 @@
                                                     <div *ngIf="form.get('email')?.errors?.email">
                                                         Email address is badly formatted
                                                     </div>
-                                                    <div *ngIf="firebaseError !== ''">
-                                                        {{firebaseError}}
+                                                    <div *ngIf="auth.firebaseError !== ''">
+                                                        {{auth.firebaseError}}
                                                     </div>
                                                 </div>
                                             </div>
