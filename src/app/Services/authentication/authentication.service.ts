@@ -37,7 +37,7 @@ export class AuthenticationService {
             .auth()
             .signInWithEmailAndPassword(email, password)
             .then(() => {
-                // User in logged in
+                // User is logged in
 
                 // Set cookie
                 this.cookieService.set('email', email, 365);
@@ -120,6 +120,60 @@ export class AuthenticationService {
                 console.error(
                     `Error in creation of the user : ${error.message}`
                 );
+            });
+    };
+
+    /**
+     * Google connexion
+     */
+    googleSignUp = () => {
+        var provider = new firebase.auth.GoogleAuthProvider();
+
+        firebase
+            .auth()
+            .signInWithPopup(provider)
+            .then((result) => {
+                let userId: any = firebase.auth().currentUser?.uid;
+
+                // Get data from google account
+                const firstName = result.user?.displayName?.split(' ')[0];
+                const lastName = result.user?.displayName?.split(' ')[1];
+                const email = result.user?.email;
+                const photoUrl = result.user?.photoURL;
+
+                // Set data
+                this.user['firstName'] = firstName;
+                this.user['lastName'] = lastName;
+                this.user['email'] = email;
+                this.user['photo'] = photoUrl;
+
+                // Store informations of user
+                firebase
+                    .firestore()
+                    .collection('users')
+                    .doc(userId)
+                    .set({
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email,
+                        dateCreation: new Date(),
+                    })
+                    .then(() => {
+                        // User data has been created
+                        console.log('User data has been saved !');
+
+                        this.router.navigate(['home']);
+                    })
+                    .catch((error) => {
+                        console.log(
+                            `Error in creation of the data of the user ${error.message}`
+                        );
+                    });
+
+                this.router.navigate(['home']);
+            })
+            .catch((error) => {
+                console.log(error.message);
             });
     };
 

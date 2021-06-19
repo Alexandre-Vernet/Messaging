@@ -38,4 +38,8 @@ export class SignUpComponent implements OnInit {
         // Sign-up
         this.auth.signUp(firstName, lastName, email, password);
     };
+
+    googleSignUp = () => {
+        this.auth.googleSignUp();
+    };
 }

@@ -49,6 +49,10 @@ export class SignInComponent implements OnInit {
         this.firebaseError = this.auth.getError();
     };
 
+    googleSignUp = () => {
+        this.auth.googleSignUp();
+    };
+
     resetPassword = () => {
         const emailAddress = this.formReset.value['emailReset'];
 
