@@ -576,12 +576,18 @@
                                                                                                 href="#"><em
                                                                                                     class="icon ni ni-reply-fill"></em>
                                                                                                 Reply</a></li>
-                                                                                        <li><a href="#"><em
+                                                                                        <li>
+                                                                                            <a class="icon"
+                                                                                                (click)="editMessage()"><em
                                                                                                     class="icon ni ni-pen-alt-fill"></em>
-                                                                                                Edit</a></li>
-                                                                                        <li><a href="#"><em
+                                                                                                Edit</a>
+                                                                                        </li>
+                                                                                        <li>
+                                                                                            <a class="icon"
+                                                                                                (click)="deleteMessage(message.date)"><em
                                                                                                     class="icon ni ni-trash-fill"></em>
-                                                                                                Remove</a></li>
+                                                                                                Remove</a>
+                                                                                        </li>
                                                                                     </ul>
                                                                                 </div>
                                                                             </div>

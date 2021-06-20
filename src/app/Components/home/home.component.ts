@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import firebase from 'firebase';
-import { Timestamp } from 'rxjs';
 import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
 
 @Component({
@@ -23,6 +22,10 @@ export class HomeComponent implements OnInit {
     }
 
     getMessages = () => {
+        // Clear messages
+        this.messages = [];
+
+        // Get messages from firestore
         this.firestore
             .collection('messages')
             .orderBy('date', 'asc')
@@ -36,8 +39,11 @@ export class HomeComponent implements OnInit {
                     });
                 });
             });
+
+        console.log('messages: ', this.messages);
     };
 
+    // Send message to firestore
     sendMessage = () => {
         if (this.newMessage.length > 0) {
             // Store message
@@ -53,8 +59,6 @@ export class HomeComponent implements OnInit {
                         'Message successfull posted with id' + docRef.id
                     );
 
-                    this.messages = [];
-
                     this.getMessages();
                 })
                 .catch((err: any) => {
@@ -66,14 +70,51 @@ export class HomeComponent implements OnInit {
         }
     };
 
+    /**
+     * Edit message
+     * @returns
+     */
+    editMessage = () => {
+        let message = firebase.firestore().collection('messages').doc('DC');
+
+        // Set the "capital" field of the city 'DC'
+        return message
+            .update({
+                message: 'this is a edited message',
+            })
+            .then(() => {
+                console.log('Document successfully updated!');
+                this.getMessages();
+            })
+            .catch((error) => {
+                // The document probably doesn't exist.
+                console.error('Error updating document: ', error);
+            });
+    };
+
+    /**
+     * Delete message
+     */
+    deleteMessage = (date: Date) => {
+        firebase
+            .firestore()
+            .collection('messages')
+            .where('date', '==', date)
+            .get()
+            .then((querySnapshot: any) => {
+                querySnapshot.forEach((doc: any) => {
+                    doc.ref.delete();
+                    this.getMessages();
+                });
+            });
+    };
+
+    /**
+     *  Format date to locale zone
+     * @param date
+     * @returns
+     */
     formatDate = (date: any) => {
         return date.toDate().toLocaleTimeString('fr-FR');
-
-        // let day = message.getDate();
-        // let month = message.getMonth();
-        // let hours = message.getHours();
-        // let minutes = message.getMinutes();
-
-        // return day + ' / ' + month + ' at ' + hours + ' : ' + minutes;
     };
 }
