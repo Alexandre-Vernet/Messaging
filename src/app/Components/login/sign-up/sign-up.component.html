@@ -99,12 +99,14 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="password">Password</label>
                                                 <div class="form-control-wrap">
-                                                    <a href="#" class="form-icon form-icon-right passcode-switch">
+                                                    <a class="form-icon form-icon-right passcode-switch"
+                                                        (click)="viewPassword()">
                                                         <em class="passcode-icon icon-show icon ni ni-eye"></em>
                                                         <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
                                                     </a>
-                                                    <input type="password" class="form-control form-control-lg"
-                                                        formControlName="password" placeholder="bob123"
+                                                    <input [type]="_viewPassword ? 'text' : 'password'"
+                                                        class="form-control form-control-lg" formControlName="password"
+                                                        placeholder="bob123"
                                                         [ngClass]="{'is-invalid': form.get('confirmPassword')?.touched && form.get('confirmPassword')?.invalid || form.get('confirmPassword')?.touched && form.value['password'] != form.value['confirmPassword']}">
 
                                                     <div *ngIf="form.get('confirmPassword')?.touched && form.get('confirmPassword')?.invalid || form.get('confirmPassword')?.touched &&  form.value['password'] != form.value['confirmPassword']"

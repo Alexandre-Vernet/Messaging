@@ -11,6 +11,8 @@ declare var $: any;
     styleUrls: ['./sign-in.component.scss'],
 })
 export class SignInComponent implements OnInit {
+    _viewPassword: boolean = false;
+
     email!: string;
     form = new FormGroup({
         email: new FormControl('', [Validators.required, Validators.email]),
@@ -54,5 +56,9 @@ export class SignInComponent implements OnInit {
 
         // Send email reset password
         this.auth.resetPassword(emailAddress);
+    };
+
+    viewPassword = () => {
+        this._viewPassword = !this._viewPassword;
     };
 }

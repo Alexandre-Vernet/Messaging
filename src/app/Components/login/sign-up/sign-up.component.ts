@@ -9,6 +9,7 @@ import { AuthenticationService } from 'src/app/Services/authentication/authentic
 })
 export class SignUpComponent implements OnInit {
     firebaseError: string = '';
+    _viewPassword: boolean = false;
 
     form = new FormGroup({
         firstName: new FormControl('', [Validators.required]),
@@ -41,5 +42,9 @@ export class SignUpComponent implements OnInit {
 
     googleSignUp = () => {
         this.auth.googleSignUp();
+    };
+
+    viewPassword = () => {
+        this._viewPassword = !this._viewPassword;
     };
 }
