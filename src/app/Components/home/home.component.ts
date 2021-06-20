@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import firebase from 'firebase';
+import { Timestamp } from 'rxjs';
 import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
 
 @Component({
@@ -65,12 +66,14 @@ export class HomeComponent implements OnInit {
         }
     };
 
-    formatDate = (message: Date): string => {
-        let day = message.getDate();
-        let month = message.getMonth();
-        let hours = message.getHours();
-        let minutes = message.getMinutes();
+    formatDate = (date: any) => {
+        return date.toDate().toLocaleTimeString('fr-FR');
 
-        return day + ' / ' + month + ' at ' + hours + ' : ' + minutes;
+        // let day = message.getDate();
+        // let month = message.getMonth();
+        // let hours = message.getHours();
+        // let minutes = message.getMinutes();
+
+        // return day + ' / ' + month + ' at ' + hours + ' : ' + minutes;
     };
 }
