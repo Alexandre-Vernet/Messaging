@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import firebase from 'firebase';
+import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
 
 @Component({
     selector: 'app-home',
@@ -7,12 +8,12 @@ import firebase from 'firebase';
     styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-    message: any;
-    messages: { user: String; message: String }[] = [];
+    newMessage: any;
+    messages: { user: String; message: String; date: Date }[] = [];
 
     firestore: any;
 
-    constructor() {}
+    constructor(public auth: AuthenticationService) {}
 
     ngOnInit() {
         this.firestore = firebase.firestore();
@@ -23,41 +24,44 @@ export class HomeComponent implements OnInit {
     getMessages = () => {
         this.firestore
             .collection('messages')
+            .orderBy('date', 'asc')
             .get()
             .then((querySnapshot: any) => {
                 querySnapshot.forEach((doc: any) => {
-                    let message: String = doc.data();
-
                     this.messages.push({
                         user: doc.get('user'),
                         message: doc.get('message'),
-                        // date: doc.get('date'),
+                        date: doc.get('date'),
                     });
                 });
             });
     };
 
     sendMessage = () => {
-        if (this.message.length > 0) {
+        if (this.newMessage.length > 0) {
             // Store message
             this.firestore
                 .collection('messages')
                 .add({
-                    user: 'Toto',
-                    message: this.message,
+                    user: this.auth.user['firstName'],
+                    message: this.newMessage,
                     date: new Date(),
                 })
                 .then((docRef: { id: string }) => {
                     console.log(
                         'Message successfull posted with id' + docRef.id
                     );
+
+                    this.messages = [];
+
+                    this.getMessages();
                 })
                 .catch((err: any) => {
                     console.log(err);
                 });
 
             // Clear input
-            this.message = '';
+            this.newMessage = '';
         }
     };
 
