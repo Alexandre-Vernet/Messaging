@@ -8,6 +8,7 @@ import { AuthenticationService } from 'src/app/Services/authentication/authentic
     styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+    user: any = {};
     newMessage: any;
     messages: {
         email: String;
@@ -19,10 +20,11 @@ export class HomeComponent implements OnInit {
 
     firestore: any;
 
-    constructor(public auth: AuthenticationService) {}
+    constructor(private auth: AuthenticationService) {}
 
     ngOnInit() {
         this.firestore = firebase.firestore();
+        this.user = this.auth.user;
 
         this.getMessages();
     }
@@ -99,8 +101,7 @@ export class HomeComponent implements OnInit {
      * Delete message
      */
     deleteMessage = (date: Date) => {
-        firebase
-            .firestore()
+        this.firestore
             .collection('messages')
             .where('date', '==', date)
             .get()
