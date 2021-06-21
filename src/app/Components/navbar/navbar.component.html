@@ -141,7 +141,7 @@
                     <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
                         <div class="user-card">
                             <div class="user-avatar">
-                                <span>{{auth.user.firstName.charAt(0) +
+                                <span *ngIf="auth.user.firstName != null">{{auth.user.firstName.charAt(0) +
                                     auth.user.lastName.charAt(0)}}</span>
                             </div>
                             <div class="user-info">
