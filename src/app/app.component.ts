@@ -40,11 +40,15 @@ export class AppComponent implements OnInit {
         let email = this.cookieService.get('email');
         let password = this.cookieService.get('password');
 
+        // Get route from user
+        let url = window.location.pathname;
+
         // Check connection
         if (email && password) {
             this.auth.signIn(email, password);
         } else {
-            this.router.navigate(['sign-in']);
+            if (url == '/sign-up') this.router.navigate(['/sign-up']);
+            else this.router.navigate(['sign-in']);
         }
     }
 }
