@@ -103,7 +103,7 @@
 </div>
 
 
-<!-- Modal Form -->
+<!-- Reset password -->
 <div class="modal fade" tabindex="-1" id="modalResetPassword">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -136,60 +136,11 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <button [disabled]="!formReset.valid" data-dismiss="modal"
-                            data-target="#modalSuccessResetPassword" type="submit" class="btn btn-lg btn-primary">Send
-                            link
-                            reset</button>
+                        <button [disabled]="!formReset.valid" data-bs-dismiss="modal" type="submit"
+                            class="btn btn-lg btn-primary">Send
+                            link reset</button>
                     </div>
                 </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Modal success reset password -->
-<div class="modal fade" tabindex="-1" id="modalSuccessResetPassword">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross"></em></a>
-            <div class="modal-body modal-body-lg text-center">
-                <div class="nk-modal">
-                    <em class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-check bg-success"></em>
-                    <h4 class="nk-modal-title">Success</h4>
-                    <div class="nk-modal-text">
-                        <div class="caption-text">E-mail has been sent to <strong> {{formReset.value['emailReset']}}
-                            </strong>
-                        </div>
-                    </div>
-                    <div class="nk-modal-action">
-                        <a href="#" class="btn btn-lg btn-mw btn-primary" data-dismiss="modal">OK</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Modal fail to send email reset -->
-<div class="modal fade" tabindex="-1" id="modalFailResetPassword">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body modal-body-lg text-center">
-                <div class="nk-modal">
-                    <em class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-cross bg-danger"></em>
-                    <h4 class="nk-modal-title">Failure</h4>
-                    <div class="nk-modal-text">
-                        <p class="lead">We are sorry, we were unable to process your reset password. Please try after
-                            sometimes.</p>
-                        <p class="text-soft"> {{auth.firebaseError}} </p>
-
-                    </div>
-                    <div class="nk-modal-action mt-5">
-                        <a href="#" class="btn btn-lg btn-mw btn-light" data-dismiss="modal">Return</a>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
