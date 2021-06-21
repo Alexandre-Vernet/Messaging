@@ -3,14 +3,13 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
 import { CookieService } from 'ngx-cookie-service';
 
-declare var $: any;
-
 @Component({
     selector: 'app-sign-in',
     templateUrl: './sign-in.component.html',
     styleUrls: ['./sign-in.component.scss'],
 })
 export class SignInComponent implements OnInit {
+    firebaseError: string = '';
     _viewPassword: boolean = false;
 
     email!: string;
@@ -30,12 +29,13 @@ export class SignInComponent implements OnInit {
     });
 
     constructor(
-        public auth: AuthenticationService,
+        private auth: AuthenticationService,
         private cookieService: CookieService
     ) {}
 
     ngOnInit() {
         this.email = this.cookieService.get('email');
+        this.firebaseError = this.auth.firebaseError;
     }
 
     signIn = () => {
@@ -45,6 +45,10 @@ export class SignInComponent implements OnInit {
 
         // Sign-in
         this.auth.signIn(email, password);
+
+        setTimeout(() => {
+            this.ngOnInit();
+        }, 300);
     };
 
     googleSignUp = () => {

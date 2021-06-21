@@ -141,13 +141,13 @@
                     <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
                         <div class="user-card">
                             <div class="user-avatar">
-                                <span *ngIf="auth.user.firstName != null">{{auth.user.firstName.charAt(0) +
-                                    auth.user.lastName.charAt(0)}}</span>
+                                <span *ngIf="user.firstName != null">{{user.firstName.charAt(0) +
+                                    user.lastName.charAt(0)}}</span>
                             </div>
                             <div class="user-info">
-                                <span class="lead-text"> {{auth.user.firstName + " " +
-                                    auth.user.lastName}}</span>
-                                <span class="sub-text"> {{auth.user.email}} </span>
+                                <span class="lead-text"> {{user.firstName + " " +
+                                    user.lastName}}</span>
+                                <span class="sub-text"> {{user.email}} </span>
                             </div>
                             <div class="user-action">
                                 <a class="btn btn-icon mr-n2" href="html/user-profile-setting.html"><em
@@ -167,7 +167,7 @@
                     </div>
                     <div class="dropdown-inner">
                         <ul class="link-list">
-                            <li><a [routerLink]="['']" (click)="auth.signOut()"><em
+                            <li><a [routerLink]="['']" (click)="signOut()"><em
                                         class=" icon ni ni-signout"></em><span>Sign
                                         out</span></a></li>
                         </ul>

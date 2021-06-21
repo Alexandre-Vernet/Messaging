@@ -75,9 +75,9 @@
                                                 <label class="form-label" for="name">Email</label>
                                                 <input type="email" class="form-control form-control-lg"
                                                     formControlName="email" placeholder="bob.razowski@gmail.com"
-                                                    [ngClass]="{'is-invalid': form.get('email')?.touched && form.get('email')?.invalid || auth.firebaseError !== ''}">
+                                                    [ngClass]="{'is-invalid': form.get('email')?.touched && form.get('email')?.invalid || firebaseError !== ''}">
 
-                                                <div *ngIf="form.get('email')?.touched && form.get('email')?.invalid || auth.firebaseError !== ''"
+                                                <div *ngIf="form.get('email')?.touched && form.get('email')?.invalid || firebaseError !== ''"
                                                     class="invalid-feedback">
                                                     <div *ngIf="form.get('email')?.errors?.required">
                                                         Email is required
@@ -85,8 +85,8 @@
                                                     <div *ngIf="form.get('email')?.errors?.email">
                                                         Email address is badly formatted
                                                     </div>
-                                                    <div *ngIf="auth.firebaseError !== ''">
-                                                        {{auth.firebaseError}}
+                                                    <div>
+                                                        {{firebaseError}}
                                                     </div>
                                                 </div>
                                             </div>

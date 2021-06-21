@@ -25,9 +25,11 @@ export class SignUpComponent implements OnInit {
         ]),
     });
 
-    constructor(public auth: AuthenticationService) {}
+    constructor(private auth: AuthenticationService) {}
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.firebaseError = this.auth.firebaseError;
+    }
 
     signUp = () => {
         // Get informations
@@ -38,6 +40,10 @@ export class SignUpComponent implements OnInit {
 
         // Sign-up
         this.auth.signUp(firstName, lastName, email, password);
+
+        setTimeout(() => {
+            this.ngOnInit();
+        }, 300);
     };
 
     googleSignUp = () => {
