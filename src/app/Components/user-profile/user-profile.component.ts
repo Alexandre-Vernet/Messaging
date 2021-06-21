@@ -13,6 +13,11 @@ export class UserProfileComponent implements OnInit {
         firstName: new FormControl('', [Validators.required]),
         lastName: new FormControl('', [Validators.required]),
     });
+
+    formChangePassword: FormGroup = new FormGroup({
+        olderPassword: new FormControl('', [Validators.required]),
+        newPassword: new FormControl('', [Validators.required]),
+    });
     constructor(private auth: AuthenticationService) {}
 
     ngOnInit(): void {
@@ -22,6 +27,8 @@ export class UserProfileComponent implements OnInit {
     updateProfile = () => {
         this.auth.updateProfile();
     };
+
+    changePassword = () => {};
     deleteAccount = () => {
         this.auth.deleteAccount();
     };

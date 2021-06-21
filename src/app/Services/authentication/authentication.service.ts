@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import firebase from 'firebase';
 import { CookieService } from 'ngx-cookie-service';
-import { SignInComponent } from 'src/app/Components/login/sign-in/sign-in.component';
+import Swal from 'sweetalert2';
 
+declare var $: any;
 @Injectable({
     providedIn: 'root',
 })
@@ -57,6 +58,8 @@ export class AuthenticationService {
                             this.user['firstName'] = doc.data()?.firstName;
                             this.user['lastName'] = doc.data()?.lastName;
                             this.user['email'] = doc.data()?.email;
+                            this.user['dateCreation'] =
+                                doc.data()?.dateCreation;
 
                             // Clear error
                             this.firebaseError = '';
@@ -198,12 +201,27 @@ export class AuthenticationService {
             .sendPasswordResetEmail(emailAddress)
             .then(() => {
                 // Email sent
-                // $('#modalSuccessResetPassword').modal('show');
-                // $('#modalResetPassword').modal('hide');
+                console.log('Email sent !');
+
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: `E-mail has been sent to ${emailAddress}`,
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
             })
             .catch((error) => {
-                // this.firebaseError = error;
-                // $('#modalFailResetPassword').modal('show');
+                // An error occurred
+                console.log('error: ', error);
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: `We are sorry, we were unable to process your reset password. Please try after
+                    sometimes.\n${error}`,
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
             });
     };
 
