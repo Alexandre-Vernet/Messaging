@@ -76,10 +76,11 @@ export class HomeComponent implements OnInit {
 
     /**
      * Edit message
-     * @returns
      */
     editMessage = () => {
-        console.log('editedMessage: ', this.form.value['editedMessage']);
+        let editedMessage = this.form.value['editedMessage'];
+        console.log('editedMessage: ', editedMessage);
+
         firebase
             .firestore()
             .collection('messages')
@@ -91,7 +92,7 @@ export class HomeComponent implements OnInit {
                 console.log('Document successfully updated!');
 
                 // Reset edited message
-                this.form.value['editedMessage'] = '';
+                editedMessage = '';
 
                 // Reload message
                 this.getMessages();
