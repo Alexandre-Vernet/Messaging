@@ -496,13 +496,14 @@
 
 
                                             <div *ngFor="let message of messages">
-                                                <div *ngIf="message.user != auth.user['firstName']">
+                                                <div *ngIf="message.email != auth.user['email']">
 
                                                     <!-- There messages -->
                                                     <div class="chat is-you">
                                                         <div class="chat-avatar">
                                                             <div class="user-avatar bg-purple">
-                                                                <span> {{message.user}} </span>
+                                                                <span> {{message.firstName.charAt(0) + "" +
+                                                                    message.lastName.charAt(0)}} </span>
                                                             </div>
                                                         </div>
                                                         <div class="chat-content">
@@ -518,7 +519,8 @@
                                                                 </div>
                                                             </div>
                                                             <ul class="chat-meta">
-                                                                <li> {{message.user}} </li>
+                                                                <li> {{message.firstName + " " + message.lastName}}
+                                                                </li>
                                                                 <li> {{formatDate(message.date)}} </li>
                                                             </ul>
                                                         </div>
@@ -526,7 +528,7 @@
                                                 </div>
 
                                                 <!-- My messages -->
-                                                <div *ngIf="message.user == auth.user['firstName']">
+                                                <div *ngIf="message.email == auth.user['email']">
 
 
                                                     <div class="chat is-me">
@@ -573,7 +575,7 @@
                                                                 </div>
                                                             </div>
                                                             <ul class="chat-meta">
-                                                                <li> {{message.user}} </li>
+                                                                <li> You </li>
                                                                 <li> {{formatDate(message.date)}} </li>
                                                             </ul>
                                                         </div>

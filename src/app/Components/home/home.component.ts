@@ -9,7 +9,13 @@ import { AuthenticationService } from 'src/app/Services/authentication/authentic
 })
 export class HomeComponent implements OnInit {
     newMessage: any;
-    messages: { user: String; message: String; date: Date }[] = [];
+    messages: {
+        email: String;
+        firstName: String;
+        lastName: String;
+        message: String;
+        date: Date;
+    }[] = [];
 
     firestore: any;
 
@@ -33,14 +39,14 @@ export class HomeComponent implements OnInit {
             .then((querySnapshot: any) => {
                 querySnapshot.forEach((doc: any) => {
                     this.messages.push({
-                        user: doc.get('user'),
+                        email: doc.get('email'),
+                        firstName: doc.get('firstName'),
+                        lastName: doc.get('lastName'),
                         message: doc.get('message'),
                         date: doc.get('date'),
                     });
                 });
             });
-
-        console.log('messages: ', this.messages);
     };
 
     // Send message to firestore
@@ -50,7 +56,9 @@ export class HomeComponent implements OnInit {
             this.firestore
                 .collection('messages')
                 .add({
-                    user: this.auth.user['firstName'],
+                    email: this.auth.user['email'],
+                    firstName: this.auth.user['firstName'],
+                    lastName: this.auth.user['lastName'],
                     message: this.newMessage,
                     date: new Date(),
                 })
