@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import firebase from 'firebase';
 import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
 
@@ -9,6 +10,11 @@ import { AuthenticationService } from 'src/app/Services/authentication/authentic
 })
 export class HomeComponent implements OnInit {
     newMessage: any;
+
+    form = new FormGroup({
+        editedMessage: new FormControl('', [Validators.required]),
+    });
+
     messages: { user: String; message: String; date: Date }[] = [];
 
     firestore: any;
@@ -39,8 +45,6 @@ export class HomeComponent implements OnInit {
                     });
                 });
             });
-
-        console.log('messages: ', this.messages);
     };
 
     // Send message to firestore
@@ -75,15 +79,21 @@ export class HomeComponent implements OnInit {
      * @returns
      */
     editMessage = () => {
-        let message = firebase.firestore().collection('messages').doc('DC');
-
-        // Set the "capital" field of the city 'DC'
-        return message
+        console.log('editedMessage: ', this.form.value['editedMessage']);
+        firebase
+            .firestore()
+            .collection('messages')
+            .doc('0FICKGZiB0YJhb3aOX9q')
             .update({
-                message: 'this is a edited message',
+                message: this.form.value['editedMessage'],
             })
             .then(() => {
                 console.log('Document successfully updated!');
+
+                // Reset edited message
+                this.form.value['editedMessage'] = '';
+
+                // Reload message
                 this.getMessages();
             })
             .catch((error) => {
