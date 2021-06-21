@@ -99,16 +99,18 @@
                                                                 </div>
                                                             </div>
 
-                                                            <!-- Date of birth -->
-                                                            <div class="data-item" data-toggle="modal"
-                                                                data-target="#profile-edit">
+                                                            <!-- Date of creation account -->
+                                                            <div class="data-item">
                                                                 <div class="data-col">
-                                                                    <span class="data-label">Date of Birth</span>
-                                                                    <span class="data-value">29 Feb, 1986</span>
+                                                                    <span class="data-label">Date of creation
+                                                                        account</span>
+                                                                    <span class="data-value">
+                                                                        {{user.dateCreation.toDate()}}
+                                                                    </span>
                                                                 </div>
                                                                 <div class="data-col data-col-end"><span
-                                                                        class="data-more"><em
-                                                                            class="icon ni ni-forward-ios"></em></span>
+                                                                        class="data-more disable"><em
+                                                                            class="icon ni ni-lock-alt"></em></span>
                                                                 </div>
                                                             </div>
 
@@ -295,7 +297,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="full-name">First Name</label>
                                                     <input type="text" class="form-control form-control-lg"
-                                                        id="full-name" value=" {{user.firstName}} "
+                                                        id="full-name" value="{{user.firstName}}"
                                                         placeholder="Enter first name" formControlName="firstName">
                                                 </div>
                                             </div>
@@ -305,7 +307,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="display-name">Last Name</label>
                                                     <input type="text" class="form-control form-control-lg"
-                                                        id="display-name" value=" {{user.lastName}} "
+                                                        id="display-name" value="{{user.lastName}}"
                                                         placeholder="Enter last name" formControlName="lastName">
                                                 </div>
                                             </div>

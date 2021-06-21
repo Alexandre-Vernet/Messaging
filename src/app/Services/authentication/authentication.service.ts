@@ -57,6 +57,8 @@ export class AuthenticationService {
                             this.user['firstName'] = doc.data()?.firstName;
                             this.user['lastName'] = doc.data()?.lastName;
                             this.user['email'] = doc.data()?.email;
+                            this.user['dateCreation'] =
+                                doc.data()?.dateCreation;
 
                             // Clear error
                             this.firebaseError = '';
