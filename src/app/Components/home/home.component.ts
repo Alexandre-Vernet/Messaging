@@ -27,17 +27,17 @@ export class HomeComponent implements OnInit {
         this.getMessages();
     }
 
+    /**
+     * Get message from firestore
+     */
     getMessages = () => {
-        // Clear messages
-        this.messages = [];
-
-        // Get messages from firestore
-        this.firestore
+        firebase
+            .firestore()
             .collection('messages')
             .orderBy('date', 'asc')
-            .get()
-            .then((querySnapshot: any) => {
-                querySnapshot.forEach((doc: any) => {
+            .onSnapshot((querySnapshot) => {
+                this.messages = [];
+                querySnapshot.forEach((doc) => {
                     this.messages.push({
                         email: doc.get('email'),
                         firstName: doc.get('firstName'),
@@ -49,7 +49,9 @@ export class HomeComponent implements OnInit {
             });
     };
 
-    // Send message to firestore
+    /**
+     * Send message to firestore
+     */
     sendMessage = () => {
         if (this.newMessage.length > 0) {
             // Store message
@@ -67,7 +69,7 @@ export class HomeComponent implements OnInit {
                         'Message successfull posted with id' + docRef.id
                     );
 
-                    this.getMessages();
+                    // this.getMessages();
                 })
                 .catch((err: any) => {
                     console.log(err);
@@ -112,7 +114,6 @@ export class HomeComponent implements OnInit {
             .then((querySnapshot: any) => {
                 querySnapshot.forEach((doc: any) => {
                     doc.ref.delete();
-                    this.getMessages();
                 });
             });
     };
