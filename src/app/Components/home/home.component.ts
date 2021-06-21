@@ -64,13 +64,6 @@ export class HomeComponent implements OnInit {
                     message: this.newMessage,
                     date: new Date(),
                 })
-                .then((docRef: { id: string }) => {
-                    console.log(
-                        'Message successfull posted with id' + docRef.id
-                    );
-
-                    // this.getMessages();
-                })
                 .catch((err: any) => {
                     console.log(err);
                 });
