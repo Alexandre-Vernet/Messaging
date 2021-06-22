@@ -602,10 +602,9 @@
                                             </div>
                                             <div class="nk-chat-editor-form">
                                                 <div class="form-control-wrap">
-                                                    <textarea class="form-control form-control-simple no-resize"
-                                                        rows="1" (keydown.enter)="sendMessage()"
-                                                        placeholder="Type your message..."
-                                                        [(ngModel)]="newMessage"></textarea>
+                                                    <input type="text" (keydown.enter)="sendMessage()"
+                                                        class="form-control form-control-simple no-resize" rows="1"
+                                                        placeholder="Type your message..." [(ngModel)]="newMessage">
                                                 </div>
                                             </div>
                                             <ul class="nk-chat-editor-tools g-2">
