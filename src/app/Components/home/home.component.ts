@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import firebase from 'firebase';
 import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
@@ -27,12 +27,17 @@ export class HomeComponent implements OnInit {
 
     constructor(
         private auth: AuthenticationService,
-        private firestore: FirestoreService
+        private firestore: FirestoreService,
+        private cdref: ChangeDetectorRef
     ) {}
 
     ngOnInit() {
         this.user = this.auth.user;
         this._messages = this.messages;
+    }
+
+    ngAfterContentChecked() {
+        this.cdref.detectChanges();
     }
 
     public get messages(): any {
