@@ -489,7 +489,7 @@
 
 
 
-                                            <div *ngFor="let message of messages">
+                                            <div *ngFor="let message of _messages">
                                                 <div *ngIf="message.email != user['email']">
 
                                                     <!-- There messages -->
@@ -603,7 +603,7 @@
                                             <div class="nk-chat-editor-form">
                                                 <div class="form-control-wrap">
                                                     <textarea class="form-control form-control-simple no-resize"
-                                                        rows="1" id="default-textarea"
+                                                        rows="1" (keydown.enter)="sendMessage()"
                                                         placeholder="Type your message..."
                                                         [(ngModel)]="newMessage"></textarea>
                                                 </div>

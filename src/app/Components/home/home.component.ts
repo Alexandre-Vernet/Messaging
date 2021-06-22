@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import firebase from 'firebase';
 import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
+import { FirestoreService } from 'src/app/Services/firestore/firestore.service';
 
 @Component({
     selector: 'app-home',
@@ -10,8 +11,7 @@ import { AuthenticationService } from 'src/app/Services/authentication/authentic
 })
 export class HomeComponent implements OnInit {
     user: any = {};
-    newMessage: any;
-    messages: {
+    _messages: {
         email: String;
         firstName: String;
         lastName: String;
@@ -19,33 +19,32 @@ export class HomeComponent implements OnInit {
         date: Date;
     }[] = [];
 
+    newMessage: any;
+
     form = new FormGroup({
         editedMessage: new FormControl('', [Validators.required]),
     });
 
-    firestore: any;
-
-    constructor(private auth: AuthenticationService) {}
+    constructor(
+        private auth: AuthenticationService,
+        private firestore: FirestoreService
+    ) {}
 
     ngOnInit() {
-        this.firestore = firebase.firestore();
         this.user = this.auth.user;
-
-        this.getMessages();
+        this._messages = this.messages;
     }
 
-    /**
-     * Get message from firestore
-     */
-    getMessages = () => {
+    public get messages(): any {
         firebase
             .firestore()
             .collection('messages')
             .orderBy('date', 'asc')
+            .limit(50)
             .onSnapshot((querySnapshot) => {
-                this.messages = [];
+                this._messages = [];
                 querySnapshot.forEach((doc) => {
-                    this.messages.push({
+                    this._messages.push({
                         email: doc.get('email'),
                         firstName: doc.get('firstName'),
                         lastName: doc.get('lastName'),
@@ -54,26 +53,13 @@ export class HomeComponent implements OnInit {
                     });
                 });
             });
-    };
 
-    /**
-     * Send message to firestore
-     */
+        return this._messages;
+    }
+
     sendMessage = () => {
         if (this.newMessage.length > 0) {
-            // Store message
-            this.firestore
-                .collection('messages')
-                .add({
-                    email: this.auth.user['email'],
-                    firstName: this.auth.user['firstName'],
-                    lastName: this.auth.user['lastName'],
-                    message: this.newMessage,
-                    date: new Date(),
-                })
-                .catch((err: any) => {
-                    console.log(err);
-                });
+            this.firestore.sendMessage(this.newMessage);
 
             // Clear input
             this.newMessage = '';
@@ -99,9 +85,6 @@ export class HomeComponent implements OnInit {
 
                 // Reset edited message
                 editedMessage = '';
-
-                // Reload message
-                this.getMessages();
             })
             .catch((error) => {
                 // The document probably doesn't exist.
@@ -109,25 +92,13 @@ export class HomeComponent implements OnInit {
             });
     };
 
-    /**
-     * Delete message
-     */
     deleteMessage = (date: Date) => {
-        this.firestore
-            .collection('messages')
-            .where('date', '==', date)
-            .get()
-            .then((querySnapshot: any) => {
-                querySnapshot.forEach((doc: any) => {
-                    doc.ref.delete();
-                });
-            });
+        this.firestore.deleteMessage(date);
     };
 
     /**
      *  Format date to locale zone
      * @param date
-     * @returns
      */
     formatDate = (date: any) => {
         return date.toDate().toLocaleTimeString('fr-FR');
