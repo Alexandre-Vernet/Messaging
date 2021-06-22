@@ -71,6 +71,10 @@ export class HomeComponent implements OnInit {
         }
     };
 
+    sendFile = () => {
+        document.getElementById('file_upload')?.click();
+    };
+
     /**
      * Edit message
      */

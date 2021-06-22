@@ -587,11 +587,11 @@
                                         </div><!-- .nk-chat-panel -->
                                         <div class="nk-chat-editor">
                                             <div class="nk-chat-editor-upload  ml-n1">
-                                                <a href="#"
+                                                <!-- <a href="#"
                                                     class="btn btn-sm btn-icon btn-trigger text-primary toggle-opt"
                                                     data-target="chat-upload"><em
-                                                        class="icon ni ni-plus-circle-fill"></em></a>
-                                                <div class="chat-upload-option" data-content="chat-upload">
+                                                        class="icon ni ni-plus-circle-fill"></em></a> -->
+                                                <!-- <div class="chat-upload-option" data-content="chat-upload">
                                                     <ul class="">
                                                         <li><a href="#"><em class="icon ni ni-img-fill"></em></a></li>
                                                         <li><a href="#"><em class="icon ni ni-camera-fill"></em></a>
@@ -599,8 +599,28 @@
                                                         <li><a href="#"><em class="icon ni ni-mic"></em></a></li>
                                                         <li><a href="#"><em class="icon ni ni-grid-sq"></em></a></li>
                                                     </ul>
+                                                </div> -->
+
+                                                <!-- Send file -->
+                                                <div class="form-control-wrap">
+                                                    <div class="custom-file">
+                                                        <!-- <input type="file" accept="image/*" multiple
+                                                            class="icon ni ni-plus-circle-fill" id=" customFile">
+                                                        <label class="custom-file-label" for="customFile">Choose
+                                                            file</label> -->
+
+                                                        <a class="btn btn-sm btn-icon btn-trigger text-primary toggle-opt"
+                                                            data-target="chat-upload">
+                                                            <input type="file" accept="image/*" id="file_upload"
+                                                                style="display: none"
+                                                                class="icon ni ni-plus-circle-fill">
+                                                            <em (click)="sendFile()"
+                                                                class="icon ni ni-plus-circle-fill"></em></a>
+                                                    </div>
                                                 </div>
                                             </div>
+
+                                            <!-- Type your message -->
                                             <div class="nk-chat-editor-form">
                                                 <div class="form-control-wrap">
                                                     <input type="text" (keydown.enter)="sendMessage()"
@@ -608,6 +628,7 @@
                                                         placeholder="Type your message..." [(ngModel)]="newMessage">
                                                 </div>
                                             </div>
+
                                             <ul class="nk-chat-editor-tools g-2">
                                                 <li>
                                                     <a href="#" class="btn btn-sm btn-icon btn-trigger text-primary"><em
