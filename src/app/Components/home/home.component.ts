@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import firebase from 'firebase';
 import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
 import { FirestoreService } from 'src/app/Services/firestore/firestore.service';
+import { StorageService } from 'src/app/Services/storage/storage.service';
 
 @Component({
     selector: 'app-home',
@@ -19,6 +20,11 @@ export class HomeComponent implements OnInit {
         date: Date;
     }[] = [];
 
+    _files: {
+        name: String;
+        link: any;
+    }[] = [];
+
     newMessage: any;
 
     form = new FormGroup({
@@ -28,12 +34,14 @@ export class HomeComponent implements OnInit {
     constructor(
         private auth: AuthenticationService,
         private firestore: FirestoreService,
+        private storage: StorageService,
         private cdref: ChangeDetectorRef
     ) {}
 
     ngOnInit() {
         this.user = this.auth.user;
         this._messages = this.messages;
+        this._files = this.storage.getFiles();
     }
 
     ngAfterContentChecked() {
@@ -71,8 +79,16 @@ export class HomeComponent implements OnInit {
         }
     };
 
-    sendFile = () => {
+    getFiles = () => {
+        this.storage.getFiles();
+    };
+
+    uploadFile = () => {
         document.getElementById('file_upload')?.click();
+    };
+
+    sendFile = (event: any) => {
+        this.storage.sendFile(event);
     };
 
     /**

@@ -575,10 +575,19 @@
                                                                 <li> {{formatDate(message.date)}} </li>
                                                             </ul>
                                                         </div>
+
                                                     </div>
                                                 </div>
                                             </div>
 
+
+                                            <div *ngFor="let file of _files">
+                                                <img class="image" src="{{file}}" alt="{{file}}">
+                                            </div>
+
+
+
+                                            <!-- https://firebasestorage.googleapis.com/v0/b/messaging-db163.appspot.com/o/images%2FLogo.jpg?alt=media&token=8db46b6c-751a-4c81-8771-94ab88bbbf79 -->
 
 
 
@@ -604,18 +613,18 @@
                                                 <!-- Send file -->
                                                 <div class="form-control-wrap">
                                                     <div class="custom-file">
-                                                        <!-- <input type="file" accept="image/*" multiple
-                                                            class="icon ni ni-plus-circle-fill" id=" customFile">
-                                                        <label class="custom-file-label" for="customFile">Choose
-                                                            file</label> -->
 
                                                         <a class="btn btn-sm btn-icon btn-trigger text-primary toggle-opt"
                                                             data-target="chat-upload">
-                                                            <input type="file" accept="image/*" id="file_upload"
-                                                                style="display: none"
+                                                            <input type="file" (change)="sendFile($event)"
+                                                                accept="image/*" id="file_upload" style="display: none"
                                                                 class="icon ni ni-plus-circle-fill">
-                                                            <em (click)="sendFile()"
+                                                            <em (click)="uploadFile()"
                                                                 class="icon ni ni-plus-circle-fill"></em></a>
+
+                                                        <!-- <input type="file" accept="image/*" id="file_upload"
+                                                            (change)="sendFile($event)"
+                                                            class="icon ni ni-plus-circle-fill"> -->
                                                     </div>
                                                 </div>
                                             </div>
