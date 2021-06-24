@@ -9,7 +9,7 @@ export class StorageService {
 
     _files: {}[] = [];
 
-    getFiles = (): any => {
+    get files() {
         let imageRef = firebase.storage().ref().child('images');
 
         // Find all items
@@ -23,11 +23,11 @@ export class StorageService {
                 });
             })
             .catch((error) => {
-                // Uh-oh, an error occurred!
+                console.log('error: ', error);
             });
 
         return this._files;
-    };
+    }
 
     sendFile = (event: any) => {
         // Get file
@@ -38,7 +38,7 @@ export class StorageService {
 
         // Upload file
         imageRef.put(file).then((snapshot) => {
-            console.log('Uploaded a blob or file!');
+            console.log('Uploaded a blob or file!', snapshot);
         });
     };
 }

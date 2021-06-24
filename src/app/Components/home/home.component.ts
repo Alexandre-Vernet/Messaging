@@ -20,10 +20,7 @@ export class HomeComponent implements OnInit {
         date: Date;
     }[] = [];
 
-    _files: {
-        name: String;
-        link: any;
-    }[] = [];
+    files: {}[] = [];
 
     newMessage: any;
 
@@ -41,7 +38,7 @@ export class HomeComponent implements OnInit {
     ngOnInit() {
         this.user = this.auth.user;
         this._messages = this.messages;
-        this._files = this.storage.getFiles();
+        this.files = this.storage.files;
     }
 
     ngAfterContentChecked() {
@@ -77,10 +74,6 @@ export class HomeComponent implements OnInit {
             // Clear input
             this.newMessage = '';
         }
-    };
-
-    getFiles = () => {
-        this.storage.getFiles();
     };
 
     uploadFile = () => {
