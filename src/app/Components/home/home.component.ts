@@ -18,9 +18,10 @@ export class HomeComponent implements OnInit {
         lastName: String;
         message: String;
         date: Date;
+        image: any;
     }[] = [];
 
-    files: {}[] = [];
+    files: { path: String; date: any }[] = [];
 
     newMessage: any;
 
@@ -59,6 +60,7 @@ export class HomeComponent implements OnInit {
                         firstName: doc.get('firstName'),
                         lastName: doc.get('lastName'),
                         message: doc.get('message'),
+                        image: doc.get('image'),
                         date: doc.get('date'),
                     });
                 });

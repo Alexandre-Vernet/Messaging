@@ -530,7 +530,12 @@
                                                         <div class="chat-content">
                                                             <div class="chat-bubbles">
                                                                 <div class="chat-bubble">
-                                                                    <div class="chat-msg"> {{message.message}}
+                                                                    <div *ngIf="message.message" class="chat-msg">
+                                                                        {{message.message}}
+                                                                    </div>
+                                                                    <div *ngIf="message.image">
+                                                                        <img src="{{message.image}}"
+                                                                            alt="{{message.image}}">
                                                                     </div>
                                                                     <ul class="chat-msg-more">
                                                                         <li class="d-none d-sm-block"><a href="#"
@@ -581,9 +586,9 @@
                                             </div>
 
 
-                                            <div *ngFor="let file of files">
-                                                <img class="image" src="{{file}}" alt="{{file}}">
-                                            </div>
+                                            <!-- <div *ngFor="let file of files">
+                                                <img class="image" src="{{file.path}}" alt="{{file.date}}">
+                                            </div> -->
 
 
 
