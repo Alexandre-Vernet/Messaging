@@ -6,9 +6,9 @@ import { AuthenticationService } from '../authentication/authentication.service'
     providedIn: 'root',
 })
 export class StorageService {
-    constructor(private auth: AuthenticationService) {}
+    private _files: { path: String; date: any }[] = [];
 
-    _files: { path: String; date: any }[] = [];
+    constructor(private auth: AuthenticationService) {}
 
     get files() {
         let imageRef = firebase.storage().ref().child('images');

@@ -503,9 +503,21 @@
                                                         <div class="chat-content">
                                                             <div class="chat-bubbles">
                                                                 <div class="chat-bubble">
-                                                                    <div class="chat-msg"> {{message.message}}
+
+                                                                    <!-- Message -->
+                                                                    <div *ngIf="message.message" class="chat-msg">
+                                                                        {{message.message}}
                                                                     </div>
+
+                                                                    <!-- Image -->
+                                                                    <div *ngIf="message.image">
+                                                                        <img src="{{message.image}}"
+                                                                            alt="{{message.image}}">
+                                                                    </div>
+
+                                                                    <!-- Action -->
                                                                     <ul class="chat-msg-more">
+                                                                        <!-- Reply -->
                                                                         <li class="d-none d-sm-block"><a href="#"
                                                                                 class="btn btn-icon btn-sm btn-trigger"><em
                                                                                     class="icon ni ni-reply-fill"></em></a>
@@ -530,13 +542,19 @@
                                                         <div class="chat-content">
                                                             <div class="chat-bubbles">
                                                                 <div class="chat-bubble">
+
+                                                                    <!-- Message -->
                                                                     <div *ngIf="message.message" class="chat-msg">
                                                                         {{message.message}}
                                                                     </div>
+
+                                                                    <!-- Image -->
                                                                     <div *ngIf="message.image">
                                                                         <img src="{{message.image}}"
                                                                             alt="{{message.image}}">
                                                                     </div>
+
+                                                                    <!-- Action -->
                                                                     <ul class="chat-msg-more">
                                                                         <li class="d-none d-sm-block"><a href="#"
                                                                                 class="btn btn-icon btn-sm btn-trigger"><em
