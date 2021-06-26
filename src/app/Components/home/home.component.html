@@ -484,12 +484,10 @@
                                             style="overflow: scroll; height: 1000px;" data-simplebar #scrollMe
                                             [scrollTop]="scrollMe.scrollHeight">
 
-
-
-
-
-
-
+                                            <!-- Check no messages -->
+                                            <div class="d-flex justify-content-center" *ngIf="_messages.length <= 0">
+                                                <h4>No message</h4>
+                                            </div>
 
                                             <div *ngFor="let message of _messages">
                                                 <div *ngIf="message.email != user['email']">
@@ -505,7 +503,8 @@
                                                         <div class="chat-content">
                                                             <div class="chat-bubbles">
                                                                 <div class="chat-bubble">
-                                                                    <div class="chat-msg"> {{message.message}} </div>
+                                                                    <div class="chat-msg"> {{message.message}}
+                                                                    </div>
                                                                     <ul class="chat-msg-more">
                                                                         <li class="d-none d-sm-block"><a href="#"
                                                                                 class="btn btn-icon btn-sm btn-trigger"><em
