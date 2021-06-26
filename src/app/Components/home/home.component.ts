@@ -46,6 +46,10 @@ export class HomeComponent implements OnInit {
         this.cdref.detectChanges();
     }
 
+    setCursor = () => {
+        document.getElementById('inputSendMessage')?.focus();
+    };
+
     public get messages(): any {
         firebase
             .firestore()

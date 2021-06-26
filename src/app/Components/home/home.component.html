@@ -480,8 +480,9 @@
                                                 </div>
                                             </div><!-- .nk-chat-head-search -->
                                         </div><!-- .nk-chat-head -->
-                                        <div class="nk-chat-panel" style="overflow: scroll; height: 1000px;"
-                                            data-simplebar #scrollMe [scrollTop]="scrollMe.scrollHeight">
+                                        <div class="nk-chat-panel" (click)="setCursor()"
+                                            style="overflow: scroll; height: 1000px;" data-simplebar #scrollMe
+                                            [scrollTop]="scrollMe.scrollHeight">
 
 
 
@@ -636,7 +637,8 @@
                                                 <div class="form-control-wrap">
                                                     <input type="text" (keydown.enter)="sendMessage()"
                                                         class="form-control form-control-simple no-resize" rows="1"
-                                                        placeholder="Type your message..." [(ngModel)]="newMessage">
+                                                        id="inputSendMessage" placeholder="Type your message..."
+                                                        [(ngModel)]="newMessage">
                                                 </div>
                                             </div>
 
