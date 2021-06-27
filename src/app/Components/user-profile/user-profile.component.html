@@ -418,17 +418,53 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="form-label" for="password">New password</label>
-                                            <input type="text" class="form-control form-control-lg" id="password"
-                                                placeholder="Enter your new password" formControlName="password">
+                                            <input type="password" class="form-control form-control-lg" id="password"
+                                                placeholder="Enter your new password" formControlName="password"
+                                                [ngClass]="{'is-invalid': formUpdatePassword.get('confirmPassword')?.touched && formUpdatePassword.get('confirmPassword')?.invalid || formUpdatePassword.get('confirmPassword')?.touched && formUpdatePassword.value['password'] != formUpdatePassword.value['confirmPassword']}">
+
+
+                                            <div *ngIf="formUpdatePassword.get('confirmPassword')?.touched && formUpdatePassword.get('confirmPassword')?.invalid || formUpdatePassword.get('confirmPassword')?.touched &&  formUpdatePassword.value['password'] != formUpdatePassword.value['confirmPassword']"
+                                                class="invalid-feedback">
+                                                <div *ngIf="formUpdatePassword.get('password')?.errors?.required">
+                                                    Password is required
+                                                </div>
+                                                <div *ngIf="formUpdatePassword.get('password')?.errors?.minlength">
+                                                    Password should be at least 6 characters
+                                                </div>
+                                                <div
+                                                    *ngIf="formUpdatePassword.value['password'] != formUpdatePassword.value['confirmPassword']">
+                                                    Passwords do not match
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+
 
                                     <!-- Confirm password -->
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="form-label" for="confirmPassword">Confirm password</label>
-                                            <input type="text" class="form-control form-control-lg" id="confirmPassword"
-                                                placeholder="Confirm your new password">
+                                            <input type="password" class="form-control form-control-lg"
+                                                id="confirmPassword" placeholder="Confirm your new password"
+                                                formControlName="confirmPassword"
+                                                [ngClass]="{'is-invalid': formUpdatePassword.get('confirmPassword')?.touched && formUpdatePassword.get('confirmPassword')?.invalid || formUpdatePassword.get('confirmPassword')?.touched && formUpdatePassword.value['password'] != formUpdatePassword.value['confirmPassword']}">
+
+
+                                            <div *ngIf="formUpdatePassword.get('confirmPassword')?.touched && formUpdatePassword.get('confirmPassword')?.invalid || formUpdatePassword.get('confirmPassword')?.touched &&  formUpdatePassword.value['password'] != formUpdatePassword.value['confirmPassword']"
+                                                class="invalid-feedback">
+                                                <div
+                                                    *ngIf="formUpdatePassword.get('confirmPassword')?.errors?.required">
+                                                    Confirm password is required
+                                                </div>
+                                                <div
+                                                    *ngIf="formUpdatePassword.get('confirmPassword')?.errors?.minlength">
+                                                    Confirm password should be at least 6 characters
+                                                </div>
+                                                <div
+                                                    *ngIf="formUpdatePassword.value['password'] != formUpdatePassword.value['confirmPassword']">
+                                                    Passwords do not match
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
