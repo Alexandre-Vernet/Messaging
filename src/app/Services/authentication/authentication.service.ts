@@ -266,9 +266,24 @@ export class AuthenticationService {
         user.updatePassword(password)
             .then(() => {
                 console.log('Password has been successfully updated');
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: `Password has been successfully updated`,
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
             })
             .catch((error: any) => {
                 console.log('error: ', error);
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: `We are sorry, we were unable to process your updating password. Please try after
+                    sometimes.\n${error}`,
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
             });
     };
 
