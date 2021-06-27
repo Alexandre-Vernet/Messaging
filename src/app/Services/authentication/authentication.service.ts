@@ -260,6 +260,18 @@ export class AuthenticationService {
             });
     };
 
+    updatePassword = (password: string) => {
+        let user: any = firebase.auth().currentUser;
+
+        user.updatePassword(password)
+            .then(() => {
+                console.log('Password has been successfully updated');
+            })
+            .catch((error: any) => {
+                console.log('error: ', error);
+            });
+    };
+
     /**
      * Sign out the user
      */

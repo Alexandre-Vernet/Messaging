@@ -14,9 +14,9 @@ export class UserProfileComponent implements OnInit {
         lastName: new FormControl(this.user.lastName, [Validators.required]),
     });
 
-    formChangePassword: FormGroup = new FormGroup({
-        olderPassword: new FormControl('', [Validators.required]),
-        newPassword: new FormControl('', [Validators.required]),
+    formUpdatePassword: FormGroup = new FormGroup({
+        password: new FormControl('', [Validators.required]),
+        // confirmPassword: new FormControl('', [Validators.required]),
     });
     constructor(private auth: AuthenticationService) {}
 
@@ -30,7 +30,10 @@ export class UserProfileComponent implements OnInit {
         this.auth.updateProfile(firstName, lastName);
     };
 
-    changePassword = () => {};
+    updatePassword = () => {
+        const password = this.formUpdatePassword.value['password'];
+        this.auth.updatePassword(password);
+    };
     deleteAccount = () => {
         this.auth.deleteAccount();
     };

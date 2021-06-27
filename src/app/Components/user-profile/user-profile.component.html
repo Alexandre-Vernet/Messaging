@@ -409,26 +409,26 @@
 
 
                         <div class="modal-body">
-                            <form [formGroup]="formChangePassword"
-                                ngSubmit="formChangePassword.valid && changePassword()">
+                            <form [formGroup]="formUpdatePassword"
+                                (ngSubmit)="formUpdatePassword.valid && updatePassword()">
                                 <div class="row gy-4">
 
-
-                                    <!-- Older password -->
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label class="form-label" for="olderPassword">Older password</label>
-                                            <input type="text" class="form-control form-control-lg" id="olderPassword"
-                                                placeholder="Enter your older password" formControlName="olderPassword">
-                                        </div>
-                                    </div>
 
                                     <!-- New password -->
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label class="form-label" for="newPassword">New password</label>
-                                            <input type="text" class="form-control form-control-lg" id="newPassword"
-                                                placeholder="Enter your new password" formControlName="newPassword">
+                                            <label class="form-label" for="password">New password</label>
+                                            <input type="text" class="form-control form-control-lg" id="password"
+                                                placeholder="Enter your new password" formControlName="password">
+                                        </div>
+                                    </div>
+
+                                    <!-- Confirm password -->
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="form-label" for="confirmPassword">Confirm password</label>
+                                            <input type="text" class="form-control form-control-lg" id="confirmPassword"
+                                                placeholder="Confirm your new password">
                                         </div>
                                     </div>
 
@@ -436,7 +436,7 @@
                                         <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                                             <li>
                                                 <button class="btn btn-lg btn-primary"
-                                                    [disabled]="!formChangePassword.valid" type="submit">Update
+                                                    [disabled]="!formUpdatePassword.valid" type="submit">Update
                                                     Profile</button>
                                             </li>
                                             <li>
