@@ -489,10 +489,11 @@
                                                 <h4>No message</h4>
                                             </div>
 
+                                            <!-- Get all messages -->
                                             <div *ngFor="let message of _messages">
                                                 <div *ngIf="message.email != user['email']">
 
-                                                    <!-- There messages -->
+                                                    <!-- Other messages -->
                                                     <div class="chat is-you">
                                                         <div class="chat-avatar">
                                                             <div class="user-avatar bg-purple">
@@ -511,8 +512,10 @@
 
                                                                     <!-- Image -->
                                                                     <div *ngIf="message.image">
-                                                                        <img src="{{message.image}}"
-                                                                            alt="{{message.image}}">
+                                                                        <a href="{{message.image}}" target="_blank">
+                                                                            <img src="{{message.image}}"
+                                                                                alt="{{message.image}}">
+                                                                        </a>
                                                                     </div>
 
                                                                     <!-- Action -->
@@ -525,6 +528,7 @@
                                                                     </ul>
                                                                 </div>
                                                             </div>
+                                                            <!-- User & Date -->
                                                             <ul class="chat-meta">
                                                                 <li> {{message.firstName + " " + message.lastName}}
                                                                 </li>
@@ -550,8 +554,10 @@
 
                                                                     <!-- Image -->
                                                                     <div *ngIf="message.image">
-                                                                        <img src="{{message.image}}"
-                                                                            alt="{{message.image}}">
+                                                                        <a href="{{message.image}}" target="_blank">
+                                                                            <img src="{{message.image}}"
+                                                                                alt="{{message.image}}">
+                                                                        </a>
                                                                     </div>
 
                                                                     <!-- Action -->
@@ -569,10 +575,14 @@
                                                                                 <div
                                                                                     class="dropdown-menu dropdown-menu-sm">
                                                                                     <ul class="link-list-opt no-bdr">
+
+                                                                                        <!-- Reply -->
                                                                                         <li class="d-sm-none"><a
                                                                                                 href="#"><em
                                                                                                     class="icon ni ni-reply-fill"></em>
                                                                                                 Reply</a></li>
+
+                                                                                        <!-- Edit -->
                                                                                         <li>
                                                                                             <a class="icon"
                                                                                                 data-toggle="modal"
@@ -580,6 +590,8 @@
                                                                                                     class="icon ni ni-pen-alt-fill"></em>
                                                                                                 Edit</a>
                                                                                         </li>
+
+                                                                                        <!-- Remove -->
                                                                                         <li>
                                                                                             <a class="icon"
                                                                                                 (click)="deleteMessage(message.date)"><em
@@ -593,6 +605,7 @@
                                                                     </ul>
                                                                 </div>
                                                             </div>
+                                                            <!-- User & Date -->
                                                             <ul class="chat-meta">
                                                                 <li> You </li>
                                                                 <li> {{formatDate(message.date)}} </li>
@@ -602,14 +615,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-
-                                            <!-- <div *ngFor="let file of files">
-                                                <img class="image" src="{{file.path}}" alt="{{file.date}}">
-                                            </div> -->
-
-
-
 
 
 
@@ -633,7 +638,6 @@
                                                 <!-- Send file -->
                                                 <div class="form-control-wrap">
                                                     <div class="custom-file">
-
                                                         <a class="btn btn-sm btn-icon btn-trigger text-primary toggle-opt"
                                                             data-target="chat-upload">
                                                             <input type="file" (change)="sendFile($event)"
@@ -641,15 +645,11 @@
                                                                 class="icon ni ni-plus-circle-fill">
                                                             <em (click)="uploadFile()"
                                                                 class="icon ni ni-plus-circle-fill"></em></a>
-
-                                                        <!-- <input type="file" accept="image/*" id="file_upload"
-                                                            (change)="sendFile($event)"
-                                                            class="icon ni ni-plus-circle-fill"> -->
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <!-- Type your message -->
+                                            <!-- Write message -->
                                             <div class="nk-chat-editor-form">
                                                 <div class="form-control-wrap">
                                                     <input type="text" (keydown.enter)="sendMessage()"
@@ -660,10 +660,14 @@
                                             </div>
 
                                             <ul class="nk-chat-editor-tools g-2">
+
+                                                <!-- Emoji -->
                                                 <li>
                                                     <a href="#" class="btn btn-sm btn-icon btn-trigger text-primary"><em
                                                             class="icon ni ni-happyf-fill"></em></a>
                                                 </li>
+
+                                                <!-- Send message -->
                                                 <li>
                                                     <button class="btn btn-round btn-primary btn-icon"><em
                                                             class="icon ni ni-send-alt"
