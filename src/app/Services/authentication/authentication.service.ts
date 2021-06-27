@@ -30,6 +30,10 @@ export class AuthenticationService {
         this._firebaseError = value;
     }
 
+    isAuthenticated = () => {
+        return firebase.auth().currentUser;
+    };
+
     /**
      * @param email in database
      * @param password in database
@@ -42,12 +46,9 @@ export class AuthenticationService {
                 // User is logged in
 
                 let userId = firebase.auth().currentUser?.uid;
+                let user = firebase.firestore().collection('users').doc(userId);
 
-                firebase
-                    .firestore()
-                    .collection('users')
-                    .doc(userId)
-                    .get()
+                user.get()
                     .then((doc) => {
                         if (doc.exists) {
                             // Set cookie
@@ -55,11 +56,10 @@ export class AuthenticationService {
                             this.cookieService.set('password', password, 365);
 
                             // Set data
-                            this.user['firstName'] = doc.data()?.firstName;
-                            this.user['lastName'] = doc.data()?.lastName;
-                            this.user['email'] = doc.data()?.email;
-                            this.user['dateCreation'] =
-                                doc.data()?.dateCreation;
+                            this.user.firstName = doc.data()?.firstName;
+                            this.user.lastName = doc.data()?.lastName;
+                            this.user.email = doc.data()?.email;
+                            this.user.dateCreation = doc.data()?.dateCreation;
 
                             // Clear error
                             this.firebaseError = '';
@@ -155,10 +155,10 @@ export class AuthenticationService {
                 const photoUrl = result.user?.photoURL;
 
                 // Set data
-                this.user['firstName'] = firstName;
-                this.user['lastName'] = lastName;
-                this.user['email'] = email;
-                this.user['photo'] = photoUrl;
+                this.user.firstName = firstName;
+                this.user.lastName = lastName;
+                this.user.email = email;
+                this.user.photo = photoUrl;
 
                 // Store informations of user
                 firebase
@@ -225,7 +225,40 @@ export class AuthenticationService {
             });
     };
 
-    updateProfile = () => {};
+    updateProfile = (firstName: string, lastName: string) => {
+        let userId: any = firebase.auth().currentUser?.uid;
+        let user = firebase.firestore().collection('users').doc(userId);
+
+        user.update({
+            firstName: firstName,
+            lastName: lastName,
+        })
+            .then(() => {
+                // User has been successfully updated
+                console.log('User has been successfully updated');
+
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: `User has been successfully updated`,
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            })
+            .catch((error) => {
+                // The document probably doesn't exist.
+                console.error('Error updating document: ', error);
+
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: `We are sorry, we were unable to process your updating profile. Please try after
+                    sometimes.\n${error}`,
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            });
+    };
 
     /**
      * Sign out the user
@@ -246,12 +279,9 @@ export class AuthenticationService {
 
     deleteAccount = () => {
         let userId = firebase.auth().currentUser?.uid;
+        let user = firebase.firestore().collection('users').doc(userId);
 
-        firebase
-            .firestore()
-            .collection('users')
-            .doc(userId)
-            .delete()
+        user.delete()
             .then(() => {
                 console.log('All data of the user has been deleted');
 
@@ -262,15 +292,41 @@ export class AuthenticationService {
                         // User deleted.
                         console.log('User has been deleted');
 
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: `User has been deleted`,
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+
                         // Go to sign up
                         this.router.navigate(['/sign-up']);
                     })
                     .catch((error) => {
                         console.log(`Error while deleting the user : ${error}`);
+
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'error',
+                            title: `We are sorry, we were unable to process your deleting profile. Please try after
+                            sometimes.\n${error}`,
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
                     });
             })
             .catch((error) => {
                 console.error(`Error deleting data of user : ${error}`);
+
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: `We are sorry, we were unable to process your deleting profile. Please try after
+                    sometimes.\n${error}`,
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
             });
     };
 }

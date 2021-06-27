@@ -10,8 +10,8 @@ import { AuthenticationService } from 'src/app/Services/authentication/authentic
 export class UserProfileComponent implements OnInit {
     user: any = {};
     form: FormGroup = new FormGroup({
-        firstName: new FormControl('', [Validators.required]),
-        lastName: new FormControl('', [Validators.required]),
+        firstName: new FormControl(this.user.firstName, [Validators.required]),
+        lastName: new FormControl(this.user.lastName, [Validators.required]),
     });
 
     formChangePassword: FormGroup = new FormGroup({
@@ -25,7 +25,9 @@ export class UserProfileComponent implements OnInit {
     }
 
     updateProfile = () => {
-        this.auth.updateProfile();
+        const firstName = this.form.value['firstName'];
+        const lastName = this.form.value['lastName'];
+        this.auth.updateProfile(firstName, lastName);
     };
 
     changePassword = () => {};

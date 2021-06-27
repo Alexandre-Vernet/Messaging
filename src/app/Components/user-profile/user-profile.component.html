@@ -113,7 +113,7 @@
                                                                 <div class="data-col">
                                                                     <span class="data-label">Date of creation
                                                                         account</span>
-                                                                    <span class="data-value">
+                                                                    <span *ngIf="user.dateCreation" class="data-value">
                                                                         {{user.dateCreation.toDate()}}
                                                                     </span>
                                                                 </div>
@@ -298,7 +298,7 @@
                             <div class="tab-content">
                                 <div class="tab-pane active" id="personal">
 
-                                    <form [formGroup]="form" ngSubmit="updateProfile()">
+                                    <form [formGroup]="form" (ngSubmit)="form.valid && updateProfile()">
                                         <div class="row gy-4">
 
 
@@ -307,8 +307,8 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="firstName">First Name</label>
                                                     <input type="text" class="form-control form-control-lg"
-                                                        id="firstName" value="{{user.firstName}}"
-                                                        placeholder="Enter first name" formControlName="firstName">
+                                                        id="firstName" placeholder="Enter first name"
+                                                        formControlName="firstName">
                                                 </div>
                                             </div>
 
@@ -317,8 +317,8 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="lastName">Last Name</label>
                                                     <input type="text" class="form-control form-control-lg"
-                                                        id="lastName" value="{{user.lastName}}"
-                                                        placeholder="Enter last name" formControlName="lastName">
+                                                        id="lastName" placeholder="Enter last name"
+                                                        formControlName="lastName">
                                                 </div>
                                             </div>
 
