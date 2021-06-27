@@ -472,7 +472,8 @@
                                         <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                                             <li>
                                                 <button class="btn btn-lg btn-primary"
-                                                    [disabled]="!formUpdatePassword.valid" type="submit">Update
+                                                    [disabled]="!formUpdatePassword.valid || !formUpdatePassword.valid || formUpdatePassword.value['password'] != formUpdatePassword.value['confirmPassword']"
+                                                    type="submit">Update
                                                     Profile</button>
                                             </li>
                                             <li>
