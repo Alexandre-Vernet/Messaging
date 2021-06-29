@@ -215,12 +215,9 @@ export class AuthenticationService {
                 // An error occurred
                 console.log('error: ', error);
                 Swal.fire({
-                    position: 'top-end',
                     icon: 'error',
-                    title: `We are sorry, we were unable to process your reset password. Please try after
-                    sometimes.\n${error}`,
-                    showConfirmButton: false,
-                    timer: 1500,
+                    title: error,
+                    showConfirmButton: true,
                 });
             });
     };
@@ -250,12 +247,9 @@ export class AuthenticationService {
                 console.error('Error updating document: ', error);
 
                 Swal.fire({
-                    position: 'top-end',
                     icon: 'error',
-                    title: `We are sorry, we were unable to process your updating profile. Please try after
-                    sometimes.\n${error}`,
-                    showConfirmButton: false,
-                    timer: 1500,
+                    title: error,
+                    showConfirmButton: true,
                 });
             });
     };
@@ -277,12 +271,9 @@ export class AuthenticationService {
             .catch((error: any) => {
                 console.log('error: ', error);
                 Swal.fire({
-                    position: 'top-end',
                     icon: 'error',
-                    title: `We are sorry, we were unable to process your updating password. Please try after
-                    sometimes.\n${error}`,
-                    showConfirmButton: false,
-                    timer: 1500,
+                    title: error,
+                    showConfirmButton: true,
                 });
             });
     };
@@ -334,12 +325,9 @@ export class AuthenticationService {
                         console.log(`Error while deleting the user : ${error}`);
 
                         Swal.fire({
-                            position: 'top-end',
                             icon: 'error',
-                            title: `We are sorry, we were unable to process your deleting profile. Please try after
-                            sometimes.\n${error}`,
-                            showConfirmButton: false,
-                            timer: 1500,
+                            title: error,
+                            showConfirmButton: true,
                         });
                     });
             })
@@ -347,12 +335,9 @@ export class AuthenticationService {
                 console.error(`Error deleting data of user : ${error}`);
 
                 Swal.fire({
-                    position: 'top-end',
                     icon: 'error',
-                    title: `We are sorry, we were unable to process your deleting profile. Please try after
-                    sometimes.\n${error}`,
-                    showConfirmButton: false,
-                    timer: 1500,
+                    title: error,
+                    showConfirmButton: true,
                 });
             });
     };
