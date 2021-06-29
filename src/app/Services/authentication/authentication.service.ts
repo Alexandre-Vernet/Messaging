@@ -240,7 +240,7 @@ export class AuthenticationService {
                 Swal.fire({
                     position: 'top-end',
                     icon: 'success',
-                    title: `User has been successfully updated`,
+                    title: `Your account has been successfully updated`,
                     showConfirmButton: false,
                     timer: 1500,
                 });
