@@ -10,6 +10,7 @@ import { ForgotPasswordComponent } from './Components/login/forgot-password/forg
 import { ErrorComponent } from './Components/error/error.component';
 import { NavbarComponent } from './Components/navbar/navbar.component';
 import { UserProfileComponent } from './Components/user-profile/user-profile.component';
+import { AsideComponent } from './Components/chat/aside/aside.component';
 @NgModule({
     declarations: [
         AppComponent,
@@ -20,6 +21,7 @@ import { UserProfileComponent } from './Components/user-profile/user-profile.com
         ErrorComponent,
         NavbarComponent,
         UserProfileComponent,
+        AsideComponent,
     ],
     imports: [
         BrowserModule,
