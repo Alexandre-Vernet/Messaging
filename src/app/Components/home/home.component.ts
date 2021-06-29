@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import firebase from 'firebase';
-import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
-import { FirestoreService } from 'src/app/Services/firestore/firestore.service';
-import { StorageService } from 'src/app/Services/storage/storage.service';
+import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
+import { FirestoreService } from 'src/app/services/firestore/firestore.service';
+import { StorageService } from 'src/app/services/storage/storage.service';
 
 @Component({
     selector: 'app-home',
