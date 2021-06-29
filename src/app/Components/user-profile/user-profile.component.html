@@ -290,14 +290,14 @@
                             <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
                         </div>
 
-                        <div class="modal-body">
+                        <div class="modal-body ">
                             <form [formGroup]="formUpdateProfile"
                                 (ngSubmit)="formUpdateProfile.valid && updateProfile()">
                                 <div class="row gy-4">
 
 
                                     <!-- First name -->
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="form-label" for="firstName">First Name</label>
                                             <input type="text" class="form-control form-control-lg" id="firstName"
@@ -315,7 +315,7 @@
                                     </div>
 
                                     <!-- Last name -->
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="form-label" for="lastName">Last Name</label>
                                             <input type="text" class="form-control form-control-lg" id="lastName"
@@ -333,7 +333,7 @@
                                     </div>
 
                                     <!-- Submit -->
-                                    <div class="col-12">
+                                    <div class="col-12 my-3">
                                         <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                                             <li>
                                                 <button class="btn btn-lg btn-primary"
@@ -341,7 +341,7 @@
                                                     Profile</button>
                                             </li>
                                             <li>
-                                                <a href="#" data-dismiss="modal" class="link link-light">Cancel</a>
+                                                <a href="#" data-dismiss="modal" class="link link-light ml-3">Cancel</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -376,7 +376,7 @@
 
 
                         <!-- New password -->
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label" for="password">New password</label>
                                 <input type="password" class="form-control form-control-lg" id="password"
@@ -402,7 +402,7 @@
 
 
                         <!-- Confirm password -->
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label" for="confirmPassword">Confirm password</label>
                                 <input type="password" class="form-control form-control-lg" id="confirmPassword"
@@ -427,7 +427,7 @@
                         </div>
 
                         <!-- Submit -->
-                        <div class="col-12">
+                        <div class="col-12 my-3">
                             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                                 <li>
                                     <button class="btn btn-lg btn-primary"
@@ -436,7 +436,7 @@
                                         Profile</button>
                                 </li>
                                 <li>
-                                    <a href="#" data-dismiss="modal" class="link link-light">Cancel</a>
+                                    <a href="#" data-dismiss="modal" class="link link-light ml-3">Cancel</a>
                                 </li>
                             </ul>
                         </div>
