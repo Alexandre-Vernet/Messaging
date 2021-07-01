@@ -140,13 +140,13 @@ export class AuthenticationService {
      * Google connexion
      */
     googleSignUp = () => {
-        var provider = new firebase.auth.GoogleAuthProvider();
+        let provider = new firebase.auth.GoogleAuthProvider();
 
         firebase
             .auth()
             .signInWithPopup(provider)
             .then((result) => {
-                let userId: any = firebase.auth().currentUser?.uid;
+                let userId: string = firebase.auth().currentUser.uid;
 
                 // Get data from google account
                 const firstName = result.user?.displayName?.split(' ')[0];
@@ -223,8 +223,8 @@ export class AuthenticationService {
     };
 
     updateProfile = (firstName: string, lastName: string) => {
-        let userId: any = firebase.auth().currentUser?.uid;
-        let user = firebase.firestore().collection('users').doc(userId);
+        const userId: string = firebase.auth().currentUser.uid;
+        const user = firebase.firestore().collection('users').doc(userId);
 
         user.update({
             firstName: firstName,
@@ -237,15 +237,61 @@ export class AuthenticationService {
                 Swal.fire({
                     position: 'top-end',
                     icon: 'success',
-                    title: `Your account has been successfully updated`,
+                    title: 'Your account has been successfully updated',
                     showConfirmButton: false,
                     timer: 1500,
                 });
+
+                // Update values
+                this.user.firstName = firstName;
+                this.user.lastName = lastName;
             })
             .catch((error) => {
                 // The document probably doesn't exist.
                 console.error('Error updating document: ', error);
 
+                Swal.fire({
+                    icon: 'error',
+                    title: error,
+                    showConfirmButton: true,
+                });
+            });
+    };
+
+    updateEmail = (email: string) => {
+        const userId = firebase.auth().currentUser.uid;
+        const user = firebase.auth().currentUser;
+
+        user.updateEmail(email)
+            .then(() => {
+                // Update successful
+
+                firebase
+                    .firestore()
+                    .collection('users')
+                    .doc(userId)
+                    .update({
+                        email: email,
+                    })
+                    .then(() => {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Your email has been successfully updated',
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                    })
+                    .catch((error) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: error,
+                            showConfirmButton: true,
+                        });
+                    });
+            })
+            .catch((error) => {
+                // An error occurred
                 Swal.fire({
                     icon: 'error',
                     title: error,

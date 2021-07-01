@@ -14,6 +14,13 @@ export class UserProfileComponent implements OnInit {
         lastName: new FormControl(this.user.lastName, [Validators.required]),
     });
 
+    formUpdateEmail: FormGroup = new FormGroup({
+        email: new FormControl(this.user.email, [
+            Validators.required,
+            Validators.email,
+        ]),
+    });
+
     formUpdatePassword: FormGroup = new FormGroup({
         password: new FormControl('', [
             Validators.required,
@@ -34,6 +41,11 @@ export class UserProfileComponent implements OnInit {
         const firstName = this.formUpdateProfile.value['firstName'];
         const lastName = this.formUpdateProfile.value['lastName'];
         this.auth.updateProfile(firstName, lastName);
+    };
+
+    updateEmail = () => {
+        const email = this.formUpdateEmail.value['email'];
+        this.auth.updateEmail(email);
     };
 
     updatePassword = () => {
