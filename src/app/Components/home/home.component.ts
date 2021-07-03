@@ -24,14 +24,14 @@ export class HomeComponent implements OnInit {
         lastName: String;
         message: String;
         date: Date;
-        image: any;
+        image: String;
     }[] = [];
 
     files: { path: String; date: Date }[] = [];
 
-    newMessage: any;
+    newMessage: String;
 
-    form = new FormGroup({
+    formEditMessage = new FormGroup({
         editedMessage: new FormControl('', [Validators.required]),
     });
 
@@ -100,7 +100,7 @@ export class HomeComponent implements OnInit {
      * Edit message
      */
     editMessage = () => {
-        let editedMessage = this.form.value['editedMessage'];
+        let editedMessage = this.formEditMessage.value['editedMessage'];
         console.log('editedMessage: ', editedMessage);
 
         firebase
@@ -108,7 +108,7 @@ export class HomeComponent implements OnInit {
             .collection('messages')
             .doc('0FICKGZiB0YJhb3aOX9q')
             .update({
-                message: this.form.value['editedMessage'],
+                message: this.formEditMessage.value['editedMessage'],
             })
             .then(() => {
                 console.log('Document successfully updated!');
@@ -131,6 +131,13 @@ export class HomeComponent implements OnInit {
      * @param date
      */
     formatDate = (date: any) => {
-        return date.toDate().toLocaleTimeString('fr-FR');
+        const option = {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        };
+        const time = date.toDate().toLocaleTimeString('fr-FR');
+
+        return time;
     };
 }

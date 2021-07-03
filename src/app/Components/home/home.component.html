@@ -416,22 +416,24 @@
                 </a>
             </div>
             <div class="modal-body">
-                <form [formGroup]="form" (ngSubmit)="form.valid && editMessage()" class="form-validate is-alter">
+                <form [formGroup]="formEditMessage" (ngSubmit)="formEditMessage.valid && editMessage()"
+                    class="form-validate is-alter">
                     <div class="form-group">
                         <label class="form-label" for="full-name">Your edited message</label>
                         <div class="form-control-wrap">
                             <input type="text" formControlName="editedMessage" class="form-control" required
-                                [ngClass]="{'is-invalid': form.get('editedMessage')?.touched && form.get('editedMessage')?.invalid}">
-                            <div *ngIf="form.get('editedMessage')?.touched && form.get('editedMessage')?.invalid"
+                                [ngClass]="{'is-invalid': formEditMessage.get('editedMessage')?.touched && formEditMessage.get('editedMessage')?.invalid}">
+                            <div *ngIf="formEditMessage.get('editedMessage')?.touched && formEditMessage.get('editedMessage')?.invalid"
                                 class="invalid-feedback">
-                                <div *ngIf="form.get('editedMessage')?.errors?.required">
+                                <div *ngIf="formEditMessage.get('editedMessage')?.errors?.required">
                                     Edited message is required
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <button type="submit" [disabled]="!form.valid" class="btn btn-lg btn-primary">Save</button>
+                        <button type="submit" [disabled]="!formEditMessage.valid"
+                            class="btn btn-lg btn-primary">Save</button>
                     </div>
                 </form>
             </div>
