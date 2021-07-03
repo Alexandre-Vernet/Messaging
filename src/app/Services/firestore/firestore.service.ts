@@ -6,26 +6,11 @@ import { AuthenticationService } from '../authentication/authentication.service'
     providedIn: 'root',
 })
 export class FirestoreService {
-    _messages: {
-        email: String;
-        firstName: String;
-        lastName: String;
-        message: String;
-        date: Date;
-    }[] = [];
-
     constructor(private auth: AuthenticationService) {}
 
     /**
-     * Get messages from database
-     */
-
-    public set messages(value: any) {
-        this._messages = value;
-    }
-
-    /**
-     * Send message to firestore
+     * Send message
+     * @param newMessage
      */
     sendMessage = (newMessage: String) => {
         // Store message
@@ -39,13 +24,14 @@ export class FirestoreService {
                 message: newMessage,
                 date: new Date(),
             })
-            .catch((err: any) => {
-                console.log(err);
+            .catch((error: String) => {
+                console.log(error);
             });
     };
 
     /**
      * Delete message
+     * @param date
      */
     deleteMessage = (date: Date) => {
         firebase

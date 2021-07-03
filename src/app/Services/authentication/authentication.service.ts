@@ -9,7 +9,12 @@ declare var $: any;
     providedIn: 'root',
 })
 export class AuthenticationService {
-    _user: any = {};
+    _user: {
+        firstName: String;
+        lastName: String;
+        email: String;
+        dateCreation: Date;
+    }[] = [];
     _firebaseError: string = '';
 
     constructor(private router: Router, private cookieService: CookieService) {}
@@ -35,8 +40,9 @@ export class AuthenticationService {
     };
 
     /**
-     * @param email in database
-     * @param password in database
+     * Sign in
+     * @param email
+     * @param password
      */
     signIn = (email: string, password: string) => {
         firebase
@@ -81,10 +87,11 @@ export class AuthenticationService {
     };
 
     /**
-     * @param firstName first name
-     * @param lastName last name
-     * @param email link to Auth firebase email
-     * @param password crypted
+     * Sign up
+     * @param firstName
+     * @param lastName
+     * @param email
+     * @param password
      */
     signUp = (
         firstName: string,
@@ -193,7 +200,8 @@ export class AuthenticationService {
     };
 
     /**
-     * @param emailAddress is the email address who receive link to reset password
+     * Reset password
+     * @param emailAddress
      */
     resetPassword = (emailAddress: string) => {
         firebase
@@ -222,6 +230,11 @@ export class AuthenticationService {
             });
     };
 
+    /**
+     * Update profile
+     * @param firstName
+     * @param lastName
+     */
     updateProfile = (firstName: string, lastName: string) => {
         const userId: string = firebase.auth().currentUser.uid;
         const user = firebase.firestore().collection('users').doc(userId);
@@ -258,6 +271,10 @@ export class AuthenticationService {
             });
     };
 
+    /**
+     * Update email
+     * @param email
+     */
     updateEmail = (email: string) => {
         const userId = firebase.auth().currentUser.uid;
         const user = firebase.auth().currentUser;
@@ -300,6 +317,10 @@ export class AuthenticationService {
             });
     };
 
+    /**
+     * Update password
+     * @param password
+     */
     updatePassword = (password: string) => {
         let user: any = firebase.auth().currentUser;
 
@@ -314,7 +335,7 @@ export class AuthenticationService {
                     timer: 1500,
                 });
             })
-            .catch((error: any) => {
+            .catch((error: string) => {
                 console.log('error: ', error);
                 Swal.fire({
                     icon: 'error',
@@ -341,6 +362,9 @@ export class AuthenticationService {
             });
     };
 
+    /**
+     * Delete account
+     */
     deleteAccount = () => {
         let userId = firebase.auth().currentUser?.uid;
         let user = firebase.firestore().collection('users').doc(userId);

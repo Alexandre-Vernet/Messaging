@@ -35,6 +35,10 @@ export class StorageService {
         return this._files;
     }
 
+    /**
+     * Send file
+     * @param event
+     */
     sendFile = (event: any) => {
         // Get file
         const file: File = event.target.files[0];

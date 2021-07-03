@@ -11,7 +11,13 @@ import { StorageService } from 'src/app/services/storage/storage.service';
     styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-    user: any = {};
+    user: {
+        firstName: String;
+        lastName: String;
+        email: String;
+        dateCreation: Date;
+    }[] = [];
+
     _messages: {
         email: String;
         firstName: String;
@@ -21,7 +27,7 @@ export class HomeComponent implements OnInit {
         image: any;
     }[] = [];
 
-    files: { path: String; date: any }[] = [];
+    files: { path: String; date: Date }[] = [];
 
     newMessage: any;
 
