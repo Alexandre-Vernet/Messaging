@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { CookieService } from 'ngx-cookie-service';
@@ -28,6 +28,8 @@ export class SignInComponent implements OnInit {
         ]),
     });
 
+    @ViewChild('modalResetPassword') modalResetPassword;
+
     constructor(
         private auth: AuthenticationService,
         private cookieService: CookieService
@@ -56,6 +58,10 @@ export class SignInComponent implements OnInit {
     };
 
     resetPassword = () => {
+        // Hide modalResetPassword
+        this.modalResetPassword.nativeElement.click();
+
+        // Get email
         const emailAddress = this.formReset.value['emailReset'];
 
         // Send email reset password

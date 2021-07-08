@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 
@@ -31,6 +31,11 @@ export class UserProfileComponent implements OnInit {
             Validators.minLength(6),
         ]),
     });
+
+    @ViewChild('modalUpdateProfile') modalUpdateProfile;
+    @ViewChild('modalUpdateEmail') modalUpdateEmail;
+    @ViewChild('modalUpdatePassword') modalUpdatePassword;
+
     constructor(private auth: AuthenticationService) {}
 
     ngOnInit(): void {
@@ -38,17 +43,26 @@ export class UserProfileComponent implements OnInit {
     }
 
     updateProfile = () => {
+        // Hide modal
+        this.modalUpdateProfile.nativeElement.click();
+
         const firstName = this.formUpdateProfile.value['firstName'];
         const lastName = this.formUpdateProfile.value['lastName'];
         this.auth.updateProfile(firstName, lastName);
     };
 
     updateEmail = () => {
+        // Hide modal
+        this.modalUpdateEmail.nativeElement.click();
+
         const email = this.formUpdateEmail.value['email'];
         this.auth.updateEmail(email);
     };
 
     updatePassword = () => {
+        // Hide modal
+        this.modalUpdatePassword.nativeElement.click();
+
         const password = this.formUpdatePassword.value['password'];
         this.auth.updatePassword(password);
     };
