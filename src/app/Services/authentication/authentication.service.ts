@@ -291,6 +291,8 @@ export class AuthenticationService {
                         email: email,
                     })
                     .then(() => {
+                        // Disconnect
+                        this.signOut();
                         Swal.fire({
                             position: 'top-end',
                             icon: 'success',
