@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import firebase from 'firebase';
+import { User } from 'src/app/class/user';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { FirestoreService } from 'src/app/services/firestore/firestore.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
@@ -11,12 +12,7 @@ import { StorageService } from 'src/app/services/storage/storage.service';
     styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-    user: {
-        firstName: String;
-        lastName: String;
-        email: String;
-        dateCreation: Date;
-    }[] = [];
+    user: User;
 
     _messages: {
         email: String;
@@ -43,9 +39,11 @@ export class HomeComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.user = this.auth.user;
-        this._messages = this.messages;
-        this.files = this.storage.files;
+        setTimeout(() => {
+            this.user = this.auth.user;
+            this._messages = this.messages;
+            this.files = this.storage.files;
+        }, 2000);
     }
 
     ngAfterContentChecked() {

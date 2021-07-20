@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import firebase from 'firebase';
 import { CookieService } from 'ngx-cookie-service';
+import { User } from 'src/app/class/user';
 import Swal from 'sweetalert2';
 
 declare var $: any;
@@ -9,29 +10,40 @@ declare var $: any;
     providedIn: 'root',
 })
 export class AuthenticationService {
-    _user: {
-        firstName: String;
-        lastName: String;
-        email: String;
-        dateCreation: Date;
-    }[] = [];
-    _firebaseError: string = '';
+    private _user: User;
+    private _firebaseError: string = '';
 
     constructor(private router: Router, private cookieService: CookieService) {}
 
-    get user(): any {
+    /**
+     * Getter user
+     * @return {User}
+     */
+    public get user(): User {
         return this._user;
     }
 
-    set user(value: any) {
+    /**
+     * Setter user
+     * @param {User} value
+     */
+    public set user(value: User) {
         this._user = value;
     }
 
-    get firebaseError(): string {
+    /**
+     * Getter firebaseError
+     * @return {string }
+     */
+    public get firebaseError(): string {
         return this._firebaseError;
     }
 
-    set firebaseError(value: string) {
+    /**
+     * Setter firebaseError
+     * @param {string } value
+     */
+    public set firebaseError(value: string) {
         this._firebaseError = value;
     }
 
@@ -57,15 +69,22 @@ export class AuthenticationService {
                 user.get()
                     .then((doc) => {
                         if (doc.exists) {
+                            // Set data
+                            let firstName = doc.data()?.firstName;
+                            let lastName = doc.data()?.lastName;
+                            let email = doc.data()?.email;
+                            let dateCreation = doc.data()?.dateCreation;
+
+                            this.user = new User(
+                                firstName,
+                                lastName,
+                                email,
+                                dateCreation
+                            );
+
                             // Set cookie
                             this.cookieService.set('email', email, 365);
                             this.cookieService.set('password', password, 365);
-
-                            // Set data
-                            this.user.firstName = doc.data()?.firstName;
-                            this.user.lastName = doc.data()?.lastName;
-                            this.user.email = doc.data()?.email;
-                            this.user.dateCreation = doc.data()?.dateCreation;
 
                             // Clear error
                             this.firebaseError = '';
@@ -165,7 +184,7 @@ export class AuthenticationService {
                 this.user.firstName = firstName;
                 this.user.lastName = lastName;
                 this.user.email = email;
-                this.user.photo = photoUrl;
+                // this.user.photo = photoUrl;
 
                 // Store informations of user
                 firebase
