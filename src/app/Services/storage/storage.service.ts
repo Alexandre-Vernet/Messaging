@@ -56,20 +56,20 @@ export class StorageService {
                 .ref()
                 .child(`images/${file.name}`)
                 .getDownloadURL()
-                .then((url) => {
+                .then((image) => {
                     // Upload file to firestore
                     firebase
                         .firestore()
                         .collection('messages')
                         .add({
-                            email: this.auth.user['email'],
-                            firstName: this.auth.user['firstName'],
-                            lastName: this.auth.user['lastName'],
-                            image: url,
+                            email: this.auth.user.email,
+                            firstName: this.auth.user.firstName,
+                            lastName: this.auth.user.lastName,
+                            image: image,
                             date: new Date(),
                         })
-                        .catch((err: any) => {
-                            console.log(err);
+                        .catch((error) => {
+                            console.log(error);
                         });
                 });
         });
@@ -113,8 +113,8 @@ export class StorageService {
                             // Update values
                             this.user.profilePicture = profilePicture;
                         })
-                        .catch((err: any) => {
-                            console.log(err);
+                        .catch((error) => {
+                            console.log(error);
                         });
                 });
         });

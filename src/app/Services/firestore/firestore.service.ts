@@ -18,9 +18,9 @@ export class FirestoreService {
             .firestore()
             .collection('messages')
             .add({
-                email: this.auth.user['email'],
-                firstName: this.auth.user['firstName'],
-                lastName: this.auth.user['lastName'],
+                email: this.auth.user.email,
+                firstName: this.auth.user.firstName,
+                lastName: this.auth.user.lastName,
                 message: newMessage,
                 date: new Date(),
             })
@@ -39,8 +39,8 @@ export class FirestoreService {
             .collection('messages')
             .where('date', '==', date)
             .get()
-            .then((querySnapshot: any) => {
-                querySnapshot.forEach((doc: any) => {
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
                     doc.ref.delete();
                 });
             });
