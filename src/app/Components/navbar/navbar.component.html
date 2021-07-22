@@ -122,14 +122,35 @@
             <li class="dropdown user-dropdown">
                 <a href="#" class="dropdown-toggle mr-lg-n1" data-toggle="dropdown">
                     <div class="user-toggle">
-                        <div class="user-avatar sm">
+
+                        <img *ngIf="user.profilePicture" class="profilePicture" src="{{user.profilePicture}}" alt="">
+                        <div *ngIf="!user.profilePicture" class="user-avatar sm">
                             <em class="icon ni ni-user-alt"></em>
                         </div>
+
                     </div>
                 </a>
                 <div class="dropdown-menu dropdown-menu-md dropdown-menu-right dropdown-menu-s1">
                     <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
-                        <div class="user-card">
+
+                        <!-- If profile picture -->
+                        <div *ngIf="user.profilePicture" class="user-card">
+                            <div class="user-avatar">
+                                <img class="profilePicture" src="{{user.profilePicture}}" alt="">
+                            </div>
+                            <div class="user-info">
+                                <span class="lead-text"> {{user.firstName + " " +
+                                    user.lastName}}</span>
+                                <span class="sub-text"> {{user.email}} </span>
+                            </div>
+                            <div class="user-action">
+                                <a class="btn btn-icon mr-n2" href="html/user-profile-setting.html"><em
+                                        class="icon ni ni-setting"></em></a>
+                            </div>
+                        </div>
+
+                        <!-- No profile picture -->
+                        <div *ngIf="!user.profilePicture" class="user-card">
                             <div class="user-avatar">
                                 <span *ngIf="user.firstName != null">{{user.firstName.charAt(0) +
                                     user.lastName.charAt(0)}}</span>

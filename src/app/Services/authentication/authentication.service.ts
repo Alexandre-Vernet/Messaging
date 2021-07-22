@@ -73,12 +73,14 @@ export class AuthenticationService {
                             let firstName = doc.data()?.firstName;
                             let lastName = doc.data()?.lastName;
                             let email = doc.data()?.email;
+                            let profilePicture = doc.data()?.profilePicture;
                             let dateCreation = doc.data()?.dateCreation;
 
                             this.user = new User(
                                 firstName,
                                 lastName,
                                 email,
+                                profilePicture,
                                 dateCreation.toDate()
                             );
 
@@ -178,13 +180,13 @@ export class AuthenticationService {
                 const firstName = result.user?.displayName?.split(' ')[0];
                 const lastName = result.user?.displayName?.split(' ')[1];
                 const email = result.user?.email;
-                const photoUrl = result.user?.photoURL;
+                const profilePicture = result.user?.photoURL;
 
                 // Set data
                 this.user.firstName = firstName;
                 this.user.lastName = lastName;
                 this.user.email = email;
-                // this.user.photo = photoUrl;
+                this.user.profilePicture = profilePicture;
 
                 // Store informations of user
                 firebase
@@ -195,6 +197,7 @@ export class AuthenticationService {
                         firstName: firstName,
                         lastName: lastName,
                         email: email,
+                        profilePicture: profilePicture,
                         dateCreation: new Date(),
                     })
                     .then(() => {

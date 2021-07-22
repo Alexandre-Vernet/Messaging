@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase';
 import { AuthenticationService } from '../authentication/authentication.service';
+import Swal from 'sweetalert2';
+import { User } from 'src/app/class/user';
 
 @Injectable({
     providedIn: 'root',
 })
 export class StorageService {
+    user: User;
     private _files: { path: String; date: any }[] = [];
 
     constructor(private auth: AuthenticationService) {}
@@ -39,7 +42,7 @@ export class StorageService {
      * Send file
      * @param event
      */
-    sendFile = (event: any) => {
+    sendFile = (event) => {
         // Get file
         const file: File = event.target.files[0];
 
@@ -64,6 +67,51 @@ export class StorageService {
                             lastName: this.auth.user['lastName'],
                             image: url,
                             date: new Date(),
+                        })
+                        .catch((err: any) => {
+                            console.log(err);
+                        });
+                });
+        });
+    };
+
+    sendProfilePicture = (event) => {
+        // Get current user
+        const userId: string = firebase.auth().currentUser.uid;
+        const user = firebase.firestore().collection('users').doc(userId);
+
+        // Get file
+        const file: File = event.target.files[0];
+
+        // Get reference to file
+        let imageRef = firebase
+            .storage()
+            .ref()
+            .child(`profilePictures/${file.name}`);
+
+        // Upload file
+        imageRef.put(file).then(() => {
+            firebase
+                .storage()
+                .ref()
+                .child(`profilePictures/${file.name}`)
+                .getDownloadURL()
+                .then((profilePicture) => {
+                    // Upload file to firestore
+                    user.update({
+                        profilePicture: profilePicture,
+                    })
+                        .then(() => {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Your profile picture has been successfully updated',
+                                showConfirmButton: false,
+                                timer: 1500,
+                            });
+
+                            // Update values
+                            this.user.profilePicture = profilePicture;
                         })
                         .catch((err: any) => {
                             console.log(err);

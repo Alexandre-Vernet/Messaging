@@ -2,17 +2,20 @@ export class User {
     private _firstName: string;
     private _lastName: string;
     private _email: string;
+    private _profilePicture: string;
     private _dateCreation: Date;
 
     constructor(
         firstName: string,
         lastName: string,
         email: string,
+        profilePicture: string,
         dateCreation: Date
     ) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.profilePicture = profilePicture;
         this.dateCreation = dateCreation;
     }
 
@@ -38,6 +41,14 @@ export class User {
      */
     public get email(): string {
         return this._email;
+    }
+
+    /**
+     * Getter profilePicture
+     * @return {string}
+     */
+    public get profilePicture(): string {
+        return this._profilePicture;
     }
 
     /**
@@ -70,6 +81,14 @@ export class User {
      */
     public set email(value: string) {
         this._email = value;
+    }
+
+    /**
+     * Setter profilePicture
+     * @param {string} value
+     */
+    public set profilePicture(value: string) {
+        this._profilePicture = value;
     }
 
     /**

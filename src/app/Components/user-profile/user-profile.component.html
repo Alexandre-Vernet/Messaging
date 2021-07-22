@@ -108,6 +108,31 @@
                                                                 </div>
                                                             </div>
 
+                                                            <!-- Photo -->
+                                                            <div class="data-item" (click)="uploadProfilePicture()"
+                                                                data-toggle="modal">
+                                                                <div class="data-col">
+                                                                    <span class="data-label">Profile picture</span>
+                                                                    <span class class="data-value">
+                                                                        <img class="profilePicture"
+                                                                            src="{{user.profilePicture}}"
+                                                                            alt="{{user.profilePicture}}">
+                                                                    </span>
+                                                                </div>
+                                                                <div class="form-control-wrap">
+                                                                    <div class="custom-file">
+                                                                        <a class="btn btn-sm btn-icon btn-trigger text-primary toggle-opt"
+                                                                            data-target="chat-upload">
+                                                                            <input type="file"
+                                                                                (change)="sendProfilePicture($event)"
+                                                                                accept="image/*" id="file_upload"
+                                                                                style="display: none"
+                                                                                class="icon ni ni-forward-ios">
+                                                                            <em class="icon ni ni-forward-ios"></em></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
                                                             <!-- Date of creation account -->
                                                             <div class="data-item">
                                                                 <div class="data-col">

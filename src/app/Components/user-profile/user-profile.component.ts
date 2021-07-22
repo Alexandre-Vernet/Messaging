@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/class/user';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
+import { StorageService } from 'src/app/services/storage/storage.service';
 
 @Component({
     selector: 'app-user-profile',
@@ -34,7 +35,10 @@ export class UserProfileComponent implements OnInit {
     @ViewChild('modalUpdateEmail') modalUpdateEmail;
     @ViewChild('modalUpdatePassword') modalUpdatePassword;
 
-    constructor(private auth: AuthenticationService) {}
+    constructor(
+        private auth: AuthenticationService,
+        private storage: StorageService
+    ) {}
 
     ngOnInit(): void {
         setTimeout(() => {
@@ -52,6 +56,14 @@ export class UserProfileComponent implements OnInit {
             this.formUpdateEmail.controls.email.setValue(this.user.email);
         }, 2000);
     }
+
+    uploadProfilePicture = () => {
+        document.getElementById('file_upload')?.click();
+    };
+
+    sendProfilePicture = (event) => {
+        this.storage.sendProfilePicture(event);
+    };
 
     updateProfile = () => {
         // Hide modal
