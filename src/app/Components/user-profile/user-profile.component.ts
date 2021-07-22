@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { User } from 'src/app/class/user';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 
 @Component({
@@ -8,17 +9,14 @@ import { AuthenticationService } from 'src/app/services/authentication/authentic
     styleUrls: ['./user-profile.component.scss'],
 })
 export class UserProfileComponent implements OnInit {
-    user: any = {};
+    user: User;
     formUpdateProfile: FormGroup = new FormGroup({
-        firstName: new FormControl(this.user.firstName, [Validators.required]),
-        lastName: new FormControl(this.user.lastName, [Validators.required]),
+        firstName: new FormControl('', [Validators.required]),
+        lastName: new FormControl('', [Validators.required]),
     });
 
     formUpdateEmail: FormGroup = new FormGroup({
-        email: new FormControl(this.user.email, [
-            Validators.required,
-            Validators.email,
-        ]),
+        email: new FormControl('', [Validators.required, Validators.email]),
     });
 
     formUpdatePassword: FormGroup = new FormGroup({
@@ -39,7 +37,20 @@ export class UserProfileComponent implements OnInit {
     constructor(private auth: AuthenticationService) {}
 
     ngOnInit(): void {
-        this.user = this.auth.user;
+        setTimeout(() => {
+            this.user = this.auth.user;
+
+            // Set default value to formUpdateProfile
+            this.formUpdateProfile.controls.firstName.setValue(
+                this.user.firstName
+            );
+            this.formUpdateProfile.controls.lastName.setValue(
+                this.user.lastName
+            );
+
+            // Set default value to formUpdateEmail
+            this.formUpdateEmail.controls.email.setValue(this.user.email);
+        }, 2000);
     }
 
     updateProfile = () => {

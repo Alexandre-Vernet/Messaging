@@ -79,7 +79,7 @@ export class AuthenticationService {
                                 firstName,
                                 lastName,
                                 email,
-                                dateCreation
+                                dateCreation.toDate()
                             );
 
                             // Set cookie
