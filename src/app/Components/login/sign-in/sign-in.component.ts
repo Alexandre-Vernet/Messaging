@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
+import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
 import { CookieService } from 'ngx-cookie-service';
 
 @Component({
@@ -33,7 +33,7 @@ export class SignInComponent implements OnInit {
     constructor(
         private auth: AuthenticationService,
         private cookieService: CookieService
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.email = this.cookieService.get('email');
@@ -65,7 +65,7 @@ export class SignInComponent implements OnInit {
         const emailAddress = this.formReset.value['emailReset'];
 
         // Send email reset password
-        this.auth.resetPassword(emailAddress);
+        // this.auth.resetPassword(emailAddress);
     };
 
     viewPassword = () => {

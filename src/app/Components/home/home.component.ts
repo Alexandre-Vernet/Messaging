@@ -1,10 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import firebase from 'firebase';
 import { User } from 'src/app/class/user';
-import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
-import { FirestoreService } from 'src/app/services/firestore/firestore.service';
-import { StorageService } from 'src/app/services/storage/storage.service';
+import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
+import { FirestoreService } from 'src/app/Services/firestore/firestore.service';
+import { StorageService } from 'src/app/Services/storage/storage.service';
 
 @Component({
     selector: 'app-home',
@@ -36,7 +35,7 @@ export class HomeComponent implements OnInit {
         private firestore: FirestoreService,
         private storage: StorageService,
         private cdref: ChangeDetectorRef
-    ) {}
+    ) { }
 
     ngOnInit() {
         setTimeout(() => {
@@ -55,24 +54,24 @@ export class HomeComponent implements OnInit {
     };
 
     public get messages(): any {
-        firebase
-            .firestore()
-            .collection('messages')
-            .orderBy('date', 'asc')
-            .limit(50)
-            .onSnapshot((querySnapshot) => {
-                this._messages = [];
-                querySnapshot.forEach((doc) => {
-                    this._messages.push({
-                        email: doc.get('email'),
-                        firstName: doc.get('firstName'),
-                        lastName: doc.get('lastName'),
-                        message: doc.get('message'),
-                        image: doc.get('image'),
-                        date: doc.get('date'),
-                    });
-                });
-            });
+        // firebase
+        //     .firestore()
+        //     .collection('messages')
+        //     .orderBy('date', 'asc')
+        //     .limit(50)
+        //     .onSnapshot((querySnapshot) => {
+        //         this._messages = [];
+        //         querySnapshot.forEach((doc) => {
+        //             this._messages.push({
+        //                 email: doc.get('email'),
+        //                 firstName: doc.get('firstName'),
+        //                 lastName: doc.get('lastName'),
+        //                 message: doc.get('message'),
+        //                 image: doc.get('image'),
+        //                 date: doc.get('date'),
+        //             });
+        //         });
+        //     });
 
         return this._messages;
     }
@@ -98,26 +97,26 @@ export class HomeComponent implements OnInit {
      * Edit message
      */
     editMessage = () => {
-        let editedMessage = this.formEditMessage.value['editedMessage'];
-        console.log('editedMessage: ', editedMessage);
+        // let editedMessage = this.formEditMessage.value['editedMessage'];
+        // console.log('editedMessage: ', editedMessage);
 
-        firebase
-            .firestore()
-            .collection('messages')
-            .doc('0FICKGZiB0YJhb3aOX9q')
-            .update({
-                message: this.formEditMessage.value['editedMessage'],
-            })
-            .then(() => {
-                console.log('Document successfully updated!');
+        // firebase
+        //     .firestore()
+        //     .collection('messages')
+        //     .doc('0FICKGZiB0YJhb3aOX9q')
+        //     .update({
+        //         message: this.formEditMessage.value['editedMessage'],
+        //     })
+        //     .then(() => {
+        //         console.log('Document successfully updated!');
 
-                // Reset edited message
-                editedMessage = '';
-            })
-            .catch((error) => {
-                // The document probably doesn't exist.
-                console.error('Error updating document: ', error);
-            });
+        //         // Reset edited message
+        //         editedMessage = '';
+        //     })
+        //     .catch((error) => {
+        //         // The document probably doesn't exist.
+        //         console.error('Error updating document: ', error);
+        //     });
     };
 
     deleteMessage = (date: Date) => {

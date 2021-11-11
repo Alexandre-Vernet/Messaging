@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/class/user';
-import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
-import { StorageService } from 'src/app/services/storage/storage.service';
+import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
+import { StorageService } from 'src/app/Services/storage/storage.service';
 
 @Component({
     selector: 'app-user-profile',
@@ -38,7 +38,7 @@ export class UserProfileComponent implements OnInit {
     constructor(
         private auth: AuthenticationService,
         private storage: StorageService
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         setTimeout(() => {

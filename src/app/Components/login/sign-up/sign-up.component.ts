@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
+import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
 
 @Component({
     selector: 'app-sign-up',
@@ -25,7 +25,7 @@ export class SignUpComponent implements OnInit {
         ]),
     });
 
-    constructor(private auth: AuthenticationService) {}
+    constructor(private auth: AuthenticationService) { }
 
     ngOnInit() {
         this.firebaseError = this.auth.firebaseError;
