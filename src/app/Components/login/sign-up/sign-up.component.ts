@@ -14,12 +14,12 @@ export class SignUpComponent implements OnInit {
     form = new FormGroup({
         firstName: new FormControl('', [Validators.required]),
         lastName: new FormControl('', [Validators.required]),
-        email: new FormControl('', [Validators.required, Validators.email]),
-        password: new FormControl('', [
+        email: new FormControl('alexandre.vernet@g-mail.fr', [Validators.required, Validators.email]),
+        password: new FormControl('alexandre', [
             Validators.required,
             Validators.minLength(6),
         ]),
-        confirmPassword: new FormControl('', [
+        confirmPassword: new FormControl('alexandre', [
             Validators.required,
             Validators.minLength(6),
         ]),
@@ -33,10 +33,10 @@ export class SignUpComponent implements OnInit {
 
     signUp = () => {
         // Get informations
-        const firstName = this.form.value['firstName'];
-        const lastName = this.form.value['lastName'];
-        const email = this.form.value['email'];
-        const password = this.form.value['password'];
+        const firstName = this.form.value.firstName;
+        const lastName = this.form.value.lastName;
+        const email = this.form.value.email;
+        const password = this.form.value.password;
 
         // Sign-up
         this.auth.signUp(firstName, lastName, email, password);

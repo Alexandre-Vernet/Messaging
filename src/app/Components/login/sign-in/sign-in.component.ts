@@ -14,8 +14,8 @@ export class SignInComponent implements OnInit {
 
     email!: string;
     form = new FormGroup({
-        email: new FormControl('', [Validators.required, Validators.email]),
-        password: new FormControl('', [
+        email: new FormControl('alexandre.vernet@g-mail.fr', [Validators.required, Validators.email]),
+        password: new FormControl('alexandre', [
             Validators.required,
             Validators.minLength(6),
         ]),
@@ -42,8 +42,8 @@ export class SignInComponent implements OnInit {
 
     signIn = () => {
         // Get email & pswd
-        const email = this.form.value['email'];
-        const password = this.form.value['password'];
+        const email = this.form.value.email;
+        const password = this.form.value.password;
 
         // Sign-in
         this.auth.signIn(email, password);
