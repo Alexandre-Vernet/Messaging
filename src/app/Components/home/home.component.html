@@ -95,12 +95,12 @@
                                             [scrollTop]="scrollMe.scrollHeight">
 
                                             <!-- Check no messages -->
-                                            <div class="d-flex justify-content-center" *ngIf="_messages.length <= 0">
+                                            <div class="d-flex justify-content-center" *ngIf="messages.length <= 0">
                                                 <h4>No message</h4>
                                             </div>
 
                                             <!-- Get all messages -->
-                                            <div *ngFor="let message of _messages">
+                                            <div *ngFor="let message of messages">
                                                 <div *ngIf="message.email != user['email']">
 
                                                     <!-- Other messages -->

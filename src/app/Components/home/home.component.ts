@@ -1,5 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { collection, doc, getDoc, getDocs, getFirestore, limit, orderBy, query } from 'firebase/firestore';
+import { Message } from 'src/app/class/message';
 import { User } from 'src/app/class/user';
 import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
 import { FirestoreService } from 'src/app/Services/firestore/firestore.service';
@@ -13,14 +15,20 @@ import { StorageService } from 'src/app/Services/storage/storage.service';
 export class HomeComponent implements OnInit {
     user: User;
 
-    _messages: {
-        email: String;
-        firstName: String;
-        lastName: String;
-        message: String;
-        date: Date;
-        image: String;
-    }[] = [];
+
+    db = getFirestore();
+
+
+    // _messages: {
+    //     email: String;
+    //     firstName: String;
+    //     lastName: String;
+    //     message: String;
+    //     date: Date;
+    //     image: String;
+    // }[] = [];
+
+    messages: Message[] = [];
 
     files: { path: String; date: Date }[] = [];
 
@@ -40,7 +48,10 @@ export class HomeComponent implements OnInit {
     ngOnInit() {
         setTimeout(() => {
             this.user = this.auth.user;
-            this._messages = this.messages;
+            this.firestore.getMessages().then((messages: Message[]) => {
+                this.messages = messages;
+                console.log('this.messages: ', this.messages)
+            });
             this.files = this.storage.files;
         }, 2000);
     }
@@ -53,28 +64,6 @@ export class HomeComponent implements OnInit {
         document.getElementById('inputSendMessage')?.focus();
     };
 
-    public get messages(): any {
-        // firebase
-        //     .firestore()
-        //     .collection('messages')
-        //     .orderBy('date', 'asc')
-        //     .limit(50)
-        //     .onSnapshot((querySnapshot) => {
-        //         this._messages = [];
-        //         querySnapshot.forEach((doc) => {
-        //             this._messages.push({
-        //                 email: doc.get('email'),
-        //                 firstName: doc.get('firstName'),
-        //                 lastName: doc.get('lastName'),
-        //                 message: doc.get('message'),
-        //                 image: doc.get('image'),
-        //                 date: doc.get('date'),
-        //             });
-        //         });
-        //     });
-
-        return this._messages;
-    }
 
     sendMessage = () => {
         if (this.newMessage.length > 0) {

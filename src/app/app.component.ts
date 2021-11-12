@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { initializeApp } from "firebase/app";
 import { CookieService } from 'ngx-cookie-service';
 import * as config from '../config';
+import { AuthenticationService } from './Services/authentication/authentication.service';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -18,24 +19,24 @@ export class AppComponent implements OnInit {
     ) {
 
         // Initialize Firebase
-        const app = initializeApp(config.firebaseConfig);
+        initializeApp(config.firebaseConfig);
     }
 
     ngOnInit() {
 
-        // // Get cookie
-        // let email = this.cookieService.get('email');
-        // let password = this.cookieService.get('password');
+        // Get cookie
+        const email = this.cookieService.get('email');
+        const password = this.cookieService.get('password');
 
-        // // Get route from user
-        // let url = window.location.pathname;
+        // Get route from user
+        const url = window.location.pathname;
 
-        // // Check connection
-        // if (email && password) {
-        //     this.auth.signIn(email, password);
-        // } else {
-        //     if (url == '/sign-up') this.router.navigate(['/sign-up']);
-        //     else this.router.navigate(['sign-in']);
-        // }
+        // Check connection
+        if (email && password) {
+            // this.auth.signIn(email, password);
+        } else {
+            if (url == '/sign-up') this.router.navigate(['/sign-up']);
+            else this.router.navigate(['sign-in']);
+        }
     }
 }
