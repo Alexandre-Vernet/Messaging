@@ -4,8 +4,8 @@ import { CookieService } from 'ngx-cookie-service';
 import { User } from 'src/app/class/user';
 import Swal from 'sweetalert2';
 
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, updateEmail, updatePassword } from "firebase/auth";
-import { doc, setDoc, getDoc, getFirestore, updateDoc } from "firebase/firestore";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, updateEmail, updatePassword, deleteUser, signOut } from "firebase/auth";
+import { doc, setDoc, getDoc, getFirestore, updateDoc, deleteDoc } from "firebase/firestore";
 
 
 declare var $: any;
@@ -608,10 +608,8 @@ export class AuthenticationService {
      * Sign out the user
      */
     signOut = () => {
-        // Delete cookie
-        this.cookieService.delete('password');
 
-        // // Disconnect
+        // Disconnect
         // firebase
         //     .auth()
         //     .signOut()
@@ -619,6 +617,18 @@ export class AuthenticationService {
         //         // Disconnected
         //         this.router.navigate(['/sign-in']);
         //     });
+
+
+
+
+        signOut(this.auth).then(() => {
+            // Delete cookie
+            this.cookieService.delete('password');
+
+            this.router.navigate(['/sign-in']);
+        }).catch((error) => {
+            console.log('error: ', error)
+        });
 
 
     };
@@ -671,5 +681,48 @@ export class AuthenticationService {
         //             showConfirmButton: true,
         //         });
         //     });
+
+        const user = this.auth.currentUser;
+        const userId = this.auth.currentUser.uid;
+
+        deleteUser(user)
+            .then(async () => {
+                console.log('All data of the user has been deleted');
+
+                await deleteDoc(doc(this.db, "users", userId))
+                    .then(() => {
+                        // User deleted.
+                        console.log('User has been deleted');
+
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: `User has been deleted`,
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+
+                        // Go to sign up
+                        this.router.navigate(['/sign-up']);
+                    })
+                    .catch((error) => {
+                        console.log(`Error while deleting the user : ${error}`);
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: error,
+                            showConfirmButton: true,
+                        });
+                    });
+            })
+            .catch((error) => {
+                console.error(`Error deleting data of user : ${error}`);
+
+                Swal.fire({
+                    icon: 'error',
+                    title: error,
+                    showConfirmButton: true,
+                });
+            });
     };
 }
