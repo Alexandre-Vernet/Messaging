@@ -13,7 +13,6 @@ export class FirestoreService {
     db = getFirestore();
     messages: Message[] = [];
 
-
     constructor(private auth: AuthenticationService) {
 
         this.user = this.auth.user;

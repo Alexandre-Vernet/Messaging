@@ -14,8 +14,6 @@ import { StorageService } from 'src/app/Services/storage/storage.service';
 })
 export class HomeComponent implements OnInit {
     user: User;
-
-
     db = getFirestore();
 
 
@@ -50,7 +48,6 @@ export class HomeComponent implements OnInit {
             this.user = this.auth.user;
             this.firestore.getMessages().then((messages: Message[]) => {
                 this.messages = messages;
-                console.log('this.messages: ', this.messages)
             });
             this.files = this.storage.files;
         }, 2000);
@@ -78,7 +75,7 @@ export class HomeComponent implements OnInit {
         document.getElementById('file_upload')?.click();
     };
 
-    sendFile = (event: any) => {
+    sendFile = (event) => {
         this.storage.sendFile(event);
     };
 
@@ -116,7 +113,7 @@ export class HomeComponent implements OnInit {
      *  Format date to locale zone
      * @param date
      */
-    formatDate = (date: any) => {
+    formatDate = (date) => {
         const option = {
             year: 'numeric',
             month: '2-digit',
