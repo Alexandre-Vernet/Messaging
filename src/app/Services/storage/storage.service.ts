@@ -10,7 +10,9 @@ export class StorageService {
     user: User;
     private _files: { path: String; date: any }[] = [];
 
-    constructor(private auth: AuthenticationService) { }
+    constructor(private auth: AuthenticationService) {
+        this.user = this.auth.user;
+    }
 
     get files() {
         // let imageRef = firebase.storage().ref().child('images');

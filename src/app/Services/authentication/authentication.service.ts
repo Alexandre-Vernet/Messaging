@@ -13,8 +13,8 @@ declare var $: any;
     providedIn: 'root',
 })
 export class AuthenticationService {
-    private _user: User;
-    private _firebaseError: string = '';
+    user: User;
+    _firebaseError: string = '';
 
     db = getFirestore();
     auth = getAuth();
@@ -24,21 +24,6 @@ export class AuthenticationService {
 
     constructor(private router: Router, private cookieService: CookieService) { }
 
-    /**
-     * Getter user
-     * @return {User}
-     */
-    public get user(): User {
-        return this._user;
-    }
-
-    /**
-     * Setter user
-     * @param {User} value
-     */
-    public set user(value: User) {
-        this._user = value;
-    }
 
     /**
      * Getter firebaseError
@@ -55,10 +40,6 @@ export class AuthenticationService {
     public set firebaseError(value: string) {
         this._firebaseError = value;
     }
-
-    // isAuthenticated = () => {
-    //     return firebase.auth().currentUser;
-    // };
 
     /**
      * Sign in

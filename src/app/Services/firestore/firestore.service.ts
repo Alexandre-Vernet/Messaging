@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, limit, orderBy, query, where } from 'firebase/firestore';
 import { Message } from 'src/app/class/message';
+import { User } from 'src/app/class/user';
 import { AuthenticationService } from '../authentication/authentication.service';
 
 @Injectable({
@@ -8,11 +9,15 @@ import { AuthenticationService } from '../authentication/authentication.service'
 })
 export class FirestoreService {
 
+    user: User;
     db = getFirestore();
     messages: Message[] = [];
 
 
-    constructor(private auth: AuthenticationService) { }
+    constructor(private auth: AuthenticationService) {
+
+        this.user = this.auth.user;
+    }
 
     async getMessages(): Promise<Message[]> {
         // firebase
