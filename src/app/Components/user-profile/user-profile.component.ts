@@ -41,20 +41,18 @@ export class UserProfileComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        setTimeout(() => {
-            this.user = this.auth.user;
+        this.user = this.auth.user;
 
-            // Set default value to formUpdateProfile
-            this.formUpdateProfile.controls.firstName.setValue(
-                this.user.firstName
-            );
-            this.formUpdateProfile.controls.lastName.setValue(
-                this.user.lastName
-            );
+        // Set default value to formUpdateProfile
+        this.formUpdateProfile.controls.firstName.setValue(
+            this.user.firstName
+        );
+        this.formUpdateProfile.controls.lastName.setValue(
+            this.user.lastName
+        );
 
-            // Set default value to formUpdateEmail
-            this.formUpdateEmail.controls.email.setValue(this.user.email);
-        }, 2000);
+        // Set default value to formUpdateEmail
+        this.formUpdateEmail.controls.email.setValue(this.user.email);
     }
 
     uploadProfilePicture = () => {
@@ -69,8 +67,8 @@ export class UserProfileComponent implements OnInit {
         // Hide modal
         this.modalUpdateProfile.nativeElement.click();
 
-        const firstName = this.formUpdateProfile.value['firstName'];
-        const lastName = this.formUpdateProfile.value['lastName'];
+        const firstName = this.formUpdateProfile.value.firstName;
+        const lastName = this.formUpdateProfile.value.lastName;
         this.auth.updateProfile(firstName, lastName);
     };
 
@@ -78,7 +76,7 @@ export class UserProfileComponent implements OnInit {
         // Hide modal
         this.modalUpdateEmail.nativeElement.click();
 
-        const email = this.formUpdateEmail.value['email'];
+        const email = this.formUpdateEmail.value.email;
         this.auth.updateEmail(email);
     };
 
@@ -86,7 +84,7 @@ export class UserProfileComponent implements OnInit {
         // Hide modal
         this.modalUpdatePassword.nativeElement.click();
 
-        const password = this.formUpdatePassword.value['password'];
+        const password = this.formUpdatePassword.value.password;
         this.auth.updatePassword(password);
     };
     deleteAccount = () => {
