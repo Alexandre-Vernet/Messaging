@@ -36,7 +36,12 @@ export class SignInComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.email = this.cookieService.get('email');
+
+        const cookieEmail = this.cookieService.get('email');
+        if (cookieEmail) {
+            this.email = cookieEmail;
+        }
+
         this.firebaseError = this.auth.firebaseError;
     }
 
@@ -46,11 +51,7 @@ export class SignInComponent implements OnInit {
         const password = this.form.value.password;
 
         // Sign-in
-        this.auth.signIn(email, password);
-
-        setTimeout(() => {
-            this.ngOnInit();
-        }, 300);
+        this.firebaseError = this.auth.signIn(email, password);
     };
 
     googleSignUp = () => {
@@ -62,10 +63,10 @@ export class SignInComponent implements OnInit {
         this.modalResetPassword.nativeElement.click();
 
         // Get email
-        const emailAddress = this.formReset.value['emailReset'];
+        const emailAddress = this.formReset.value.emailReset;
 
         // Send email reset password
-        // this.auth.resetPassword(emailAddress);
+        this.auth.resetPassword(emailAddress);
     };
 
     viewPassword = () => {

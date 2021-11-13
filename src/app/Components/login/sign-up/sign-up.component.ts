@@ -39,11 +39,7 @@ export class SignUpComponent implements OnInit {
         const password = this.form.value.password;
 
         // Sign-up
-        this.auth.signUp(firstName, lastName, email, password);
-
-        setTimeout(() => {
-            this.ngOnInit();
-        }, 300);
+        this.firebaseError = this.auth.signUp(firstName, lastName, email, password);
     };
 
     googleSignUp = () => {

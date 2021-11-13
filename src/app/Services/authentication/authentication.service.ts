@@ -4,7 +4,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { User } from 'src/app/class/user';
 import Swal from 'sweetalert2';
 
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, updateEmail, updatePassword, deleteUser, signOut } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, updateEmail, updatePassword, deleteUser, signOut, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { doc, setDoc, getDoc, getFirestore, updateDoc, deleteDoc } from "firebase/firestore";
 
 
@@ -18,6 +18,8 @@ export class AuthenticationService {
 
     db = getFirestore();
     auth = getAuth();
+
+    provider = new GoogleAuthProvider();
 
 
     constructor(private router: Router, private cookieService: CookieService) { }
@@ -121,6 +123,7 @@ export class AuthenticationService {
                 console.log(user);
 
 
+                // Get user datas
                 const docRef = doc(this.db, "users", user.uid);
                 const docSnap = await getDoc(docRef);
 
@@ -162,6 +165,8 @@ export class AuthenticationService {
                 console.log('error: ', error)
                 this.firebaseError = error.message;
             });
+
+        return this.firebaseError;
     };
 
     /**
@@ -255,6 +260,8 @@ export class AuthenticationService {
                 );
                 this.firebaseError = error.message;
             });
+
+        return this.firebaseError;
     };
 
     // /**
@@ -312,6 +319,52 @@ export class AuthenticationService {
         //         console.log(error.message);
         //         this.firebaseError = error.message;
         //     });
+
+
+        signInWithPopup(this.auth, this.provider)
+            .then(async (result) => {
+                // This gives you a Google Access Token. You can use it to access the Google API.
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                const token = credential.accessToken;
+                console.log('token: ', token)
+                // The signed-in user info.
+                const user = result.user;
+                console.log('user: ', user);
+
+                // Get data from google account
+                const firstName = result.user?.displayName?.split(' ')[0];
+                const lastName = result.user?.displayName?.split(' ')[1];
+                const email = result.user?.email;
+                const profilePicture = result.user?.photoURL;
+
+                // Set users data
+                this.user = new User(firstName, lastName, email, profilePicture, new Date());
+
+                await setDoc(doc(this.db, "users", user.uid), {
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    dateCreation: new Date(),
+                }).then(() => {
+                    //  User data has been created
+                    console.log('User data has been saved !');
+
+                    // Clear error
+                    this.firebaseError = '';
+
+                    // Navigate to home
+                    this.router.navigate(['home']);
+                })
+                    .catch((error) => {
+                        console.log(`Error in creation of the data of the user ${error.message}`);
+                        this.firebaseError = error.message;
+                    });
+            }).catch((error) => {
+                console.log('error: ', error)
+                const errorMessage = error.message;
+                this.firebaseError = errorMessage;
+            });
+
     };
 
     /**
