@@ -59,8 +59,8 @@ export class UserProfileComponent implements OnInit {
         document.getElementById('file_upload')?.click();
     };
 
-    sendProfilePicture = (event) => {
-        this.storage.sendProfilePicture(event);
+    updateProfilePicture = (event) => {
+        this.storage.updateProfilePicture(event);
     };
 
     updateProfile = () => {
@@ -87,6 +87,7 @@ export class UserProfileComponent implements OnInit {
         const password = this.formUpdatePassword.value.password;
         this.auth.updatePassword(password);
     };
+
     deleteAccount = () => {
         this.auth.deleteAccount();
     };

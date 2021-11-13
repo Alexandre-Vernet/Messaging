@@ -328,7 +328,7 @@ export class AuthenticationService {
                     dateCreation: new Date(),
                 }).then(() => {
                     //  User data has been created
-                    console.log('User data has been saved !');
+                    console.log('User is logged with google account');
 
                     // Clear error
                     this.firebaseError = '';

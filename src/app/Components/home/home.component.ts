@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { collection, doc, getDoc, getDocs, getFirestore, limit, orderBy, query } from 'firebase/firestore';
+import { File } from 'src/app/class/file';
 import { Message } from 'src/app/class/message';
 import { User } from 'src/app/class/user';
 import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
@@ -13,7 +14,6 @@ import { StorageService } from 'src/app/Services/storage/storage.service';
     styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-    user: User;
     db = getFirestore();
 
 
@@ -26,9 +26,9 @@ export class HomeComponent implements OnInit {
     //     image: String;
     // }[] = [];
 
+    user: User;
     messages: Message[] = [];
-
-    files: { path: String; date: Date }[] = [];
+    files: File[] = [];
 
     newMessage: String;
 
@@ -46,10 +46,14 @@ export class HomeComponent implements OnInit {
     ngOnInit() {
         setTimeout(() => {
             this.user = this.auth.user;
+
             this.firestore.getMessages().then((messages: Message[]) => {
                 this.messages = messages;
             });
-            this.files = this.storage.files;
+
+            this.storage.getFiles().then((files: File[]) => {
+                this.files = files;
+            });
         }, 2000);
     }
 
