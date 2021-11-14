@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, limit, orderBy, query, where } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, limit, orderBy, query, updateDoc, where } from 'firebase/firestore';
 import { Message } from 'src/app/class/message';
 import { User } from 'src/app/class/user';
 import { AuthenticationService } from '../authentication/authentication.service';
+import Swal from 'sweetalert2';
 
 @Injectable({
     providedIn: 'root',
@@ -89,6 +90,56 @@ export class FirestoreService {
 
         console.log(docRef);
     };
+
+
+
+    async getMessageId(date: Date) {
+        let messageId: string;
+
+        const q = query(collection(this.db, "messages"), where('date', '==', date));
+
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach(async (docRef) => {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(docRef.id, " => ", docRef.data());
+            messageId = docRef.id;
+        });
+
+        return messageId;
+
+    }
+
+    // Edit message
+    editMessage = async (newMessage: String, date: Date, messageId: string) => {
+        console.log('messageId: ', messageId)
+
+
+        const messageRef = doc(this.db, "messages", messageId);
+
+        await updateDoc(messageRef, {
+            message: newMessage,
+            date: date,
+        }).then(() => {
+            console.log("Document successfully updated!");
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Message successfully updated!',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        }).catch((error) => {
+            console.error("Error updating document: ", error);
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: `Error updating message ${error}`,
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        })
+    };
+
 
     /**
      * Delete message

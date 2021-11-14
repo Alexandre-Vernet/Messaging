@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { collection, doc, getDoc, getDocs, getFirestore, limit, orderBy, query } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, getFirestore, limit, orderBy, query, where } from 'firebase/firestore';
 import { File } from 'src/app/class/file';
 import { Message } from 'src/app/class/message';
 import { User } from 'src/app/class/user';
@@ -79,42 +79,38 @@ export class HomeComponent implements OnInit {
         document.getElementById('file_upload')?.click();
     };
 
-    sendFile = (event) => {
-        this.storage.sendFile(event);
+    sendFile = (file: Event) => {
+        this.storage.sendFile(file);
     };
+
+
+
+    preUpdateMessage(date: Date) {
+        this.firestore.getMessageId(date).then((messageId: string) => {
+            this.test = messageId;
+        });
+    };
+
+    test: string;
 
     /**
      * Edit message
      */
-    editMessage = () => {
-        // let editedMessage = this.formEditMessage.value['editedMessage'];
-        // console.log('editedMessage: ', editedMessage);
+    editMessage = async () => {
+        const editedMessage = this.formEditMessage.value.editedMessage;
+        const date = new Date();
+        const messageId = this.test;
 
-        // firebase
-        //     .firestore()
-        //     .collection('messages')
-        //     .doc('0FICKGZiB0YJhb3aOX9q')
-        //     .update({
-        //         message: this.formEditMessage.value['editedMessage'],
-        //     })
-        //     .then(() => {
-        //         console.log('Document successfully updated!');
-
-        //         // Reset edited message
-        //         editedMessage = '';
-        //     })
-        //     .catch((error) => {
-        //         // The document probably doesn't exist.
-        //         console.error('Error updating document: ', error);
-        //     });
+        this.firestore.editMessage(editedMessage, date, messageId);
     };
+
 
     deleteMessage = (date: Date) => {
         this.firestore.deleteMessage(date);
     };
 
     /**
-     *  Format date to locale zone
+     *  Format date to locale zone 
      * @param date
      */
     formatDate = (date) => {

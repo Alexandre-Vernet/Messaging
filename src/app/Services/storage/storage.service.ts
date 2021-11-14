@@ -57,7 +57,7 @@ export class StorageService {
                     const date = new Date();
 
                     const file = new File(path, date);
-                    console.log('itemRef: ', file);
+                    // console.log('itemRef: ', file);
 
                     this.files.push(file);
 
