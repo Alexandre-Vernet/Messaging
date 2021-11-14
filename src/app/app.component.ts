@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { initializeApp } from "firebase/app";
 import { CookieService } from 'ngx-cookie-service';
-import * as config from '../config';
+import { firebaseConfig } from '../config';
 import { AuthenticationService } from './Services/authentication/authentication.service';
 @Component({
     selector: 'app-root',
@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
     ) {
 
         // Initialize Firebase
-        initializeApp(config.firebaseConfig);
+        initializeApp(firebaseConfig);
     }
 
     ngOnInit() {
