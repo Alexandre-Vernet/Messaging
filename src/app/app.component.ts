@@ -13,9 +13,9 @@ import { AuthenticationService } from './Services/authentication/authentication.
 export class AppComponent implements OnInit {
 
     constructor(
+        private auth: AuthenticationService,
         private router: Router,
         private cookieService: CookieService,
-        // private auth: AuthenticationService
     ) {
 
         // Initialize Firebase
@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
 
         // Check connection
         if (email && password) {
-            // this.auth.signIn(email, password);
+            this.auth.signIn(email, password);
         } else {
             if (url == '/sign-up') this.router.navigate(['/sign-up']);
             else this.router.navigate(['sign-in']);
