@@ -25,6 +25,9 @@ export class AuthenticationService {
     constructor(private router: Router, private cookieService: CookieService) { }
 
 
+    async getAuth(): Promise<User> {
+        return this.user;
+    }
     /**
      * Getter firebaseError
      * @return {string }
@@ -47,55 +50,8 @@ export class AuthenticationService {
      * @param password
      */
     signIn = (email: string, password: string) => {
-        // firebase
-        //     .auth()
-        //     .signInWithEmailAndPassword(email, password)
-        //     .then(() => {
-        //         // User is logged in
-
-        //         let userId = firebase.auth().currentUser?.uid;
-        //         let user = firebase.firestore().collection('users').doc(userId);
-
-        //         user.get()
-        //             .then((doc) => {
-        //                 if (doc.exists) {
-        //                     // Set data
-        //                     let firstName = doc.data()?.firstName;
-        //                     let lastName = doc.data()?.lastName;
-        //                     let email = doc.data()?.email;
-        //                     let profilePicture = doc.data()?.profilePicture;
-        //                     let dateCreation = doc.data()?.dateCreation;
-
-        //                     this.user = new User(
-        //                         firstName,
-        //                         lastName,
-        //                         email,
-        //                         profilePicture,
-        //                         dateCreation.toDate()
-        //                     );
-
-        //                     // Set cookie
-        //                     this.cookieService.set('email', email, 365);
-        //                     this.cookieService.set('password', password, 365);
-
-        //                     // Clear error
-        //                     this.firebaseError = '';
-
-        //                     // Redirect to next page
-        //                     let url = window.location.pathname;
-        //                     if (url != '/sign-in') this.router.navigate([url]);
-        //                     else this.router.navigate(['/home']);
-        //                 } else console.log('Cant get user infos');
-        //             })
-        //             .catch((error) => {
-        //                 console.log(error);
-        //             });
-        //     })
-        //     .catch((error) => {
-        //         console.log(error.message);
-        //         this.firebaseError = error.message;
-        //     });
-
+        console.log('password: ', password)
+        console.log('email: ', email)
 
         signInWithEmailAndPassword(this.auth, email, password)
             .then(async (userCredential) => {
@@ -112,11 +68,11 @@ export class AuthenticationService {
                     console.log("Document data:", docSnap.data());
 
                     //  Set data
-                    let firstName = docSnap.data()?.firstName;
-                    let lastName = docSnap.data()?.lastName;
-                    let email = docSnap.data()?.email;
-                    let profilePicture = docSnap.data()?.profilePicture;
-                    let dateCreation = docSnap.data()?.dateCreation;
+                    const firstName = docSnap.data()?.firstName;
+                    const lastName = docSnap.data()?.lastName;
+                    const email = docSnap.data()?.email;
+                    const profilePicture = docSnap.data()?.profilePicture;
+                    const dateCreation = docSnap.data()?.dateCreation;
 
                     this.user = new User(
                         firstName,

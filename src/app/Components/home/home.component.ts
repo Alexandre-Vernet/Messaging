@@ -1,6 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { collection, doc, getDoc, getDocs, getFirestore, limit, orderBy, query } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, getFirestore, limit, orderBy, query, where } from 'firebase/firestore';
 import { File } from 'src/app/class/file';
 import { Message } from 'src/app/class/message';
 import { User } from 'src/app/class/user';
@@ -16,15 +16,8 @@ import { StorageService } from 'src/app/Services/storage/storage.service';
 export class HomeComponent implements OnInit {
     db = getFirestore();
 
-
-    // _messages: {
-    //     email: String;
-    //     firstName: String;
-    //     lastName: String;
-    //     message: String;
-    //     date: Date;
-    //     image: String;
-    // }[] = [];
+    @ViewChild('modalEditMessage') modalEditMessage;
+    messageId: string;
 
     user: User;
     messages: Message[] = [];
@@ -44,17 +37,18 @@ export class HomeComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        setTimeout(() => {
-            this.user = this.auth.user;
+        this.auth.getAuth().then((user: User) => {
+            this.user = user;
+            console.log('this.user: ', this.user)
+        });
 
-            this.firestore.getMessages().then((messages: Message[]) => {
-                this.messages = messages;
-            });
+        this.firestore.getMessages().then((messages: Message[]) => {
+            this.messages = messages;
+        });
 
-            this.storage.getFiles().then((files: File[]) => {
-                this.files = files;
-            });
-        }, 2000);
+        this.storage.getFiles().then((files: File[]) => {
+            this.files = files;
+        });
     }
 
     ngAfterContentChecked() {
@@ -79,42 +73,40 @@ export class HomeComponent implements OnInit {
         document.getElementById('file_upload')?.click();
     };
 
-    sendFile = (event) => {
-        this.storage.sendFile(event);
+    sendFile = (file: Event) => {
+        this.storage.sendFile(file);
     };
+
+
+
+    preUpdateMessage(date: Date) {
+        this.firestore.getMessageId(date).then((messageId: string) => {
+            this.messageId = messageId;
+        });
+    };
+
 
     /**
      * Edit message
      */
-    editMessage = () => {
-        // let editedMessage = this.formEditMessage.value['editedMessage'];
-        // console.log('editedMessage: ', editedMessage);
+    editMessage = async () => {
+        const editedMessage = this.formEditMessage.value.editedMessage,
+            date = new Date(),
+            messageId = this.messageId;
 
-        // firebase
-        //     .firestore()
-        //     .collection('messages')
-        //     .doc('0FICKGZiB0YJhb3aOX9q')
-        //     .update({
-        //         message: this.formEditMessage.value['editedMessage'],
-        //     })
-        //     .then(() => {
-        //         console.log('Document successfully updated!');
+        this.firestore.editMessage(editedMessage, date, messageId);
 
-        //         // Reset edited message
-        //         editedMessage = '';
-        //     })
-        //     .catch((error) => {
-        //         // The document probably doesn't exist.
-        //         console.error('Error updating document: ', error);
-        //     });
+        // Close modal
+        this.modalEditMessage.nativeElement.click();
     };
+
 
     deleteMessage = (date: Date) => {
         this.firestore.deleteMessage(date);
     };
 
     /**
-     *  Format date to locale zone
+     *  Format date to locale zone 
      * @param date
      */
     formatDate = (date) => {
