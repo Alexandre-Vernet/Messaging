@@ -51,7 +51,8 @@ export class SignInComponent implements OnInit {
         const password = this.form.value.password;
 
         // Sign-in
-        this.firebaseError = this.auth.signIn(email, password);
+        // this.firebaseError = this.auth.signIn(email, password);
+        this.auth.signIn(email, password);
     };
 
     googleSignUp = () => {

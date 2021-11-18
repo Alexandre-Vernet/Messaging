@@ -21,11 +21,11 @@ export class AuthenticationService {
 
     provider = new GoogleAuthProvider();
 
-
     constructor(private router: Router, private cookieService: CookieService) { }
 
-
     async getAuth(): Promise<User> {
+        console.log('service getAuth: ', this.user)
+        this.user = new User('Alexandre', 'VERNET', 'alexandre.vernet@g-mail.fr', 'photooo', new Date());
         return this.user;
     }
     /**
@@ -50,22 +50,17 @@ export class AuthenticationService {
      * @param password
      */
     signIn = (email: string, password: string) => {
-        console.log('password: ', password)
-        console.log('email: ', email)
 
         signInWithEmailAndPassword(this.auth, email, password)
             .then(async (userCredential) => {
                 // Signed in 
                 const user = userCredential.user;
-                console.log(user);
-
 
                 // Get user datas
-                const docRef = doc(this.db, "users", user.uid);
+                const docRef = doc(this.db, 'users', user.uid);
                 const docSnap = await getDoc(docRef);
 
                 if (docSnap.exists()) {
-                    console.log("Document data:", docSnap.data());
 
                     //  Set data
                     const firstName = docSnap.data()?.firstName;
@@ -103,7 +98,7 @@ export class AuthenticationService {
                 this.firebaseError = error.message;
             });
 
-        return this.firebaseError;
+        return this.user;
     };
 
     /**

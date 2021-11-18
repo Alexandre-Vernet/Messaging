@@ -37,9 +37,12 @@ export class HomeComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+
+        console.log("home");
+
         this.auth.getAuth().then((user: User) => {
             this.user = user;
-            console.log('this.user: ', this.user)
+            console.log('home.compo.ts ', this.user)
         });
 
         this.firestore.getMessages().then((messages: Message[]) => {

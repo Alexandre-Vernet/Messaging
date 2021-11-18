@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app";
 
-
 export const firebaseConfig = {
     apiKey: 'AIzaSyAhod5EQ_wRW3eEz8Zsaw3Ya6WCQ9sldlg',
     authDomain: 'messaging-db163.firebaseapp.com',
@@ -12,4 +11,3 @@ export const firebaseConfig = {
 };
 
 initializeApp(firebaseConfig);
-
