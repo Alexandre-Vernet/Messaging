@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { collection, doc, getDoc, getDocs, getFirestore, limit, orderBy, query, where } from 'firebase/firestore';
 import { File } from 'src/app/class/file';
@@ -16,15 +16,8 @@ import { StorageService } from 'src/app/Services/storage/storage.service';
 export class HomeComponent implements OnInit {
     db = getFirestore();
 
-
-    // _messages: {
-    //     email: String;
-    //     firstName: String;
-    //     lastName: String;
-    //     message: String;
-    //     date: Date;
-    //     image: String;
-    // }[] = [];
+    @ViewChild('modalEditMessage') modalEditMessage;
+    messageId: string;
 
     user: User;
     messages: Message[] = [];
@@ -44,17 +37,18 @@ export class HomeComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        setTimeout(() => {
-            this.user = this.auth.user;
+        this.auth.getAuth().then((user: User) => {
+            this.user = user;
+            console.log('this.user: ', this.user)
+        });
 
-            this.firestore.getMessages().then((messages: Message[]) => {
-                this.messages = messages;
-            });
+        this.firestore.getMessages().then((messages: Message[]) => {
+            this.messages = messages;
+        });
 
-            this.storage.getFiles().then((files: File[]) => {
-                this.files = files;
-            });
-        }, 2000);
+        this.storage.getFiles().then((files: File[]) => {
+            this.files = files;
+        });
     }
 
     ngAfterContentChecked() {
@@ -87,21 +81,23 @@ export class HomeComponent implements OnInit {
 
     preUpdateMessage(date: Date) {
         this.firestore.getMessageId(date).then((messageId: string) => {
-            this.test = messageId;
+            this.messageId = messageId;
         });
     };
 
-    test: string;
 
     /**
      * Edit message
      */
     editMessage = async () => {
-        const editedMessage = this.formEditMessage.value.editedMessage;
-        const date = new Date();
-        const messageId = this.test;
+        const editedMessage = this.formEditMessage.value.editedMessage,
+            date = new Date(),
+            messageId = this.messageId;
 
         this.firestore.editMessage(editedMessage, date, messageId);
+
+        // Close modal
+        this.modalEditMessage.nativeElement.click();
     };
 
 

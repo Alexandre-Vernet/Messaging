@@ -110,7 +110,7 @@ export class FirestoreService {
     }
 
     // Edit message
-    editMessage = async (newMessage: String, date: Date, messageId: string) => {
+    editMessage = async (newMessage: string, date: Date, messageId: string) => {
         console.log('messageId: ', messageId)
 
 
@@ -121,6 +121,7 @@ export class FirestoreService {
             date: date,
         }).then(() => {
             console.log("Document successfully updated!");
+
             Swal.fire({
                 position: 'top-end',
                 icon: 'success',
@@ -130,6 +131,7 @@ export class FirestoreService {
             });
         }).catch((error) => {
             console.error("Error updating document: ", error);
+
             Swal.fire({
                 position: 'top-end',
                 icon: 'success',
