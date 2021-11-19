@@ -4,10 +4,7 @@ import { ForgotPasswordComponent } from './forgot-password.component';
 
 const routes: Routes = [
     {
-        path: '',
-        children: [
-            { path: '', component: ForgotPasswordComponent },
-        ]
+        path: '', component: ForgotPasswordComponent
     },
 ];
 
