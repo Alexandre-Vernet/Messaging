@@ -101,7 +101,7 @@
 
                                             <!-- Get all messages -->
                                             <div *ngFor="let message of messages">
-                                                <div *ngIf="message.email != user['email']">
+                                                <div *ngIf="message?.email != user?.email">
 
                                                     <!-- Other messages -->
                                                     <div class="chat is-you">
@@ -149,7 +149,7 @@
                                                 </div>
 
                                                 <!-- My messages -->
-                                                <div *ngIf="message.email == user['email']">
+                                                <div *ngIf="message?.email == user?.email">
 
 
                                                     <div class="chat is-me">

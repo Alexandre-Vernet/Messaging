@@ -1,25 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AppComponent } from './app.component';
-import { HomeComponent } from './components/home/home.component';
-import { SignInComponent } from './components/login/sign-in/sign-in.component';
-import { SignUpComponent } from './components/login/sign-up/sign-up.component';
-import { ForgotPasswordComponent } from './components/login/forgot-password/forgot-password.component';
-import { ErrorComponent } from './components/error/error.component';
-import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 const routes: Routes = [
-    { path: '', component: HomeComponent },
-    { path: 'home', component: HomeComponent },
-    { path: 'sign-in', component: SignInComponent },
-    { path: 'sign-up', component: SignUpComponent },
-    { path: 'forgot-password', component: ForgotPasswordComponent },
-    { path: 'view-profile', component: UserProfileComponent },
-    { path: '**', component: ErrorComponent },
+    { path: '', loadChildren: () => import('./Components/home/home.module').then(m => m.HomeModule) },
+    { path: 'home', loadChildren: () => import('./Components/home/home.module').then(m => m.HomeModule) },
+    { path: 'sign-in', loadChildren: () => import('./Components/login/sign-in/sign-in.module').then(m => m.SignInModule) },
+    { path: 'sign-up', loadChildren: () => import('./Components/login/sign-up/sign-up.module').then(m => m.SignUpModule) },
+    { path: 'forgot-password', loadChildren: () => import('./Components/login/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule) },
+    { path: 'view-profile', loadChildren: () => import('./Components/user-profile/user-profile.module').then(m => m.UserProfileModule) },
+    { path: '**', loadChildren: () => import('./Components/error/error.module').then(m => m.ErrorModule) },
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
+    imports: [
+        RouterModule.forRoot(routes)],
     exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

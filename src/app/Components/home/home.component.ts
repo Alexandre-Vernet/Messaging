@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { collection, doc, getDoc, getDocs, getFirestore, limit, orderBy, query, where } from 'firebase/firestore';
+import { getFirestore } from 'firebase/firestore';
 import { File } from 'src/app/class/file';
 import { Message } from 'src/app/class/message';
 import { User } from 'src/app/class/user';
@@ -34,13 +34,14 @@ export class HomeComponent implements OnInit {
         private firestore: FirestoreService,
         private storage: StorageService,
         private cdref: ChangeDetectorRef
-    ) { }
+    ) {}
 
     ngOnInit() {
-        this.auth.getAuth().then((user: User) => {
-            this.user = user;
-            console.log('this.user: ', this.user)
-        });
+        setTimeout(() => {
+            this.auth.getAuth().then((user: User) => {
+                this.user = user;
+            });
+        }, 2000);
 
         this.firestore.getMessages().then((messages: Message[]) => {
             this.messages = messages;
@@ -59,7 +60,6 @@ export class HomeComponent implements OnInit {
         document.getElementById('inputSendMessage')?.focus();
     };
 
-
     sendMessage = () => {
         if (this.newMessage.length > 0) {
             this.firestore.sendMessage(this.newMessage);
@@ -77,14 +77,11 @@ export class HomeComponent implements OnInit {
         this.storage.sendFile(file);
     };
 
-
-
     preUpdateMessage(date: Date) {
         this.firestore.getMessageId(date).then((messageId: string) => {
             this.messageId = messageId;
         });
-    };
-
+    }
 
     /**
      * Edit message
@@ -100,13 +97,12 @@ export class HomeComponent implements OnInit {
         this.modalEditMessage.nativeElement.click();
     };
 
-
     deleteMessage = (date: Date) => {
         this.firestore.deleteMessage(date);
     };
 
     /**
-     *  Format date to locale zone 
+     *  Format date to locale zone
      * @param date
      */
     formatDate = (date) => {

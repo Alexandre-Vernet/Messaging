@@ -1,7 +1,7 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { initializeApp } from "firebase/app";
+import { initializeApp } from 'firebase/app';
 import { CookieService } from 'ngx-cookie-service';
 import { firebaseConfig } from '../config';
 import { AuthenticationService } from './Services/authentication/authentication.service';
@@ -11,19 +11,16 @@ import { AuthenticationService } from './Services/authentication/authentication.
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-
     constructor(
+        private auth: AuthenticationService,
         private router: Router,
-        private cookieService: CookieService,
-        // private auth: AuthenticationService
+        private cookieService: CookieService
     ) {
-
         // Initialize Firebase
         initializeApp(firebaseConfig);
     }
 
     ngOnInit() {
-
         // Get cookie
         const email = this.cookieService.get('email');
         const password = this.cookieService.get('password');
@@ -33,7 +30,7 @@ export class AppComponent implements OnInit {
 
         // Check connection
         if (email && password) {
-            // this.auth.signIn(email, password);
+            this.auth.signIn(email, password);
         } else {
             if (url == '/sign-up') this.router.navigate(['/sign-up']);
             else this.router.navigate(['sign-in']);
