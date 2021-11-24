@@ -123,8 +123,8 @@
                 <a href="#" class="dropdown-toggle mr-lg-n1" data-toggle="dropdown">
                     <div class="user-toggle">
 
-                        <img *ngIf="user.profilePicture" class="profilePicture" src="{{user.profilePicture}}" alt="">
-                        <div *ngIf="!user.profilePicture" class="user-avatar sm">
+                        <img *ngIf="user?.profilePicture" class="profilePicture" src="{{user?.profilePicture}}" alt="">
+                        <div *ngIf="!user?.profilePicture" class="user-avatar sm">
                             <em class="icon ni ni-user-alt"></em>
                         </div>
 
@@ -134,14 +134,14 @@
                     <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
 
                         <!-- If profile picture -->
-                        <div *ngIf="user.profilePicture" class="user-card">
+                        <div *ngIf="user?.profilePicture" class="user-card">
                             <div class="user-avatar">
-                                <img class="profilePicture" src="{{user.profilePicture}}" alt="">
+                                <img class="profilePicture" src="{{user?.profilePicture}}" alt="">
                             </div>
                             <div class="user-info">
-                                <span class="lead-text"> {{user.firstName + " " +
-                                    user.lastName}}</span>
-                                <span class="sub-text"> {{user.email}} </span>
+                                <span class="lead-text"> {{user?.firstName + " " +
+                                    user?.lastName}}</span>
+                                <span class="sub-text"> {{user?.email}} </span>
                             </div>
                             <div class="user-action">
                                 <a class="btn btn-icon mr-n2" href="html/user-profile-setting.html"><em
@@ -150,15 +150,15 @@
                         </div>
 
                         <!-- No profile picture -->
-                        <div *ngIf="!user.profilePicture" class="user-card">
+                        <div *ngIf="!user?.profilePicture" class="user-card">
                             <div class="user-avatar">
-                                <span *ngIf="user.firstName != null">{{user.firstName.charAt(0) +
-                                    user.lastName.charAt(0)}}</span>
+                                <span *ngIf="user?.firstName != null">{{user?.firstName.charAt(0) +
+                                    user?.lastName.charAt(0)}}</span>
                             </div>
                             <div class="user-info">
-                                <span class="lead-text"> {{user.firstName + " " +
-                                    user.lastName}}</span>
-                                <span class="sub-text"> {{user.email}} </span>
+                                <span class="lead-text"> {{user?.firstName + " " +
+                                    user?.lastName}}</span>
+                                <span class="sub-text"> {{user?.email}} </span>
                             </div>
                             <div class="user-action">
                                 <a class="btn btn-icon mr-n2" href="html/user-profile-setting.html"><em

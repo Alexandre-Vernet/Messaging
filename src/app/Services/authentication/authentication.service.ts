@@ -4,9 +4,27 @@ import { CookieService } from 'ngx-cookie-service';
 import { User } from 'src/app/class/user';
 import Swal from 'sweetalert2';
 
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, updateEmail, updatePassword, deleteUser, signOut, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { doc, setDoc, getDoc, getFirestore, updateDoc, deleteDoc } from "firebase/firestore";
-
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    updateProfile,
+    sendPasswordResetEmail,
+    updateEmail,
+    updatePassword,
+    deleteUser,
+    signOut,
+    GoogleAuthProvider,
+    signInWithPopup,
+} from 'firebase/auth';
+import {
+    doc,
+    setDoc,
+    getDoc,
+    getFirestore,
+    updateDoc,
+    deleteDoc,
+} from 'firebase/firestore';
 
 declare var $: any;
 @Injectable({
@@ -21,11 +39,10 @@ export class AuthenticationService {
 
     provider = new GoogleAuthProvider();
 
-    constructor(private router: Router, private cookieService: CookieService) { }
+    constructor(private router: Router, private cookieService: CookieService) {}
 
     async getAuth(): Promise<User> {
-        console.log('service getAuth: ', this.user)
-        this.user = new User('Alexandre', 'VERNET', 'alexandre.vernet@g-mail.fr', 'photooo', new Date());
+        console.log('service getAuth: ', this.user);
         return this.user;
     }
     /**
@@ -50,10 +67,9 @@ export class AuthenticationService {
      * @param password
      */
     signIn = (email: string, password: string) => {
-
         signInWithEmailAndPassword(this.auth, email, password)
             .then(async (userCredential) => {
-                // Signed in 
+                // Signed in
                 const user = userCredential.user;
 
                 // Get user datas
@@ -61,7 +77,6 @@ export class AuthenticationService {
                 const docSnap = await getDoc(docRef);
 
                 if (docSnap.exists()) {
-
                     //  Set data
                     const firstName = docSnap.data()?.firstName;
                     const lastName = docSnap.data()?.lastName;
@@ -87,14 +102,13 @@ export class AuthenticationService {
                     let url = window.location.pathname;
                     if (url != '/sign-in') this.router.navigate([url]);
                     else this.router.navigate(['/home']);
-
                 } else {
                     // doc.data() will be undefined in this case
-                    console.log("No such document!");
+                    console.log('No such document!');
                 }
             })
             .catch((error) => {
-                console.log('error: ', error)
+                console.log('error: ', error);
                 this.firebaseError = error.message;
             });
 
@@ -157,27 +171,27 @@ export class AuthenticationService {
         //         this.firebaseError = error.message;
         //     });
 
-
         createUserWithEmailAndPassword(this.auth, email, password)
             .then(async (userCredential) => {
-                // Signed in 
+                // Signed in
                 const user = userCredential.user;
-                console.log('user: ', user.uid)
+                console.log('user: ', user.uid);
 
-                await setDoc(doc(this.db, "users", user.uid), {
+                await setDoc(doc(this.db, 'users', user.uid), {
                     firstName: firstName,
                     lastName: lastName,
                     email: email,
                     dateCreation: new Date(),
-                }).then(() => {
-                    //  User data has been created
-                    console.log('User data has been saved !');
-
-                    // Clear error
-                    this.firebaseError = '';
-
-                    this.signIn(email, password);
                 })
+                    .then(() => {
+                        //  User data has been created
+                        console.log('User data has been saved !');
+
+                        // Clear error
+                        this.firebaseError = '';
+
+                        this.signIn(email, password);
+                    })
                     .catch((error) => {
                         console.log(
                             `Error in creation of the data of the user ${error.message}`
@@ -187,9 +201,7 @@ export class AuthenticationService {
                     });
             })
             .catch((error) => {
-                console.log(
-                    `Error in creation of the user : ${error.message}`
-                );
+                console.log(`Error in creation of the user : ${error.message}`);
                 this.firebaseError = error.message;
             });
 
@@ -252,13 +264,13 @@ export class AuthenticationService {
         //         this.firebaseError = error.message;
         //     });
 
-
         signInWithPopup(this.auth, this.provider)
             .then(async (result) => {
                 // This gives you a Google Access Token. You can use it to access the Google API.
-                const credential = GoogleAuthProvider.credentialFromResult(result);
+                const credential =
+                    GoogleAuthProvider.credentialFromResult(result);
                 const token = credential.accessToken;
-                console.log('token: ', token)
+                console.log('token: ', token);
                 // The signed-in user info.
                 const user = result.user;
                 console.log('user: ', user);
@@ -270,33 +282,42 @@ export class AuthenticationService {
                 const profilePicture = result.user?.photoURL;
 
                 // Set users data
-                this.user = new User(firstName, lastName, email, profilePicture, new Date());
+                this.user = new User(
+                    firstName,
+                    lastName,
+                    email,
+                    profilePicture,
+                    new Date()
+                );
 
-                await setDoc(doc(this.db, "users", user.uid), {
+                await setDoc(doc(this.db, 'users', user.uid), {
                     firstName: firstName,
                     lastName: lastName,
                     email: email,
                     dateCreation: new Date(),
-                }).then(() => {
-                    //  User data has been created
-                    console.log('User is logged with google account');
-
-                    // Clear error
-                    this.firebaseError = '';
-
-                    // Navigate to home
-                    this.router.navigate(['home']);
                 })
+                    .then(() => {
+                        //  User data has been created
+                        console.log('User is logged with google account');
+
+                        // Clear error
+                        this.firebaseError = '';
+
+                        // Navigate to home
+                        this.router.navigate(['home']);
+                    })
                     .catch((error) => {
-                        console.log(`Error in creation of the data of the user ${error.message}`);
+                        console.log(
+                            `Error in creation of the data of the user ${error.message}`
+                        );
                         this.firebaseError = error.message;
                     });
-            }).catch((error) => {
-                console.log('error: ', error)
+            })
+            .catch((error) => {
+                console.log('error: ', error);
                 const errorMessage = error.message;
                 this.firebaseError = errorMessage;
             });
-
     };
 
     /**
@@ -393,10 +414,8 @@ export class AuthenticationService {
         //         });
         //     });
 
-
         const userId = this.auth.currentUser.uid;
-        const userRef = doc(this.db, "users", userId);
-
+        const userRef = doc(this.db, 'users', userId);
 
         await updateDoc(userRef, {
             firstName: firstName,
@@ -477,11 +496,8 @@ export class AuthenticationService {
         //         });
         //     });
 
-
-
         const userId = this.auth.currentUser.uid;
-        const userRef = doc(this.db, "users", userId);
-
+        const userRef = doc(this.db, 'users', userId);
 
         updateEmail(this.auth.currentUser, email)
             .then(async () => {
@@ -512,22 +528,20 @@ export class AuthenticationService {
                 //         });
                 //     });
 
-
                 await updateDoc(userRef, {
-                    email: email
-                })
-                    .then(() => {
-                        // Disconnect
-                        this.signOut();
+                    email: email,
+                }).then(() => {
+                    // Disconnect
+                    this.signOut();
 
-                        Swal.fire({
-                            position: 'top-end',
-                            icon: 'success',
-                            title: 'Your email has been successfully updated',
-                            showConfirmButton: false,
-                            timer: 1500,
-                        });
-                    })
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Your email has been successfully updated',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                });
             })
             .catch((error) => {
                 // An error occurred
@@ -593,7 +607,6 @@ export class AuthenticationService {
      * Sign out the user
      */
     signOut = () => {
-
         // Disconnect
         // firebase
         //     .auth()
@@ -603,19 +616,16 @@ export class AuthenticationService {
         //         this.router.navigate(['/sign-in']);
         //     });
 
+        signOut(this.auth)
+            .then(() => {
+                // Delete cookie
+                this.cookieService.delete('password');
 
-
-
-        signOut(this.auth).then(() => {
-            // Delete cookie
-            this.cookieService.delete('password');
-
-            this.router.navigate(['/sign-in']);
-        }).catch((error) => {
-            console.log('error: ', error)
-        });
-
-
+                this.router.navigate(['/sign-in']);
+            })
+            .catch((error) => {
+                console.log('error: ', error);
+            });
     };
 
     /**
@@ -674,7 +684,7 @@ export class AuthenticationService {
             .then(async () => {
                 console.log('All data of the user has been deleted');
 
-                await deleteDoc(doc(this.db, "users", userId))
+                await deleteDoc(doc(this.db, 'users', userId))
                     .then(() => {
                         // User deleted.
                         console.log('User has been deleted');
