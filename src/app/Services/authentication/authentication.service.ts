@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { User } from 'src/app/class/user';
 import Swal from 'sweetalert2';
+import sha256 from 'crypto-js/sha256';
 
 import {
     getAuth,
@@ -25,6 +26,7 @@ import {
     updateDoc,
     deleteDoc,
 } from 'firebase/firestore';
+import { CryptoService } from '../crypto/crypto.service';
 
 declare var $: any;
 @Injectable({
@@ -39,10 +41,13 @@ export class AuthenticationService {
 
     provider = new GoogleAuthProvider();
 
-    constructor(private router: Router, private cookieService: CookieService) {}
+    constructor(
+        private router: Router,
+        private cookieService: CookieService,
+        private cryptoService: CryptoService
+    ) {}
 
     async getAuth(): Promise<User> {
-        console.log('service getAuth: ', this.user);
         return this.user;
     }
     /**
@@ -93,8 +98,14 @@ export class AuthenticationService {
                     );
 
                     // Set cookie
-                    this.cookieService.set('email', email, 365);
-                    this.cookieService.set('password', password, 365);
+                    const hashPassword = this.cryptoService.encrypt(password);
+                    const timeBeforeExpire = 7;
+                    this.cookieService.set('email', email, timeBeforeExpire);
+                    this.cookieService.set(
+                        'password',
+                        hashPassword,
+                        timeBeforeExpire
+                    );
 
                     // Clear error
                     this.firebaseError = '';
@@ -110,6 +121,7 @@ export class AuthenticationService {
             .catch((error) => {
                 console.log('error: ', error);
                 this.firebaseError = error.message;
+                this.router.navigate(['/sign-in']);
             });
 
         return this.user;
