@@ -32,7 +32,7 @@
             ],
             "styles": [
               "src/styles.scss"
-                        ],
+            ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js"
             ]
@@ -105,9 +105,21 @@
             ],
             "scripts": []
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
   },
-  "defaultProject": "Messagerie"
+  "defaultProject": "Messagerie",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  }
 }
