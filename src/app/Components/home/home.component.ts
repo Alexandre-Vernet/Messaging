@@ -1,21 +1,23 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    ChangeDetectorRef,
+    ViewChild,
+    AfterViewInit,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { getFirestore } from 'firebase/firestore';
 import { File } from 'src/app/class/file';
 import { Message } from 'src/app/class/message';
 import { User } from 'src/app/class/user';
 import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
 import { FirestoreService } from 'src/app/Services/firestore/firestore.service';
 import { StorageService } from 'src/app/Services/storage/storage.service';
-
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
-    db = getFirestore();
-
+export class HomeComponent implements OnInit, AfterViewInit {
     @ViewChild('modalEditMessage') modalEditMessage;
     messageId: string;
 
@@ -77,15 +79,23 @@ export class HomeComponent implements OnInit {
         this.storage.sendFile(file);
     };
 
+    ngAfterViewInit() {
+        // Shortcut keyboard
+        window.addEventListener('keydown', (e) => {
+            // Edit last message
+            if (e.keyCode === 38) {
+                e.preventDefault();
+                document.getElementById('modalEditMessage').click();
+            }
+        });
+    }
+
     preUpdateMessage(date: Date) {
         this.firestore.getMessageId(date).then((messageId: string) => {
             this.messageId = messageId;
         });
     }
 
-    /**
-     * Edit message
-     */
     editMessage = async () => {
         const editedMessage = this.formEditMessage.value.editedMessage,
             date = new Date(),
