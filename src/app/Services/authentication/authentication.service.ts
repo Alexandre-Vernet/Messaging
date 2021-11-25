@@ -97,15 +97,10 @@ export class AuthenticationService {
                         dateCreation.toDate()
                     );
 
-                    // Set cookie
+                    // Store user in local storage
                     const hashPassword = this.cryptoService.encrypt(password);
-                    const timeBeforeExpire = 7;
-                    this.cookieService.set('email', email, timeBeforeExpire);
-                    this.cookieService.set(
-                        'password',
-                        hashPassword,
-                        timeBeforeExpire
-                    );
+                    localStorage.setItem('email', email);
+                    localStorage.setItem('password', hashPassword);
 
                     // Clear error
                     this.firebaseError = '';

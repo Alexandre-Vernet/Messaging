@@ -24,9 +24,9 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        // Get cookie
-        const email = this.cookieService.get('email');
-        const password = this.cookieService.get('password');
+        // Get local storage
+        const email = localStorage.getItem('email');
+        const password = localStorage.getItem('password');
 
         // Get route from user
         const url = window.location.pathname;
