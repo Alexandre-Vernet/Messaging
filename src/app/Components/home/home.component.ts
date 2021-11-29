@@ -85,12 +85,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
             // Edit last message
             if (e.keyCode === 38) {
                 e.preventDefault();
-                document.getElementById('modalEditMessage').click();
+                this.editLastMessage();
             }
         });
     }
 
-    preUpdateMessage(date: Date) {
+    getMessageId(date: Date) {
         this.firestore.getMessageId(date).then((messageId: string) => {
             this.messageId = messageId;
         });
@@ -106,6 +106,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
         // Close modal
         this.modalEditMessage.nativeElement.click();
     };
+
+    editLastMessage() {
+        // Open modal
+        document.getElementById('modalEditMessage').click();
+
+        // Get last message
+        this.firestore.getLastMessage().then((lastMessage) => {
+            const message = lastMessage.message;
+
+            // Set message in input
+            this.formEditMessage.get('editedMessage').setValue(message);
+        });
+    }
 
     deleteMessage = (date: Date) => {
         this.firestore.deleteMessage(date);

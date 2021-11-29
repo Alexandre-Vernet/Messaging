@@ -9,10 +9,12 @@ import { AuthenticationService } from '../../Services/authentication/authenticat
 })
 export class NavbarComponent implements OnInit {
     user: User | null;
-    constructor(private auth: AuthenticationService) { }
+    constructor(private auth: AuthenticationService) {}
 
     ngOnInit(): void {
-        this.user = this.auth.user;
+        setTimeout(() => {
+            this.user = this.auth.user;
+        }, 1500);
     }
 
     signOut = () => {
