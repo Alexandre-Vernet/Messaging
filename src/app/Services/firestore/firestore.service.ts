@@ -1,22 +1,20 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {
     addDoc,
     collection,
     deleteDoc,
     doc,
-    DocumentData,
     getDocs,
     getFirestore,
     limit,
     orderBy,
-    Query,
     query,
     updateDoc,
     where,
 } from 'firebase/firestore';
-import { Message } from 'src/app/class/message';
-import { User } from 'src/app/class/user';
-import { AuthenticationService } from '../authentication/authentication.service';
+import {Message} from 'src/app/class/message';
+import {User} from 'src/app/class/user';
+import {AuthenticationService} from '../authentication/authentication.service';
 import Swal from 'sweetalert2';
 
 @Injectable({
@@ -112,7 +110,7 @@ export class FirestoreService {
     };
 
     async getMessageId(date: Date) {
-        let messageId: string;
+        const message = {}
 
         const q = query(
             collection(this.db, 'messages'),
@@ -120,13 +118,12 @@ export class FirestoreService {
         );
 
         const querySnapshot = await getDocs(q);
-        querySnapshot.forEach(async (docRef) => {
-            // doc.data() is never undefined for query doc snapshots
-            console.log(docRef.id, ' => ', docRef.data());
-            messageId = docRef.id;
+        querySnapshot.forEach((docRef) => {
+            message['id'] = docRef.id;
+            message['message'] = docRef.get('message');
         });
 
-        return messageId;
+        return message;
     }
 
     // Get last message send by user
@@ -142,9 +139,11 @@ export class FirestoreService {
 
         const querySnapshot = await getDocs(q);
 
-        let a;
-        querySnapshot.forEach(async (docRef) => {
-            a = docRef.data();
+        let a = {};
+        querySnapshot.forEach((docRef) => {
+            a['message'] = docRef.data();
+            a['id'] = docRef.id;
+            return a;
         });
 
         return a;
