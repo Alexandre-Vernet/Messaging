@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import Swal from 'sweetalert2';
-import { User } from 'src/app/class/user';
-import { File } from 'src/app/class/file';
-import { AuthenticationService } from '../authentication/authentication.service';
-import { getStorage, listAll, ref, uploadBytes } from "firebase/storage";
-import { addDoc, collection, getFirestore } from 'firebase/firestore';
+import {Injectable} from '@angular/core';
+import {User} from 'src/app/class/user';
+import {File} from 'src/app/class/file';
+import {AuthenticationService} from '../authentication/authentication.service';
+import {getDownloadURL, getStorage, listAll, ref, uploadBytes} from "firebase/storage";
+import {addDoc, collection, getDocs, getFirestore, query, where} from 'firebase/firestore';
+import Swal from "sweetalert2";
 
 @Injectable({
     providedIn: 'root',
@@ -22,6 +22,77 @@ export class StorageService {
     }
 
     async getFiles(): Promise<File[]> {
+        // Get all files from firestore
+        const q = query(collection(this.db, 'messages'), where('image', '!=', null));
+        const querySnapshot = await getDocs(q);
+
+        querySnapshot.forEach((doc) => {
+            const filesRef = ref(this.storage, 'images');
+
+            listAll(filesRef)
+                .then((res) => {
+                    res.items.forEach((itemRef) => {
+                        const name = itemRef.name;
+
+                        // Get URL file
+                        getDownloadURL(ref(this.storage, `images/${name}`))
+                            .then(async (url) => {
+                                const id = doc.get('id');
+                                const name = doc.get('name');
+                                // const extensionFile = name.split('.')[1];
+                                // const size = doc.get('size');
+                                // const date = doc.get('date');
+                                //
+                                // const email = doc.get('email');
+                                // const firstName = doc.get('firstName');
+                                // const lastName = doc.get('lastName');
+                                // const user = new User(
+                                //     firstName,
+                                //     lastName,
+                                //     email,
+                                //     null,
+                                //     null
+                                // );
+
+                                const file = new File(
+                                    id,
+                                    name,
+                                    url,
+                                    null, null, null, null
+                                );
+
+                                this.files.push(file);
+                            })
+                            .catch((error) => {
+                                console.log('error: ', error);
+
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'error',
+                                    title: `Error while getting URL files ${error}`,
+                                    showConfirmButton: false,
+                                    timer: 4000,
+                                });
+                            });
+                    });
+                })
+                .catch((error) => {
+                    console.log('error: ', error);
+
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: `Error while getting files ${error}`,
+                        showConfirmButton: false,
+                        timer: 4000,
+                    });
+                });
+        });
+
+        return this.files;
+    }
+
+    async getFiles2(): Promise<File[]> {
         // let imageRef = firebase.storage().ref().child('images');
 
         // // Find all items
@@ -56,10 +127,10 @@ export class StorageService {
                     const path = itemRef.fullPath;
                     const date = new Date();
 
-                    const file = new File(path, date);
+                    // const file = new File(path, date);
                     // console.log('itemRef: ', file);
 
-                    this.files.push(file);
+                    // this.files.push(file);
 
 
                     // All the items under listRef.
@@ -75,9 +146,9 @@ export class StorageService {
 
                 });
             }).catch((error) => {
-                // Uh-oh, an error occurred!
-                console.log('error: ', error)
-            });
+            // Uh-oh, an error occurred!
+            console.log('error: ', error)
+        });
 
 
         return this.files;
@@ -120,7 +191,6 @@ export class StorageService {
         //                 });
         //         });
         // });
-
 
 
         const storageRef = ref(this.storage, `images/${file.name}`);

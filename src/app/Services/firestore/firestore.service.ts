@@ -30,25 +30,6 @@ export class FirestoreService {
     }
 
     async getMessages(): Promise<Message[]> {
-        // firebase
-        //     .firestore()
-        //     .collection('messages')
-        //     .orderBy('date', 'asc')
-        //     .limit(50)
-        //     .onSnapshot((querySnapshot) => {
-        //         this._messages = [];
-        //         querySnapshot.forEach((doc) => {
-        //             this._messages.push({
-        //                 email: doc.get('email'),
-        //                 firstName: doc.get('firstName'),
-        //                 lastName: doc.get('lastName'),
-        //                 message: doc.get('message'),
-        //                 image: doc.get('image'),
-        //                 date: doc.get('date'),
-        //             });
-        //         });
-        //     });
-
         const q = query(
             collection(this.db, 'messages'),
             orderBy('date', 'asc'),
