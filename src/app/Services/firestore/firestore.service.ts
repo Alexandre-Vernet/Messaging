@@ -141,7 +141,7 @@ export class FirestoreService {
 
         let a = {};
         querySnapshot.forEach((docRef) => {
-            a['message'] = docRef.data();
+            a['message'] = docRef.get('message');
             a['id'] = docRef.id;
             return a;
         });
