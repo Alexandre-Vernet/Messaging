@@ -26,6 +26,7 @@ export class AppComponent implements OnInit {
     ngOnInit() {
         // Get local storage
         const email = localStorage.getItem('email');
+
         const password = localStorage.getItem('password');
 
         // Get route from user
