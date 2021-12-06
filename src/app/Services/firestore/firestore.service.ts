@@ -38,21 +38,22 @@ export class FirestoreService {
 
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
 
+            const id = doc.id;
             const email = doc.get('email');
             const firstName = doc.get('firstName');
             const lastName = doc.get('lastName');
             const message = doc.get('message');
-            const image = doc.get('image');
+            const file = doc.get('file');
             const date = doc.get('date');
 
             const newMessage = new Message(
+                id,
                 email,
                 firstName,
                 lastName,
                 message,
-                image,
+                file,
                 date
             );
             this.messages.push(newMessage);
@@ -66,22 +67,7 @@ export class FirestoreService {
      * @param newMessage
      */
     sendMessage = async (newMessage: String) => {
-        // // Store message
-        // firebase
-        //     .firestore()
-        //     .collection('messages')
-        //     .add({
-        //         email: this.auth.user.email,
-        //         firstName: this.auth.user.firstName,
-        //         lastName: this.auth.user.lastName,
-        //         message: newMessage,
-        //         date: new Date(),
-        //     })
-        //     .catch((error: String) => {
-        //         console.log(error);
-        //     });
-
-        const docRef = await addDoc(collection(this.db, 'messages'), {
+        await addDoc(collection(this.db, 'messages'), {
             email: this.auth.user.email,
             firstName: this.auth.user.firstName,
             lastName: this.auth.user.lastName,

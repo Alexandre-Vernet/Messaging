@@ -1,11 +1,11 @@
 import {AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild,} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {File} from 'src/app/class/file';
-import {Message} from 'src/app/class/message';
 import {User} from 'src/app/class/user';
 import {AuthenticationService} from 'src/app/Services/authentication/authentication.service';
 import {FirestoreService} from 'src/app/Services/firestore/firestore.service';
 import {StorageService} from 'src/app/Services/storage/storage.service';
+import {Message} from "../../class/message";
 
 @Component({
     selector: 'app-home',
@@ -45,9 +45,9 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
             this.messages = messages;
         });
 
-        this.storage.getFiles().then((files: File[]) => {
-            this.files = files;
-        });
+        // this.storage.getFiles().then((files: File[]) => {
+        //     this.files = files;
+        // });
     }
 
     ngAfterContentChecked() {
