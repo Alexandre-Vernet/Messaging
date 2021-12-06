@@ -1,41 +1,41 @@
 <div class="nk-header-wrap">
     <div class="nk-header-brand">
         <a [routerLink]=" ['/home']" class="logo-link">
-            <img class="logo-dark logo-img" src="../favicon.ico" alt="logo">
+            <img alt="logo" class="logo-dark logo-img" src="../favicon.ico">
         </a>
     </div><!-- .nk-header-brand -->
     <div class="nk-header-menu">
         <ul class="nk-menu nk-menu-main">
             <li class="nk-menu-item">
-                <a class="nk-menu-link" [routerLink]=" ['/home']">
-                    <span class="nk-menu-text">Home</span>
+                <a [routerLink]=" ['/home']" class="nk-menu-link">
+                    <span class="nk-menu-text">Home222</span>
                 </a>
             </li><!-- .nk-menu-item -->
             <li class="nk-menu-item has-sub">
-                <a href="#" class="nk-menu-link nk-menu-toggle">
+                <a class="nk-menu-link nk-menu-toggle" href="#">
                     <span class="nk-menu-text">Apps</span>
                 </a>
                 <ul class="nk-menu-sub">
                     <li class="nk-menu-item">
-                        <a href="html/apps-messages.html" class="nk-menu-link"><span
-                                class="nk-menu-text">Messages</span></a>
+                        <a class="nk-menu-link" href="html/apps-messages.html"><span
+                            class="nk-menu-text">Messages</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="html/apps-inbox.html" class="nk-menu-link"><span class="nk-menu-text">Inbox /
+                        <a class="nk-menu-link" href="html/apps-inbox.html"><span class="nk-menu-text">Inbox /
                                 Mail</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="html/apps-file-manager.html" class="nk-menu-link"><span class="nk-menu-text">File
+                        <a class="nk-menu-link" href="html/apps-file-manager.html"><span class="nk-menu-text">File
                                 Manager</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="html/apps-chats.html" class="nk-menu-link"><span class="nk-menu-text">Chats /
+                        <a class="nk-menu-link" href="html/apps-chats.html"><span class="nk-menu-text">Chats /
                                 Messenger</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a href="html/apps-calendar.html" class="nk-menu-link"><span
-                                class="nk-menu-text">Calendar</span><span
-                                class="nk-menu-badge badge-warning">New</span></a>
+                        <a class="nk-menu-link" href="html/apps-calendar.html"><span
+                            class="nk-menu-text">Calendar</span><span
+                            class="nk-menu-badge badge-warning">New</span></a>
                     </li>
                 </ul><!-- .nk-menu-sub -->
             </li><!-- .nk-menu-item -->
@@ -45,7 +45,7 @@
     <div class="nk-header-tools">
         <ul class="nk-quick-nav">
             <li class="dropdown notification-dropdown">
-                <a href="#" class="dropdown-toggle nk-quick-nav-icon" data-toggle="dropdown">
+                <a class="dropdown-toggle nk-quick-nav-icon" data-toggle="dropdown" href="#">
                     <div class="icon-status icon-status-info"><em class="icon ni ni-bell"></em></div>
                 </a>
                 <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right dropdown-menu-s1">
@@ -120,10 +120,10 @@
                 </div>
             </li><!-- .dropdown -->
             <li class="dropdown user-dropdown">
-                <a href="#" class="dropdown-toggle mr-lg-n1" data-toggle="dropdown">
+                <a class="dropdown-toggle mr-lg-n1" data-toggle="dropdown" href="#">
                     <div class="user-toggle">
 
-                        <img *ngIf="user?.profilePicture" class="profilePicture" src="{{user?.profilePicture}}" alt="">
+                        <img *ngIf="user?.profilePicture" alt="" class="profilePicture" src="{{user?.profilePicture}}">
                         <div *ngIf="!user?.profilePicture" class="user-avatar sm">
                             <em class="icon ni ni-user-alt"></em>
                         </div>
@@ -136,16 +136,16 @@
                         <!-- If profile picture -->
                         <div *ngIf="user?.profilePicture" class="user-card">
                             <div class="user-avatar">
-                                <img class="profilePicture" src="{{user?.profilePicture}}" alt="">
+                                <img alt="" class="profilePicture" src="{{user?.profilePicture}}">
                             </div>
                             <div class="user-info">
                                 <span class="lead-text"> {{user?.firstName + " " +
-                                    user?.lastName}}</span>
+                                user?.lastName}}</span>
                                 <span class="sub-text"> {{user?.email}} </span>
                             </div>
                             <div class="user-action">
                                 <a class="btn btn-icon mr-n2" href="html/user-profile-setting.html"><em
-                                        class="icon ni ni-setting"></em></a>
+                                    class="icon ni ni-setting"></em></a>
                             </div>
                         </div>
 
@@ -153,16 +153,16 @@
                         <div *ngIf="!user?.profilePicture" class="user-card">
                             <div class="user-avatar">
                                 <span *ngIf="user?.firstName != null">{{user?.firstName.charAt(0) +
-                                    user?.lastName.charAt(0)}}</span>
+                                user?.lastName.charAt(0)}}</span>
                             </div>
                             <div class="user-info">
                                 <span class="lead-text"> {{user?.firstName + " " +
-                                    user?.lastName}}</span>
+                                user?.lastName}}</span>
                                 <span class="sub-text"> {{user?.email}} </span>
                             </div>
                             <div class="user-action">
                                 <a class="btn btn-icon mr-n2" href="html/user-profile-setting.html"><em
-                                        class="icon ni ni-setting"></em></a>
+                                    class="icon ni ni-setting"></em></a>
                             </div>
                         </div>
                     </div>
@@ -171,23 +171,23 @@
                             <li><a [routerLink]=" ['/view-profile']"><em class="icon ni ni-user-alt"></em><span>View
                                         Profile</span></a></li>
                             <li><a href="html/user-profile-setting.html"><em
-                                        class="icon ni ni-setting-alt"></em><span>Account Setting</span></a></li>
+                                class="icon ni ni-setting-alt"></em><span>Account Setting</span></a></li>
                             <li><a class="dark-switch" href="#"><em class="icon ni ni-moon"></em><span>Dark
                                         Mode</span></a></li>
                         </ul>
                     </div>
                     <div class="dropdown-inner">
                         <ul class="link-list">
-                            <li><a [routerLink]="['']" (click)="signOut()"><em
-                                        class=" icon ni ni-signout"></em><span>Sign
+                            <li><a (click)="signOut()" [routerLink]="['']"><em
+                                class=" icon ni ni-signout"></em><span>Sign
                                         out</span></a></li>
                         </ul>
                     </div>
                 </div>
             </li><!-- .dropdown -->
             <li class="d-lg-none">
-                <a href="#" class="toggle nk-quick-nav-icon mr-n1" data-target="sideNav"><em
-                        class="icon ni ni-menu"></em></a>
+                <a class="toggle nk-quick-nav-icon mr-n1" data-target="sideNav" href="#"><em
+                    class="icon ni ni-menu"></em></a>
             </li>
         </ul><!-- .nk-quick-nav -->
     </div><!-- .nk-header-tools -->
