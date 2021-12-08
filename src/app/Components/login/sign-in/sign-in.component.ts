@@ -1,7 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
-import { CookieService } from 'ngx-cookie-service';
 
 @Component({
     selector: 'app-sign-in',
@@ -37,7 +36,7 @@ export class SignInComponent {
 
 
     signIn = () => {
-        // Get email & pswd
+        // Get email & psd
         const email = this.form.value.email;
         const password = this.form.value.password;
 
@@ -52,7 +51,6 @@ export class SignInComponent {
                 this.firebaseError = "Your account has been disabled.";
                 break;
         }
-        // this.auth.signIn(email, password);
     };
 
     googleSignUp = () => {

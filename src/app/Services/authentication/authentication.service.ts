@@ -136,49 +136,6 @@ export class AuthenticationService {
         email: string,
         password: string
     ) => {
-        // // Create user with email & pswd
-        // firebase
-        //     .auth()
-        //     .createUserWithEmailAndPassword(email, password)
-        //     .then(() => {
-        //         // User has been created
-        //         let userId: any = firebase.auth().currentUser?.uid;
-
-        //         // Store informations of user
-        //         firebase
-        //             .firestore()
-        //             .collection('users')
-        //             .doc(userId)
-        //             .set({
-        //                 firstName: firstName,
-        //                 lastName: lastName,
-        //                 email: email,
-        //                 dateCreation: new Date(),
-        //             })
-        //             .then(() => {
-        //                 // User data has been created
-        //                 console.log('User data has been saved !');
-
-        //                 // Clear error
-        //                 this.firebaseError = '';
-
-        //                 this.signIn(email, password);
-        //             })
-        //             .catch((error) => {
-        //                 console.log(
-        //                     `Error in creation of the data of the user ${error.message}`
-        //                 );
-
-        //                 this.firebaseError = error.message;
-        //             });
-        //     })
-        //     .catch((error) => {
-        //         console.error(
-        //             `Error in creation of the user : ${error.message}`
-        //         );
-        //         this.firebaseError = error.message;
-        //     });
-
         createUserWithEmailAndPassword(this.auth, email, password)
             .then(async (userCredential) => {
                 // Signed in
