@@ -7,7 +7,7 @@
             <div class="nk-content ">
                 <div class="nk-block nk-block-middle nk-auth-body  wide-xs">
                     <div class="brand-logo pb-4 text-center">
-                        <img class="logo-img logo-img-lg" src="../../../../favicon.ico" alt="logo">
+                        <img alt="logo" class="logo-img logo-img-lg" src="../../../../favicon.ico">
                     </div>
                     <div class="card card-bordered">
                         <div class="card-inner card-inner-lg">
@@ -19,16 +19,20 @@
                                     </div>
                                 </div>
                             </div>
-                            <form [formGroup]="form" (ngSubmit)="form.valid && signIn()">
+                            <form (ngSubmit)="form.valid && signIn()" [formGroup]="form">
                                 <!-- Email -->
                                 <div class="form-group">
-                                    <label class="form-label" for="name">Email</label>
-                                    <input type="text" class="form-control form-control-lg" formControlName="email"
-                                        placeholder="bob.razowski@gmail.com" [(ngModel)]="email"
-                                        [ngClass]="{'is-invalid': form.get('email')?.touched && form.get('email')?.invalid || firebaseError !== ''}">
+                                    <label class="form-label" for="email">Email</label>
+                                    <input [(ngModel)]="email"
+                                           [ngClass]="{'is-invalid': form.get('email')?.touched && form.get('email')?.invalid || firebaseError !== ''}"
+                                           class="form-control form-control-lg"
+                                           formControlName="email"
+                                           id="email" placeholder="bob.razowski@gmail.com"
+                                           type="text">
 
 
-                                    <div *ngIf="form.get('email')?.touched && form.get('email')?.invalid || firebaseError !== ''"
+                                    <div
+                                        *ngIf="form.get('email')?.touched && form.get('email')?.invalid || firebaseError !== ''"
                                         class="invalid-feedback">
                                         <div *ngIf="form.get('email')?.errors?.required">
                                             Email is required
@@ -36,7 +40,7 @@
                                         <div *ngIf="form.get('email')?.errors?.email">
                                             Email address is badly formatted
                                         </div>
-                                        <div *ngIf="firebaseError != ''">
+                                        <div *ngIf="firebaseError !== ''">
                                             {{firebaseError}}
                                         </div>
                                     </div>
@@ -47,22 +51,25 @@
                                 <div class="form-group">
                                     <div class="form-label-group">
                                         <label class="form-label" for="password">Password</label>
-                                        <a class="link link-primary link-sm" data-toggle="modal"
-                                            data-target="#modalResetPassword">Forgot password ?</a>
+                                        <a class="link link-primary link-sm" data-target="#modalResetPassword"
+                                           data-toggle="modal">Forgot password ?</a>
                                     </div>
                                     <div class="form-control-wrap">
-                                        <a class="form-icon form-icon-right passcode-switch" (click)="viewPassword()">
+                                        <a (click)="viewPassword()" class="form-icon form-icon-right passcode-switch">
                                             <em class="passcode-icon icon-show icon ni ni-eye"></em>
                                             <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
                                         </a>
-                                        <input [type]="_viewPassword ? 'text' : 'password'"
-                                            class="form-control form-control-lg" formControlName="password"
-                                            placeholder="bob123"
-                                            [ngClass]="{'is-invalid': form.get('password')?.touched && form.get('password')?.invalid}">
+                                        <input
+                                            [ngClass]="{'is-invalid': form.get('password')?.touched && form.get('password')?.invalid}"
+                                            [type]="_viewPassword ? 'text' : 'password'"
+                                            class="form-control form-control-lg"
+                                            formControlName="password"
+                                            id="password"
+                                            placeholder="bob123">
 
 
                                         <div *ngIf="form.get('password')?.touched && form.get('password')?.invalid"
-                                            class="invalid-feedback">
+                                             class="invalid-feedback">
                                             <div *ngIf="form.get('password')?.errors?.required">
                                                 Password is required
                                             </div>
@@ -76,18 +83,19 @@
 
                                 <div class="form-group">
                                     <button [disabled]="!form.valid" class="btn btn-lg btn-primary btn-block">Sign
-                                        in</button>
+                                        in
+                                    </button>
                                 </div>
                             </form>
                             <div class="form-note-s2 text-center pt-4"> New on our platform ? <a
-                                    [routerLink]=" ['/sign-up'] ">Create an account</a>
+                                [routerLink]=" ['/sign-up'] ">Create an account</a>
                             </div>
                             <div class="text-center pt-4 pb-3">
                                 <h6 class="overline-title overline-title-sap"><span>OR</span></h6>
                             </div>
                             <ul class="nav justify-center gx-8">
-                                <li class="nav-item"><a class="nav-link icon" (click)="googleSignUp()">Sign-in with
-                                        Google</a></li>
+                                <li class="nav-item"><a (click)="googleSignUp()" class="nav-link icon">Sign-in with
+                                    Google</a></li>
                             </ul>
                         </div>
                     </div>
@@ -102,28 +110,29 @@
 
 
 <!-- Reset password -->
-<div class="modal fade" tabindex="-1" id="modalResetPassword">
+<div class="modal fade" id="modalResetPassword" tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Reset password</h5>
-                <a href="#" class="close" data-dismiss="modal" aria-label="Close" #modalResetPassword>
+                <a #modalResetPassword aria-label="Close" class="close" data-dismiss="modal" href="#">
                     <em class="icon ni ni-cross"></em>
                 </a>
             </div>
             <div class="modal-body">
-                <form [formGroup]="formReset" (ngSubmit)="formReset.valid && resetPassword()">
+                <form (ngSubmit)="formReset.valid && resetPassword()" [formGroup]="formReset">
                     <div class="form-group">
                         <label class="form-label" for="email">Email address</label>
                         <div class="form-control-wrap">
-                            <input type="email" formControlName="emailReset" placeholder="bob.razowski@gmail.com"
-                                class="form-control"
-                                [ngClass]="{'is-invalid': formReset.get('emailReset')?.touched && formReset.get('emailReset')?.invalid}">
-
+                            <input
+                                [ngClass]="{'is-invalid': formReset.get('emailReset')?.touched && formReset.get('emailReset')?.invalid}"
+                                class="form-control" formControlName="emailReset"
+                                placeholder="bob.razowski@gmail.com"
+                                type="email">
 
 
                             <div *ngIf="formReset.get('emailReset')?.touched && formReset.get('emailReset')?.invalid"
-                                class="invalid-feedback">
+                                 class="invalid-feedback">
                                 <div *ngIf="formReset.get('emailReset')?.errors?.required">
                                     Email address is required
                                 </div>
@@ -134,9 +143,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <button [disabled]="!formReset.valid" data-bs-dismiss="modal" type="submit"
-                            class="btn btn-lg btn-primary">Send
-                            link reset</button>
+                        <button [disabled]="!formReset.valid" class="btn btn-lg btn-primary" data-bs-dismiss="modal"
+                                type="submit">Send
+                            link reset
+                        </button>
                     </div>
                 </form>
             </div>
@@ -146,21 +156,21 @@
 
 
 <!-- Modal success reset password -->
-<div class="modal fade" tabindex="-1" id="modalSuccessResetPassword">
+<div class="modal fade" id="modalSuccessResetPassword" tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross"></em></a>
+            <a class="close" data-dismiss="modal" href="#"><em class="icon ni ni-cross"></em></a>
             <div class="modal-body modal-body-lg text-center">
                 <div class="nk-modal">
                     <em class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-check bg-success"></em>
                     <h4 class="nk-modal-title">Success</h4>
                     <div class="nk-modal-text">
                         <div class="caption-text">E-mail has been sent to <strong> {{formReset.value['emailReset']}}
-                            </strong>
+                        </strong>
                         </div>
                     </div>
                     <div class="nk-modal-action">
-                        <a href="#" class="btn btn-lg btn-mw btn-primary" data-dismiss="modal">OK</a>
+                        <a class="btn btn-lg btn-mw btn-primary" data-dismiss="modal" href="#">OK</a>
                     </div>
                 </div>
             </div>
@@ -170,7 +180,7 @@
 
 
 <!-- Modal fail to send email reset -->
-<div class="modal fade" tabindex="-1" id="modalFailResetPassword">
+<div class="modal fade" id="modalFailResetPassword" tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body modal-body-lg text-center">
@@ -184,7 +194,7 @@
 
                     </div>
                     <div class="nk-modal-action mt-5">
-                        <a href="#" class="btn btn-lg btn-mw btn-light" data-dismiss="modal">Return</a>
+                        <a class="btn btn-lg btn-mw btn-light" data-dismiss="modal" href="#">Return</a>
                     </div>
                 </div>
             </div>

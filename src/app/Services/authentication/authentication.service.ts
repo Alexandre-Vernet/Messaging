@@ -29,27 +29,25 @@ import {
 import { CryptoService } from '../crypto/crypto.service';
 
 declare var $: any;
+
 @Injectable({
     providedIn: 'root',
 })
 export class AuthenticationService {
     user: User;
-    _firebaseError: string = '';
-
     db = getFirestore();
     auth = getAuth();
-
     provider = new GoogleAuthProvider();
 
     constructor(
         private router: Router,
         private cookieService: CookieService,
         private cryptoService: CryptoService
-    ) {}
-
-    async getAuth(): Promise<User> {
-        return this.user;
+    ) {
     }
+
+    _firebaseError: string = '';
+
     /**
      * Getter firebaseError
      * @return {string }
@@ -64,6 +62,10 @@ export class AuthenticationService {
      */
     public set firebaseError(value: string) {
         this._firebaseError = value;
+    }
+
+    async getAuth(): Promise<User> {
+        return this.user;
     }
 
     /**
@@ -105,9 +107,9 @@ export class AuthenticationService {
                     // Clear error
                     this.firebaseError = '';
 
-                    let url = window.location.pathname;
-                    if (url != '/sign-in') this.router.navigate([url]);
-                    else this.router.navigate(['/home']);
+                    // let url = window.location.pathname;
+                    // if (url != '/sign-in') this.router.navigate([url]);
+                    // else this.router.navigate(['/home']);
                 } else {
                     // doc.data() will be undefined in this case
                     console.log('No such document!');
@@ -116,10 +118,9 @@ export class AuthenticationService {
             .catch((error) => {
                 console.log('error: ', error);
                 this.firebaseError = error.message;
-                this.router.navigate(['/sign-in']);
             });
 
-        return this.user;
+        return this.firebaseError;
     };
 
     /**
