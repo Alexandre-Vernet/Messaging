@@ -34,7 +34,6 @@ export class SignInComponent {
     ) {
     }
 
-
     signIn = () => {
         // Get email & psd
         const email = this.form.value.email;
@@ -44,11 +43,11 @@ export class SignInComponent {
         const error = this.auth.signIn(email, password);
 
         switch (error) {
-            case "Firebase: Error (auth/user-not-found).":
-                this.firebaseError = "Email or password is incorrect.";
+            case 'Firebase: Error (auth/user-not-found).':
+                this.firebaseError = 'Email or password is incorrect.';
                 break;
-            case "FirebaseError: Firebase: Error (auth/user-disabled).":
-                this.firebaseError = "Your account has been disabled.";
+            case 'FirebaseError: Firebase: Error (auth/user-disabled).':
+                this.firebaseError = 'Your account has been disabled.';
                 break;
         }
     };

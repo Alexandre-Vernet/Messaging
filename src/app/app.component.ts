@@ -30,16 +30,16 @@ export class AppComponent implements OnInit {
         const password = localStorage.getItem('password');
 
         // Get route from user
-        // const url = window.location.pathname;
-        //
-        // // Check connection
-        // if (email && password) {
-        //     const hashPassword = this.cryptoService.decrypt(password);
-        //
-        //     this.auth.signIn(email, hashPassword);
-        // } else {
-        //     if (url == '/sign-up') this.router.navigate(['/sign-up']);
-        //     else this.router.navigate(['sign-in']);
-        // }
+        const url = window.location.pathname;
+
+        // Check connection
+        if (email && password) {
+            const hashPassword = this.cryptoService.decrypt(password);
+
+            this.auth.signIn(email, hashPassword);
+        } else {
+            if (url == '/sign-up') this.router.navigate(['/sign-up']);
+            else this.router.navigate(['sign-in']);
+        }
     }
 }

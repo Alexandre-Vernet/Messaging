@@ -38,30 +38,13 @@ export class AuthenticationService {
     db = getFirestore();
     auth = getAuth();
     provider = new GoogleAuthProvider();
+    firebaseError: string = '';
 
     constructor(
         private router: Router,
         private cookieService: CookieService,
         private cryptoService: CryptoService
     ) {
-    }
-
-    _firebaseError: string = '';
-
-    /**
-     * Getter firebaseError
-     * @return {string }
-     */
-    public get firebaseError(): string {
-        return this._firebaseError;
-    }
-
-    /**
-     * Setter firebaseError
-     * @param {string } value
-     */
-    public set firebaseError(value: string) {
-        this._firebaseError = value;
     }
 
     async getAuth(): Promise<User> {
@@ -79,7 +62,7 @@ export class AuthenticationService {
                 // Signed in
                 const user = userCredential.user;
 
-                // Get user datas
+                // Get user data
                 const docRef = doc(this.db, 'users', user.uid);
                 const docSnap = await getDoc(docRef);
 
@@ -105,11 +88,11 @@ export class AuthenticationService {
                     localStorage.setItem('password', hashPassword);
 
                     // Clear error
-                    this.firebaseError = '';
+                    // this.firebaseError = '';
 
-                    // let url = window.location.pathname;
-                    // if (url != '/sign-in') this.router.navigate([url]);
-                    // else this.router.navigate(['/home']);
+                    let url = window.location.pathname;
+                    if (url != '/sign-in') this.router.navigate([url]);
+                    else this.router.navigate(['/home']);
                 } else {
                     // doc.data() will be undefined in this case
                     console.log('No such document!');
@@ -119,7 +102,7 @@ export class AuthenticationService {
                 console.log('error: ', error);
                 this.firebaseError = error.message;
             });
-
+        console.log(this.firebaseError);
         return this.firebaseError;
     };
 
