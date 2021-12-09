@@ -29,41 +29,26 @@ import {
 import { CryptoService } from '../crypto/crypto.service';
 
 declare var $: any;
+
 @Injectable({
     providedIn: 'root',
 })
 export class AuthenticationService {
     user: User;
-    _firebaseError: string = '';
-
     db = getFirestore();
     auth = getAuth();
-
     provider = new GoogleAuthProvider();
+    firebaseError: string = '';
 
     constructor(
         private router: Router,
         private cookieService: CookieService,
         private cryptoService: CryptoService
-    ) {}
+    ) {
+    }
 
     async getAuth(): Promise<User> {
         return this.user;
-    }
-    /**
-     * Getter firebaseError
-     * @return {string }
-     */
-    public get firebaseError(): string {
-        return this._firebaseError;
-    }
-
-    /**
-     * Setter firebaseError
-     * @param {string } value
-     */
-    public set firebaseError(value: string) {
-        this._firebaseError = value;
     }
 
     /**
@@ -77,7 +62,7 @@ export class AuthenticationService {
                 // Signed in
                 const user = userCredential.user;
 
-                // Get user datas
+                // Get user data
                 const docRef = doc(this.db, 'users', user.uid);
                 const docSnap = await getDoc(docRef);
 
@@ -103,7 +88,7 @@ export class AuthenticationService {
                     localStorage.setItem('password', hashPassword);
 
                     // Clear error
-                    this.firebaseError = '';
+                    // this.firebaseError = '';
 
                     let url = window.location.pathname;
                     if (url != '/sign-in') this.router.navigate([url]);
@@ -116,10 +101,9 @@ export class AuthenticationService {
             .catch((error) => {
                 console.log('error: ', error);
                 this.firebaseError = error.message;
-                this.router.navigate(['/sign-in']);
             });
-
-        return this.user;
+        console.log(this.firebaseError);
+        return this.firebaseError;
     };
 
     /**
@@ -135,49 +119,6 @@ export class AuthenticationService {
         email: string,
         password: string
     ) => {
-        // // Create user with email & pswd
-        // firebase
-        //     .auth()
-        //     .createUserWithEmailAndPassword(email, password)
-        //     .then(() => {
-        //         // User has been created
-        //         let userId: any = firebase.auth().currentUser?.uid;
-
-        //         // Store informations of user
-        //         firebase
-        //             .firestore()
-        //             .collection('users')
-        //             .doc(userId)
-        //             .set({
-        //                 firstName: firstName,
-        //                 lastName: lastName,
-        //                 email: email,
-        //                 dateCreation: new Date(),
-        //             })
-        //             .then(() => {
-        //                 // User data has been created
-        //                 console.log('User data has been saved !');
-
-        //                 // Clear error
-        //                 this.firebaseError = '';
-
-        //                 this.signIn(email, password);
-        //             })
-        //             .catch((error) => {
-        //                 console.log(
-        //                     `Error in creation of the data of the user ${error.message}`
-        //                 );
-
-        //                 this.firebaseError = error.message;
-        //             });
-        //     })
-        //     .catch((error) => {
-        //         console.error(
-        //             `Error in creation of the user : ${error.message}`
-        //         );
-        //         this.firebaseError = error.message;
-        //     });
-
         createUserWithEmailAndPassword(this.auth, email, password)
             .then(async (userCredential) => {
                 // Signed in

@@ -1,14 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
-import { CookieService } from 'ngx-cookie-service';
 
 @Component({
     selector: 'app-sign-in',
     templateUrl: './sign-in.component.html',
     styleUrls: ['./sign-in.component.scss'],
 })
-export class SignInComponent implements OnInit {
+export class SignInComponent {
     firebaseError: string = '';
     _viewPassword: boolean = false;
 
@@ -31,28 +30,26 @@ export class SignInComponent implements OnInit {
     @ViewChild('modalResetPassword') modalResetPassword;
 
     constructor(
-        private auth: AuthenticationService,
-        private cookieService: CookieService
-    ) { }
-
-    ngOnInit() {
-
-        const cookieEmail = this.cookieService.get('email');
-        if (cookieEmail) {
-            this.email = cookieEmail;
-        }
-
-        this.firebaseError = this.auth.firebaseError;
+        private auth: AuthenticationService
+    ) {
     }
 
     signIn = () => {
-        // Get email & pswd
+        // Get email & psd
         const email = this.form.value.email;
         const password = this.form.value.password;
 
         // Sign-in
-        // this.firebaseError = this.auth.signIn(email, password);
-        this.auth.signIn(email, password);
+        const error = this.auth.signIn(email, password);
+
+        switch (error) {
+            case 'Firebase: Error (auth/user-not-found).':
+                this.firebaseError = 'Email or password is incorrect.';
+                break;
+            case 'FirebaseError: Firebase: Error (auth/user-disabled).':
+                this.firebaseError = 'Your account has been disabled.';
+                break;
+        }
     };
 
     googleSignUp = () => {

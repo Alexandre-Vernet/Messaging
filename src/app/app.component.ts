@@ -7,6 +7,7 @@ import { firebaseConfig } from '../config';
 import sha256 from 'crypto-js/sha256';
 import { AuthenticationService } from './Services/authentication/authentication.service';
 import { CryptoService } from './Services/crypto/crypto.service';
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -26,7 +27,6 @@ export class AppComponent implements OnInit {
     ngOnInit() {
         // Get local storage
         const email = localStorage.getItem('email');
-
         const password = localStorage.getItem('password');
 
         // Get route from user

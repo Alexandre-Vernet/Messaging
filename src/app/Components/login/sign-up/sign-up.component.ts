@@ -25,21 +25,27 @@ export class SignUpComponent implements OnInit {
         ]),
     });
 
-    constructor(private auth: AuthenticationService) { }
+    constructor(private auth: AuthenticationService) {
+    }
 
     ngOnInit() {
         this.firebaseError = this.auth.firebaseError;
     }
 
     signUp = () => {
-        // Get informations
+        // Get value from form
         const firstName = this.form.value.firstName;
         const lastName = this.form.value.lastName;
         const email = this.form.value.email;
         const password = this.form.value.password;
 
         // Sign-up
-        this.firebaseError = this.auth.signUp(firstName, lastName, email, password);
+        const error = this.auth.signUp(firstName, lastName, email, password);
+        switch (error) {
+            case "Firebase: Error (auth/email-already-in-use).":
+                this.firebaseError = "Email is already in use.";
+                break;
+        }
     };
 
     googleSignUp = () => {
