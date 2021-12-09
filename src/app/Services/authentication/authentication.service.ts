@@ -2,9 +2,6 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { User } from 'src/app/class/user';
-import Swal from 'sweetalert2';
-import sha256 from 'crypto-js/sha256';
-
 import {
     getAuth,
     createUserWithEmailAndPassword,
@@ -27,6 +24,7 @@ import {
     deleteDoc,
 } from 'firebase/firestore';
 import { CryptoService } from '../crypto/crypto.service';
+import { Toast } from '../../class/Toast';
 
 declare var $: any;
 
@@ -99,7 +97,7 @@ export class AuthenticationService {
                 }
             })
             .catch((error) => {
-                console.log('error: ', error);
+                console.error(error);
                 this.firebaseError = error.message;
             });
         console.log(this.firebaseError);
@@ -132,24 +130,19 @@ export class AuthenticationService {
                     dateCreation: new Date(),
                 })
                     .then(() => {
-                        //  User data has been created
-                        console.log('User data has been saved !');
-
                         // Clear error
                         this.firebaseError = '';
 
                         this.signIn(email, password);
                     })
                     .catch((error) => {
-                        console.log(
-                            `Error in creation of the data of the user ${error.message}`
-                        );
+                        console.error(error);
 
                         this.firebaseError = error.message;
                     });
             })
             .catch((error) => {
-                console.log(`Error in creation of the user : ${error.message}`);
+                console.error(error);
                 this.firebaseError = error.message;
             });
 
@@ -255,14 +248,12 @@ export class AuthenticationService {
                         this.router.navigate(['home']);
                     })
                     .catch((error) => {
-                        console.log(
-                            `Error in creation of the data of the user ${error.message}`
-                        );
+                        console.error(error);
                         this.firebaseError = error.message;
                     });
             })
             .catch((error) => {
-                console.log('error: ', error);
+                console.error(error);
                 const errorMessage = error.message;
                 this.firebaseError = errorMessage;
             });
@@ -301,24 +292,12 @@ export class AuthenticationService {
         sendPasswordResetEmail(this.auth, emailAddress)
             .then(() => {
                 // Email sent
-                console.log('Email sent !');
-
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: `E-mail has been sent to ${emailAddress}`,
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+                Toast.success('E-mail has been sent to', emailAddress);
             })
             .catch((error) => {
                 // An error occurred
-                console.log('error: ', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: error,
-                    showConfirmButton: true,
-                });
+                console.error(error);
+                Toast.error('Error in sending email', error.message);
             });
     };
 
@@ -370,16 +349,7 @@ export class AuthenticationService {
             lastName: lastName,
         })
             .then(() => {
-                // User has been successfully updated
-                console.log('User has been successfully updated');
-
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: 'Your account has been successfully updated',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+                Toast.success('Your account has been successfully updated');
 
                 // Update values
                 this.user.firstName = firstName;
@@ -387,13 +357,8 @@ export class AuthenticationService {
             })
             .catch((error) => {
                 // The document probably doesn't exist.
-                console.error('Error updating document: ', error);
-
-                Swal.fire({
-                    icon: 'error',
-                    title: error,
-                    showConfirmButton: true,
-                });
+                console.error(error);
+                Toast.error(error.message);
             });
     };
 
@@ -482,22 +447,13 @@ export class AuthenticationService {
                     // Disconnect
                     this.signOut();
 
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: 'success',
-                        title: 'Your email has been successfully updated',
-                        showConfirmButton: false,
-                        timer: 1500,
-                    });
+                    Toast.success('Your email has been successfully updated');
+
                 });
             })
             .catch((error) => {
-                // An error occurred
-                Swal.fire({
-                    icon: 'error',
-                    title: error,
-                    showConfirmButton: true,
-                });
+                console.error(error);
+                Toast.error(error.message);
             });
     };
 
@@ -532,22 +488,11 @@ export class AuthenticationService {
 
         updatePassword(user, newPassword)
             .then(() => {
-                console.log('Password has been successfully updated');
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: `Password has been successfully updated`,
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+                Toast.success('Password has been successfully updated');
             })
-            .catch((error: string) => {
-                console.log('error: ', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: error,
-                    showConfirmButton: true,
-                });
+            .catch((error) => {
+                console.error(error);
+                Toast.error('Error in updating password', error.message);
             });
     };
 
@@ -572,7 +517,8 @@ export class AuthenticationService {
                 this.router.navigate(['/sign-in']);
             })
             .catch((error) => {
-                console.log('error: ', error);
+                console.error(error);
+                Toast.error('Error while disconnecting ', error.message);
             });
     };
 
@@ -634,38 +580,19 @@ export class AuthenticationService {
 
                 await deleteDoc(doc(this.db, 'users', userId))
                     .then(() => {
-                        // User deleted.
-                        console.log('User has been deleted');
-
-                        Swal.fire({
-                            position: 'top-end',
-                            icon: 'success',
-                            title: `User has been deleted`,
-                            showConfirmButton: false,
-                            timer: 1500,
-                        });
+                        Toast.success('User has been deleted');
 
                         // Go to sign up
                         this.router.navigate(['/sign-up']);
                     })
                     .catch((error) => {
-                        console.log(`Error while deleting the user : ${error}`);
-
-                        Swal.fire({
-                            icon: 'error',
-                            title: error,
-                            showConfirmButton: true,
-                        });
+                        console.error(error);
+                        Toast.error('Error while deleting the user', error.message);
                     });
             })
             .catch((error) => {
-                console.error(`Error deleting data of user : ${error}`);
-
-                Swal.fire({
-                    icon: 'error',
-                    title: error,
-                    showConfirmButton: true,
-                });
+                console.error(error);
+                Toast.error('Error deleting data of user : ', error.message);
             });
     };
 }

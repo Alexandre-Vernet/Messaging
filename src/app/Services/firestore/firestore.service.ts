@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
     addDoc,
     collection,
@@ -12,10 +12,10 @@ import {
     updateDoc,
     where,
 } from 'firebase/firestore';
-import {Message} from 'src/app/class/message';
-import {User} from 'src/app/class/user';
-import {AuthenticationService} from '../authentication/authentication.service';
-import Swal from 'sweetalert2';
+import { Message } from 'src/app/class/message';
+import { User } from 'src/app/class/user';
+import { AuthenticationService } from '../authentication/authentication.service';
+import { Toast } from '../../class/Toast';
 
 @Injectable({
     providedIn: 'root',
@@ -77,7 +77,7 @@ export class FirestoreService {
     };
 
     async getMessageId(date: Date) {
-        const message = {}
+        const message = {};
 
         const q = query(
             collection(this.db, 'messages'),
@@ -127,26 +127,11 @@ export class FirestoreService {
             date: date,
         })
             .then(() => {
-                console.log('Document successfully updated!');
-
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: 'Message successfully updated!',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+                Toast.success('Message successfully updated');
             })
             .catch((error) => {
-                console.error('Error updating document: ', error);
-
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: `Error updating message ${error}`,
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+                console.error(error);
+                Toast.error('Error updating message', error.message);
             });
     };
 
