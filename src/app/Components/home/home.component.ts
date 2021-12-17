@@ -1,11 +1,11 @@
-import {AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild,} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {File} from 'src/app/class/file';
-import {User} from 'src/app/class/user';
-import {AuthenticationService} from 'src/app/Services/authentication/authentication.service';
-import {FirestoreService} from 'src/app/Services/firestore/firestore.service';
-import {StorageService} from 'src/app/Services/storage/storage.service';
-import {Message} from "../../class/message";
+import { AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild, } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { File } from 'src/app/class/file';
+import { User } from 'src/app/class/user';
+import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
+import { FirestoreService } from 'src/app/Services/firestore/firestore.service';
+import { StorageService } from 'src/app/Services/storage/storage.service';
+import { Message } from '../../class/message';
 
 @Component({
     selector: 'app-home',
@@ -44,10 +44,6 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
         this.firestore.getMessages().then((messages: Message[]) => {
             this.messages = messages;
         });
-
-        // this.storage.getFiles().then((files: File[]) => {
-        //     this.files = files;
-        // });
     }
 
     ngAfterContentChecked() {
@@ -58,7 +54,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
         document.getElementById('inputSendMessage')?.focus();
     };
 
-    sendMessage = () => {
+    sendMessage() {
         if (this.newMessage.length > 0) {
             this.firestore.sendMessage(this.newMessage);
 
@@ -67,11 +63,11 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
         }
     };
 
-    uploadFile = () => {
+    uploadFile() {
         document.getElementById('file_upload')?.click();
     };
 
-    sendFile = (file: Event) => {
+    sendFile(file: Event) {
         this.storage.sendFile(file);
     };
 
@@ -93,7 +89,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
         });
     }
 
-    editMessage = async () => {
+    async editMessage() {
         const editedMessage = this.formEditMessage.value.editedMessage,
             date = new Date(),
             messageId = this.messageId;
@@ -118,7 +114,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
         });
     }
 
-    deleteMessage = (date: Date) => {
+    deleteMessage(date: Date) {
         this.firestore.deleteMessage(date);
     };
 
@@ -126,7 +122,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
      *  Format date to locale zone
      * @param date
      */
-    formatDate = (date) => {
+    formatDate(date) {
         const option = {
             year: 'numeric',
             month: '2-digit',
