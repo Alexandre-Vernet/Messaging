@@ -2,7 +2,6 @@
     "theme_color": "#1976d2",
     "background_color": "#ffffff",
     "display": "standalone",
-    "start_url": "https://messaging-db163.web.app/",
     "name": "Messaging",
     "short_name": "Messaging",
     "icons": [
