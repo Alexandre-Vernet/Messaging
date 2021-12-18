@@ -1,7 +1,7 @@
 <div class="nk-header-wrap">
     <div class="nk-header-brand">
         <a [routerLink]=" ['/home']" class="logo-link">
-            <img alt="logo" class="logo-dark logo-img" src="../favicon.ico">
+            <img alt="logo" class="logo-dark logo-img" src="./favicon.ico">
         </a>
     </div><!-- .nk-header-brand -->
     <div class="nk-header-menu">
@@ -17,25 +17,25 @@
                 </a>
                 <ul class="nk-menu-sub">
                     <li class="nk-menu-item">
-                        <a class="nk-menu-link" href="html/apps-messages.html"><span
-                            class="nk-menu-text">Messages</span></a>
+                        <a class="nk-menu-link" href="#"><span
+                                class="nk-menu-text">Messages</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a class="nk-menu-link" href="html/apps-inbox.html"><span class="nk-menu-text">Inbox /
+                        <a class="nk-menu-link" href="#"><span class="nk-menu-text">Inbox /
                                 Mail</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a class="nk-menu-link" href="html/apps-file-manager.html"><span class="nk-menu-text">File
+                        <a class="nk-menu-link" href="#"><span class="nk-menu-text">File
                                 Manager</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a class="nk-menu-link" href="html/apps-chats.html"><span class="nk-menu-text">Chats /
+                        <a class="nk-menu-link" href="#"><span class="nk-menu-text">Chats /
                                 Messenger</span></a>
                     </li>
                     <li class="nk-menu-item">
-                        <a class="nk-menu-link" href="html/apps-calendar.html"><span
-                            class="nk-menu-text">Calendar</span><span
-                            class="nk-menu-badge badge-warning">New</span></a>
+                        <a class="nk-menu-link" href="#"><span
+                                class="nk-menu-text">Calendar</span><span
+                                class="nk-menu-badge badge-warning">New</span></a>
                     </li>
                 </ul><!-- .nk-menu-sub -->
             </li><!-- .nk-menu-item -->
@@ -144,15 +144,15 @@
                                 <span class="sub-text"> {{user?.email}} </span>
                             </div>
                             <div class="user-action">
-                                <a class="btn btn-icon mr-n2" href="html/user-profile-setting.html"><em
-                                    class="icon ni ni-setting"></em></a>
+                                <a class="btn btn-icon mr-n2" href="#"><em
+                                        class="icon ni ni-setting"></em></a>
                             </div>
                         </div>
 
                         <!-- No profile picture -->
                         <div *ngIf="!user?.profilePicture" class="user-card">
                             <div class="user-avatar">
-                                <span *ngIf="user?.firstName != null">{{user?.firstName.charAt(0) +
+                                <span *ngIf="user?.firstName !== null">{{user?.firstName.charAt(0) +
                                 user?.lastName.charAt(0)}}</span>
                             </div>
                             <div class="user-info">
@@ -161,8 +161,8 @@
                                 <span class="sub-text"> {{user?.email}} </span>
                             </div>
                             <div class="user-action">
-                                <a class="btn btn-icon mr-n2" href="html/user-profile-setting.html"><em
-                                    class="icon ni ni-setting"></em></a>
+                                <a class="btn btn-icon mr-n2" href="#"><em
+                                        class="icon ni ni-setting"></em></a>
                             </div>
                         </div>
                     </div>
@@ -170,8 +170,8 @@
                         <ul class="link-list">
                             <li><a [routerLink]=" ['/view-profile']"><em class="icon ni ni-user-alt"></em><span>View
                                         Profile</span></a></li>
-                            <li><a href="html/user-profile-setting.html"><em
-                                class="icon ni ni-setting-alt"></em><span>Account Setting</span></a></li>
+                            <li><a href="#"><em
+                                    class="icon ni ni-setting-alt"></em><span>Account Setting</span></a></li>
                             <li><a class="dark-switch" href="#"><em class="icon ni ni-moon"></em><span>Dark
                                         Mode</span></a></li>
                         </ul>
@@ -179,7 +179,7 @@
                     <div class="dropdown-inner">
                         <ul class="link-list">
                             <li><a (click)="signOut()" [routerLink]="['']"><em
-                                class=" icon ni ni-signout"></em><span>Sign
+                                    class=" icon ni ni-signout"></em><span>Sign
                                         out</span></a></li>
                         </ul>
                     </div>
@@ -187,7 +187,7 @@
             </li><!-- .dropdown -->
             <li class="d-lg-none">
                 <a class="toggle nk-quick-nav-icon mr-n1" data-target="sideNav" href="#"><em
-                    class="icon ni ni-menu"></em></a>
+                        class="icon ni ni-menu"></em></a>
             </li>
         </ul><!-- .nk-quick-nav -->
     </div><!-- .nk-header-tools -->
