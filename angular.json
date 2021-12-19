@@ -36,6 +36,8 @@
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/popper.js/dist/umd/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
               "src/assets/js/apps/chats.js",
               "src/assets/js/bundle.js",
               "src/assets/js/scripts.js"
