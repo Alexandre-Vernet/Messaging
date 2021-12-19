@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
     formEditMessage = new FormGroup({
         editedMessage: new FormControl('', [Validators.required]),
     });
-
+        
     constructor(
         private auth: AuthenticationService,
         private firestore: FirestoreService,
