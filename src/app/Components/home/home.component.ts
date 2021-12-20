@@ -27,7 +27,10 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
     messages: Message[] = [];
     files: File[] = [];
 
-    newMessage: String;
+
+    formNewMessage = new FormGroup({
+        newMessage: new FormControl('', [Validators.required]),
+    });
 
     formEditMessage = new FormGroup({
         editedMessage: new FormControl('', [Validators.required]),
@@ -62,11 +65,17 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
     };
 
     sendMessage() {
-        if (this.newMessage.length > 0) {
-            this.firestore.sendMessage(this.newMessage);
+        // if (this.newMessage.length > 0) {
+        //     this.firestore.sendMessage(this.newMessage);
+        //
+        //     // Clear input
+        //     this.newMessage = '';
+        // }
 
-            // Clear input
-            this.newMessage = '';
+        const newMessage = this.formNewMessage.value;
+
+        if (newMessage.length > 0) {
+            this.firestore.sendMessage(newMessage);
         }
     };
 
