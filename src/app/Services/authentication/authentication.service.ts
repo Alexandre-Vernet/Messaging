@@ -24,7 +24,7 @@ import {
 } from 'firebase/firestore';
 import { CryptoService } from '../crypto/crypto.service';
 import { Toast } from '../../class/Toast';
-import { deleteObject, getStorage, ref } from 'firebase/storage';
+import { getStorage } from 'firebase/storage';
 
 @Injectable({
     providedIn: 'root',
@@ -121,7 +121,7 @@ export class AuthenticationService {
                         // Clear error
                         this.firebaseError = '';
 
-                        this.signIn(email, password);
+                        this.router.navigate(['/sign-in']);
                     })
                     .catch((error) => {
                         console.error(error);
@@ -248,31 +248,6 @@ export class AuthenticationService {
 
 
     resetPassword(emailAddress: string) {
-        // firebase
-        //     .auth()
-        //     .sendPasswordResetEmail(emailAddress)
-        //     .then(() => {
-        //         // Email sent
-        //         console.log('Email sent !');
-
-        //         Swal.fire({
-        //             position: 'top-end',
-        //             icon: 'success',
-        //             title: `E-mail has been sent to ${emailAddress}`,
-        //             showConfirmButton: false,
-        //             timer: 1500,
-        //         });
-        //     })
-        //     .catch((error) => {
-        //         // An error occurred
-        //         console.log('error: ', error);
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: error,
-        //             showConfirmButton: true,
-        //         });
-        //     });
-
         sendPasswordResetEmail(this.auth, emailAddress)
             .then(() => {
                 // Email sent
@@ -358,44 +333,28 @@ export class AuthenticationService {
             });
     }
 
-    deleteAccount() {
+    async deleteAccount() {
         const user = this.auth.currentUser;
-        const userId = this.user.id;
+        const userId = this.auth.currentUser.uid;
 
-        deleteUser(user)
-            .then(async () => {
+        // Delete data user
+        await deleteDoc(doc(this.db, 'users', userId))
+            .then(() => {
+                // Delete user
+                deleteUser(user)
+                    .then(async () => {
+                        Toast.success('User has been deleted');
 
-                // Get user's profile picture
-                const profilePicture = this.user.profilePicture;
-                this.deleteProfilePicture(profilePicture).then(async () => {
-                    // Delete user from database
-                    await deleteDoc(doc(this.db, 'users', userId))
-                        .then(() => {
-                            Toast.success('User has been deleted');
-
-                            // Go to sign up
-                            this.router.navigate(['/sign-up']);
-                        })
-                        .catch((error) => {
-                            console.error(error);
-                            Toast.error('Error while deleting the user', error.message);
-                        });
-                })
+                        this.router.navigate(['/sign-up']);
+                    })
                     .catch((error) => {
                         console.error(error);
-                        Toast.error('Error deleting data of user : ', error.message);
+                        Toast.error('Error while deleting the user', error.message);
                     });
+            })
+            .catch((error) => {
+                console.error(error);
+                Toast.error('Error deleting data of user : ', error.message);
             });
-    }
-
-    async deleteProfilePicture(profilePicture: string) {
-        // Create a reference to the file to delete
-        const profilePictureRef = ref(this.storage, `profilePictures/${ profilePicture }`);
-
-        // Delete the file
-        deleteObject(profilePictureRef).then(() => {
-        }).catch((error) => {
-            Toast.error('Error while deleting profile picture', error.message);
-        });
     }
 }
