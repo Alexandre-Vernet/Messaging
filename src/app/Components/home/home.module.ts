@@ -5,10 +5,11 @@ import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
 import { AsideComponent } from '../chat/aside/aside.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { ProfileComponent } from '../chat/profile/profile.component';
 
 
 @NgModule({
-    declarations: [HomeComponent, AsideComponent],
+    declarations: [HomeComponent, AsideComponent, ProfileComponent],
     imports: [
         CommonModule,
         HomeRoutingModule,
@@ -17,4 +18,5 @@ import { SharedModule } from 'src/app/shared/shared.module';
         SharedModule
     ]
 })
-export class HomeModule { }
+export class HomeModule {
+}
