@@ -2,6 +2,7 @@
     "theme_color": "#1976d2",
     "background_color": "#ffffff",
     "display": "standalone",
+    "start_url": "/",
     "name": "Messaging",
     "short_name": "Messaging",
     "icons": [

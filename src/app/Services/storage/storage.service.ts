@@ -1,10 +1,11 @@
-import {Injectable} from '@angular/core';
-import {User} from 'src/app/class/user';
-import {File} from 'src/app/class/file';
-import {AuthenticationService} from '../authentication/authentication.service';
-import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
-import {addDoc, collection, getFirestore} from 'firebase/firestore';
-import Swal from "sweetalert2";
+import { Injectable } from '@angular/core';
+import { User } from 'src/app/class/user';
+import { File } from 'src/app/class/file';
+import { AuthenticationService } from '../authentication/authentication.service';
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
+import { addDoc, collection, doc, getFirestore, updateDoc } from 'firebase/firestore';
+import Swal from 'sweetalert2';
+import { Toast } from '../../class/Toast';
 
 @Injectable({
     providedIn: 'root',
@@ -18,19 +19,17 @@ export class StorageService {
     storage = getStorage();
 
     constructor(private auth: AuthenticationService) {
-        this.user = this.auth.user;
+        setTimeout(() => {
+            this.user = this.auth.user;
+        }, 1500);
     }
 
-    /**
-     * Send file
-     * @param event
-     */
-    sendFile = (event) => {
+    sendFile(event) {
         // Get file
         const file = event.target.files[0];
 
         // Set file source
-        const fileSource = `files/${file.name}`;
+        const fileSource = `files/${ file.name }`;
         const storageRef = ref(this.storage, fileSource);
 
         // Upload file to firebase storage
@@ -38,7 +37,7 @@ export class StorageService {
             getDownloadURL(ref(this.storage, fileSource))
                 .then(async (url) => {
                     // Upload file to firestore
-                    await addDoc(collection(this.db, "messages"), {
+                    await addDoc(collection(this.db, 'messages'), {
                         email: this.auth.user.email,
                         firstName: this.auth.user.firstName,
                         lastName: this.auth.user.lastName,
@@ -57,48 +56,31 @@ export class StorageService {
         });
     };
 
-    updateProfilePicture = (event) => {
-        // // Get current user
-        // const userId: string = firebase.auth().currentUser.uid;
-        // const user = firebase.firestore().collection('users').doc(userId);
+    updateProfilePicture(event) {
+        // Get file
+        const file = event.target.files[0];
 
-        // // Get file
-        // const file: File = event.target.files[0];
+        // Set file source
+        const fileSource = `profilePictures/${ file.name }`;
+        const storageRef = ref(this.storage, fileSource);
 
-        // // Get reference to file
-        // let imageRef = firebase
-        //     .storage()
-        //     .ref()
-        //     .child(`profilePictures/${file.name}`);
+        const userRef = doc(this.db, 'users', this.user.id);
 
-        // // Upload file
-        // imageRef.put(file).then(() => {
-        //     firebase
-        //         .storage()
-        //         .ref()
-        //         .child(`profilePictures/${file.name}`)
-        //         .getDownloadURL()
-        //         .then((profilePicture) => {
-        //             // Upload file to firestore
-        //             user.update({
-        //                 profilePicture: profilePicture,
-        //             })
-        //                 .then(() => {
-        //                     Swal.fire({
-        //                         position: 'top-end',
-        //                         icon: 'success',
-        //                         title: 'Your profile picture has been successfully updated',
-        //                         showConfirmButton: false,
-        //                         timer: 1500,
-        //                     });
+        // Upload file to firebase storage
+        uploadBytes(storageRef, file).then(() => {
+            getDownloadURL(ref(this.storage, fileSource))
+                .then(async (url) => {
+                    // Upload file to firestore
+                    await updateDoc(userRef, {
+                        profilePicture: url,
+                    });
 
-        //                     // Update values
-        //                     this.user.profilePicture = profilePicture;
-        //                 })
-        //                 .catch((error) => {
-        //                     console.log(error);
-        //                 });
-        //         });
-        // });
-    };
+                    // Update user profile picture
+                    this.user.profilePicture = url;
+
+                    // Show toast
+                    Toast.success('Profile picture has been successfully updated');
+                });
+        });
+    }
 }

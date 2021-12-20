@@ -6,7 +6,6 @@ import {
     getAuth,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
-    updateProfile,
     sendPasswordResetEmail,
     updateEmail,
     updatePassword,
@@ -25,8 +24,7 @@ import {
 } from 'firebase/firestore';
 import { CryptoService } from '../crypto/crypto.service';
 import { Toast } from '../../class/Toast';
-
-declare var $: any;
+import { getStorage } from 'firebase/storage';
 
 @Injectable({
     providedIn: 'root',
@@ -35,13 +33,14 @@ export class AuthenticationService {
     user: User;
     db = getFirestore();
     auth = getAuth();
+    storage = getStorage();
     provider = new GoogleAuthProvider();
     firebaseError: string = '';
 
     constructor(
         private router: Router,
         private cookieService: CookieService,
-        private cryptoService: CryptoService
+        private cryptoService: CryptoService,
     ) {
     }
 
@@ -49,12 +48,7 @@ export class AuthenticationService {
         return this.user;
     }
 
-    /**
-     * Sign in
-     * @param email
-     * @param password
-     */
-    signIn = (email: string, password: string) => {
+    signIn(email: string, password: string) {
         signInWithEmailAndPassword(this.auth, email, password)
             .then(async (userCredential) => {
                 // Signed in
@@ -66,6 +60,7 @@ export class AuthenticationService {
 
                 if (docSnap.exists()) {
                     //  Set data
+                    const id = docSnap.id;
                     const firstName = docSnap.data()?.firstName;
                     const lastName = docSnap.data()?.lastName;
                     const email = docSnap.data()?.email;
@@ -73,6 +68,7 @@ export class AuthenticationService {
                     const dateCreation = docSnap.data()?.dateCreation;
 
                     this.user = new User(
+                        id,
                         firstName,
                         lastName,
                         email,
@@ -100,23 +96,15 @@ export class AuthenticationService {
                 console.error(error);
                 this.firebaseError = error.message;
             });
-        console.log(this.firebaseError);
         return this.firebaseError;
     };
 
-    /**
-     * Sign up
-     * @param firstName
-     * @param lastName
-     * @param email
-     * @param password
-     */
-    signUp = (
+    signUp(
         firstName: string,
         lastName: string,
         email: string,
         password: string
-    ) => {
+    ) {
         createUserWithEmailAndPassword(this.auth, email, password)
             .then(async (userCredential) => {
                 // Signed in
@@ -133,7 +121,7 @@ export class AuthenticationService {
                         // Clear error
                         this.firebaseError = '';
 
-                        this.signIn(email, password);
+                        this.router.navigate(['/sign-in']);
                     })
                     .catch((error) => {
                         console.error(error);
@@ -147,12 +135,10 @@ export class AuthenticationService {
             });
 
         return this.firebaseError;
-    };
+    }
 
-    // /**
-    //  * Google connexion
-    //  */
-    googleSignUp = () => {
+
+    googleSignUp() {
         // let provider = new firebase.auth.GoogleAuthProvider();
 
         // firebase
@@ -224,6 +210,7 @@ export class AuthenticationService {
 
                 // Set users data
                 this.user = new User(
+                    user.uid,
                     firstName,
                     lastName,
                     email,
@@ -257,38 +244,10 @@ export class AuthenticationService {
                 const errorMessage = error.message;
                 this.firebaseError = errorMessage;
             });
-    };
+    }
 
-    /**
-     * Reset password
-     * @param emailAddress
-     */
-    resetPassword = (emailAddress: string) => {
-        // firebase
-        //     .auth()
-        //     .sendPasswordResetEmail(emailAddress)
-        //     .then(() => {
-        //         // Email sent
-        //         console.log('Email sent !');
 
-        //         Swal.fire({
-        //             position: 'top-end',
-        //             icon: 'success',
-        //             title: `E-mail has been sent to ${emailAddress}`,
-        //             showConfirmButton: false,
-        //             timer: 1500,
-        //         });
-        //     })
-        //     .catch((error) => {
-        //         // An error occurred
-        //         console.log('error: ', error);
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: error,
-        //             showConfirmButton: true,
-        //         });
-        //     });
-
+    resetPassword(emailAddress: string) {
         sendPasswordResetEmail(this.auth, emailAddress)
             .then(() => {
                 // Email sent
@@ -299,49 +258,11 @@ export class AuthenticationService {
                 console.error(error);
                 Toast.error('Error in sending email', error.message);
             });
-    };
+    }
 
-    /**
-     * Update profile
-     * @param firstName
-     * @param lastName
-     */
-    updateProfile = async (firstName: string, lastName: string) => {
-        // const userId: string = firebase.auth().currentUser.uid;
-        // const user = firebase.firestore().collection('users').doc(userId);
 
-        // user.update({
-        //     firstName: firstName,
-        //     lastName: lastName,
-        // })
-        //     .then(() => {
-        //         // User has been successfully updated
-        //         console.log('User has been successfully updated');
-
-        //         Swal.fire({
-        //             position: 'top-end',
-        //             icon: 'success',
-        //             title: 'Your account has been successfully updated',
-        //             showConfirmButton: false,
-        //             timer: 1500,
-        //         });
-
-        //         // Update values
-        //         this.user.firstName = firstName;
-        //         this.user.lastName = lastName;
-        //     })
-        //     .catch((error) => {
-        //         // The document probably doesn't exist.
-        //         console.error('Error updating document: ', error);
-
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: error,
-        //             showConfirmButton: true,
-        //         });
-        //     });
-
-        const userId = this.auth.currentUser.uid;
+    async updateProfile(firstName: string, lastName: string) {
+        const userId = this.user.id;
         const userRef = doc(this.db, 'users', userId);
 
         await updateDoc(userRef, {
@@ -360,95 +281,22 @@ export class AuthenticationService {
                 console.error(error);
                 Toast.error(error.message);
             });
-    };
+    }
 
-    /**
-     * Update email
-     * @param email
-     */
     updateEmail = (email: string) => {
-        // const userId = firebase.auth().currentUser.uid;
-        // const user = firebase.auth().currentUser;
-
-        // user.updateEmail(email)
-        //     .then(() => {
-        //         // Update successful
-
-        //         firebase
-        //             .firestore()
-        //             .collection('users')
-        //             .doc(userId)
-        //             .update({
-        //                 email: email,
-        //             })
-        //             .then(() => {
-        //                 // Disconnect
-        //                 this.signOut();
-        //                 Swal.fire({
-        //                     position: 'top-end',
-        //                     icon: 'success',
-        //                     title: 'Your email has been successfully updated',
-        //                     showConfirmButton: false,
-        //                     timer: 1500,
-        //                 });
-        //             })
-        //             .catch((error) => {
-        //                 Swal.fire({
-        //                     icon: 'error',
-        //                     title: error,
-        //                     showConfirmButton: true,
-        //                 });
-        //             });
-        //     })
-        //     .catch((error) => {
-        //         // An error occurred
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: error,
-        //             showConfirmButton: true,
-        //         });
-        //     });
-
-        const userId = this.auth.currentUser.uid;
+        const userId = this.user.id;
         const userRef = doc(this.db, 'users', userId);
 
         updateEmail(this.auth.currentUser, email)
             .then(async () => {
-                // // Update successful
-                // firebase
-                //     .firestore()
-                //     .collection('users')
-                //     .doc(userId)
-                //     .update({
-                //         email: email,
-                //     })
-                //     .then(() => {
-                //         // Disconnect
-                //         this.signOut();
-                //         Swal.fire({
-                //             position: 'top-end',
-                //             icon: 'success',
-                //             title: 'Your email has been successfully updated',
-                //             showConfirmButton: false,
-                //             timer: 1500,
-                //         });
-                //     })
-                //     .catch((error) => {
-                //         Swal.fire({
-                //             icon: 'error',
-                //             title: error,
-                //             showConfirmButton: true,
-                //         });
-                //     });
-
                 await updateDoc(userRef, {
                     email: email,
                 }).then(() => {
                     // Disconnect
                     this.signOut();
 
+                    // Display message
                     Toast.success('Your email has been successfully updated');
-
                 });
             })
             .catch((error) => {
@@ -457,33 +305,8 @@ export class AuthenticationService {
             });
     };
 
-    /**
-     * Update password
-     * @param password
-     */
-    updatePassword = (newPassword: string) => {
-        // let user: any = firebase.auth().currentUser;
 
-        // user.updatePassword(password)
-        //     .then(() => {
-        //         console.log('Password has been successfully updated');
-        //         Swal.fire({
-        //             position: 'top-end',
-        //             icon: 'success',
-        //             title: `Password has been successfully updated`,
-        //             showConfirmButton: false,
-        //             timer: 1500,
-        //         });
-        //     })
-        //     .catch((error: string) => {
-        //         console.log('error: ', error);
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: error,
-        //             showConfirmButton: true,
-        //         });
-        //     });
-
+    updatePassword(newPassword: string) {
         const user = this.auth.currentUser;
 
         updatePassword(user, newPassword)
@@ -494,21 +317,9 @@ export class AuthenticationService {
                 console.error(error);
                 Toast.error('Error in updating password', error.message);
             });
-    };
+    }
 
-    /**
-     * Sign out the user
-     */
-    signOut = () => {
-        // Disconnect
-        // firebase
-        //     .auth()
-        //     .signOut()
-        //     .then(() => {
-        //         // Disconnected
-        //         this.router.navigate(['/sign-in']);
-        //     });
-
+    signOut() {
         signOut(this.auth)
             .then(() => {
                 // Delete cookie
@@ -520,69 +331,20 @@ export class AuthenticationService {
                 console.error(error);
                 Toast.error('Error while disconnecting ', error.message);
             });
-    };
+    }
 
-    /**
-     * Delete account
-     */
-    deleteAccount = () => {
-        // let userId = firebase.auth().currentUser?.uid;
-        // let user = firebase.firestore().collection('users').doc(userId);
-
-        // user.delete()
-        //     .then(() => {
-        //         console.log('All data of the user has been deleted');
-
-        //         firebase
-        //             .auth()
-        //             .currentUser?.delete()
-        //             .then(() => {
-        //                 // User deleted.
-        //                 console.log('User has been deleted');
-
-        //                 Swal.fire({
-        //                     position: 'top-end',
-        //                     icon: 'success',
-        //                     title: `User has been deleted`,
-        //                     showConfirmButton: false,
-        //                     timer: 1500,
-        //                 });
-
-        //                 // Go to sign up
-        //                 this.router.navigate(['/sign-up']);
-        //             })
-        //             .catch((error) => {
-        //                 console.log(`Error while deleting the user : ${error}`);
-
-        //                 Swal.fire({
-        //                     icon: 'error',
-        //                     title: error,
-        //                     showConfirmButton: true,
-        //                 });
-        //             });
-        //     })
-        //     .catch((error) => {
-        //         console.error(`Error deleting data of user : ${error}`);
-
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: error,
-        //             showConfirmButton: true,
-        //         });
-        //     });
-
+    async deleteAccount() {
         const user = this.auth.currentUser;
         const userId = this.auth.currentUser.uid;
 
-        deleteUser(user)
-            .then(async () => {
-                console.log('All data of the user has been deleted');
-
-                await deleteDoc(doc(this.db, 'users', userId))
-                    .then(() => {
+        // Delete data user
+        await deleteDoc(doc(this.db, 'users', userId))
+            .then(() => {
+                // Delete user
+                deleteUser(user)
+                    .then(async () => {
                         Toast.success('User has been deleted');
 
-                        // Go to sign up
                         this.router.navigate(['/sign-up']);
                     })
                     .catch((error) => {
@@ -594,5 +356,5 @@ export class AuthenticationService {
                 console.error(error);
                 Toast.error('Error deleting data of user : ', error.message);
             });
-    };
+    }
 }
