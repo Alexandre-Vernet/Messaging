@@ -1,4 +1,11 @@
-import { AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild, } from '@angular/core';
+import {
+    AfterContentChecked,
+    AfterViewInit,
+    ChangeDetectorRef,
+    Component,
+    OnInit,
+    ViewChild,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { File } from 'src/app/class/file';
 import { User } from 'src/app/class/user';
@@ -21,8 +28,6 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
     files: File[] = [];
 
     newMessage: String;
-
-    rightPanel: boolean = false;
 
     formEditMessage = new FormGroup({
         editedMessage: new FormControl('', [Validators.required]),
