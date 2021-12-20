@@ -25,8 +25,6 @@ import {
 import { CryptoService } from '../crypto/crypto.service';
 import { Toast } from '../../class/Toast';
 
-declare var $: any;
-
 @Injectable({
     providedIn: 'root',
 })
