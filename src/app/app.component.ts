@@ -4,8 +4,6 @@ import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthenticationService } from './Services/authentication/authentication.service';
 import { CryptoService } from './Services/crypto/crypto.service';
-import { initializeApp } from 'firebase/app';
-import { firebaseConfig } from 'src/environments/environment';
 
 @Component({
     selector: 'app-root',
@@ -19,7 +17,6 @@ export class AppComponent implements OnInit {
         private cookieService: CookieService,
         private cryptoService: CryptoService
     ) {
-        initializeApp(firebaseConfig);
     }
 
     ngOnInit() {
