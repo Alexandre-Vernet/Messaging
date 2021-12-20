@@ -6,7 +6,6 @@ import {
     getAuth,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
-    updateProfile,
     sendPasswordResetEmail,
     updateEmail,
     updatePassword,
@@ -49,12 +48,7 @@ export class AuthenticationService {
         return this.user;
     }
 
-    /**
-     * Sign in
-     * @param email
-     * @param password
-     */
-    signIn = (email: string, password: string) => {
+    signIn(email: string, password: string) {
         signInWithEmailAndPassword(this.auth, email, password)
             .then(async (userCredential) => {
                 // Signed in
@@ -66,6 +60,7 @@ export class AuthenticationService {
 
                 if (docSnap.exists()) {
                     //  Set data
+                    const id = docSnap.id;
                     const firstName = docSnap.data()?.firstName;
                     const lastName = docSnap.data()?.lastName;
                     const email = docSnap.data()?.email;
@@ -73,6 +68,7 @@ export class AuthenticationService {
                     const dateCreation = docSnap.data()?.dateCreation;
 
                     this.user = new User(
+                        id,
                         firstName,
                         lastName,
                         email,
@@ -100,23 +96,15 @@ export class AuthenticationService {
                 console.error(error);
                 this.firebaseError = error.message;
             });
-        console.log(this.firebaseError);
         return this.firebaseError;
     };
 
-    /**
-     * Sign up
-     * @param firstName
-     * @param lastName
-     * @param email
-     * @param password
-     */
-    signUp = (
+    signUp(
         firstName: string,
         lastName: string,
         email: string,
         password: string
-    ) => {
+    ) {
         createUserWithEmailAndPassword(this.auth, email, password)
             .then(async (userCredential) => {
                 // Signed in
@@ -147,12 +135,10 @@ export class AuthenticationService {
             });
 
         return this.firebaseError;
-    };
+    }
 
-    // /**
-    //  * Google connexion
-    //  */
-    googleSignUp = () => {
+
+    googleSignUp() {
         // let provider = new firebase.auth.GoogleAuthProvider();
 
         // firebase
@@ -224,6 +210,7 @@ export class AuthenticationService {
 
                 // Set users data
                 this.user = new User(
+                    user.uid,
                     firstName,
                     lastName,
                     email,
@@ -257,13 +244,10 @@ export class AuthenticationService {
                 const errorMessage = error.message;
                 this.firebaseError = errorMessage;
             });
-    };
+    }
 
-    /**
-     * Reset password
-     * @param emailAddress
-     */
-    resetPassword = (emailAddress: string) => {
+
+    resetPassword(emailAddress: string) {
         // firebase
         //     .auth()
         //     .sendPasswordResetEmail(emailAddress)
@@ -299,14 +283,10 @@ export class AuthenticationService {
                 console.error(error);
                 Toast.error('Error in sending email', error.message);
             });
-    };
+    }
 
-    /**
-     * Update profile
-     * @param firstName
-     * @param lastName
-     */
-    updateProfile = async (firstName: string, lastName: string) => {
+
+    async updateProfile(firstName: string, lastName: string) {
         // const userId: string = firebase.auth().currentUser.uid;
         // const user = firebase.firestore().collection('users').doc(userId);
 
@@ -360,12 +340,9 @@ export class AuthenticationService {
                 console.error(error);
                 Toast.error(error.message);
             });
-    };
+    }
 
-    /**
-     * Update email
-     * @param email
-     */
+
     updateEmail = (email: string) => {
         // const userId = firebase.auth().currentUser.uid;
         // const user = firebase.auth().currentUser;
@@ -457,11 +434,8 @@ export class AuthenticationService {
             });
     };
 
-    /**
-     * Update password
-     * @param password
-     */
-    updatePassword = (newPassword: string) => {
+
+    updatePassword(newPassword: string) {
         // let user: any = firebase.auth().currentUser;
 
         // user.updatePassword(password)
@@ -496,19 +470,8 @@ export class AuthenticationService {
             });
     };
 
-    /**
-     * Sign out the user
-     */
-    signOut = () => {
-        // Disconnect
-        // firebase
-        //     .auth()
-        //     .signOut()
-        //     .then(() => {
-        //         // Disconnected
-        //         this.router.navigate(['/sign-in']);
-        //     });
 
+    signOut() {
         signOut(this.auth)
             .then(() => {
                 // Delete cookie
@@ -520,12 +483,9 @@ export class AuthenticationService {
                 console.error(error);
                 Toast.error('Error while disconnecting ', error.message);
             });
-    };
+    }
 
-    /**
-     * Delete account
-     */
-    deleteAccount = () => {
+    deleteAccount() {
         // let userId = firebase.auth().currentUser?.uid;
         // let user = firebase.firestore().collection('users').doc(userId);
 
@@ -594,5 +554,5 @@ export class AuthenticationService {
                 console.error(error);
                 Toast.error('Error deleting data of user : ', error.message);
             });
-    };
+    }
 }

@@ -28,7 +28,6 @@ export class PersonalComponent implements OnInit {
         setTimeout(() => {
             this.user = this.auth.user;
 
-
             // Set default value to formUpdateProfile
             this.formUpdateProfile.controls.firstName.setValue(
                 this.user.firstName

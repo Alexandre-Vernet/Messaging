@@ -10,7 +10,6 @@ import { AuthenticationService } from 'src/app/Services/authentication/authentic
 export class UserProfileComponent implements OnInit {
     user: User;
 
-
     constructor(
         private auth: AuthenticationService,
     ) {

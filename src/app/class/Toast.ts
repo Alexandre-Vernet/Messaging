@@ -5,7 +5,7 @@ export class Toast {
         Swal.fire({
             position: 'top-end',
             icon: 'success',
-            title: `${message} ${params}`,
+            title: params ? `${ message } ${ params }` : `${ message }`,
             showConfirmButton: false,
             timer: 1500,
         });
@@ -15,7 +15,7 @@ export class Toast {
         Swal.fire({
             position: 'top-end',
             icon: 'error',
-            title: `${message} ${params}`,
+            title: params ? `${ message } ${ params }` : `${ message }`,
             showConfirmButton: false,
             timer: 5000,
         });

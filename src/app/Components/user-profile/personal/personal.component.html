@@ -58,8 +58,14 @@
                 <div class="data-col">
                     <span class="data-label">Profile picture</span>
                     <span class="data-value">
-                        <img alt="profilePicture" class="profilePicture"
-                             src="{{user?.profilePicture}}"></span>
+                        <ng-container *ngIf="user?.profilePicture">
+                            <img alt="profilePicture" class="profilePicture"
+                                 src="{{user?.profilePicture}}">
+                        </ng-container>
+                        <ng-container *ngIf="!user?.profilePicture">
+                              No profile picture
+                        </ng-container>
+                    </span>
                 </div>
                 <div class="form-control-wrap">
                     <div class="custom-file">
