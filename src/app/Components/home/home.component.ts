@@ -28,10 +28,6 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
     files: File[] = [];
 
 
-    formNewMessage = new FormGroup({
-        newMessage: new FormControl('', [Validators.required]),
-    });
-
     formEditMessage = new FormGroup({
         editedMessage: new FormControl('', [Validators.required]),
     });
@@ -39,7 +35,6 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
     constructor(
         private auth: AuthenticationService,
         private firestore: FirestoreService,
-        private storage: StorageService,
         private cdref: ChangeDetectorRef
     ) {
     }
@@ -64,28 +59,6 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
         document.getElementById('inputSendMessage')?.focus();
     };
 
-    sendMessage() {
-        // if (this.newMessage.length > 0) {
-        //     this.firestore.sendMessage(this.newMessage);
-        //
-        //     // Clear input
-        //     this.newMessage = '';
-        // }
-
-        const newMessage = this.formNewMessage.value;
-
-        if (newMessage.length > 0) {
-            this.firestore.sendMessage(newMessage);
-        }
-    };
-
-    uploadFile() {
-        document.getElementById('file_upload')?.click();
-    };
-
-    sendFile(file: Event) {
-        this.storage.sendFile(file);
-    };
 
     ngAfterViewInit() {
         // Shortcut keyboard

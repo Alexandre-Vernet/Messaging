@@ -7,10 +7,11 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { ProfileComponent } from '../chat/profile/profile.component';
 import { ContactsComponent } from '../chat/contacts/contacts.component';
 import { HeadComponent } from '../chat/head/head.component';
+import { EditorComponent } from '../chat/editor/editor.component';
 
 
 @NgModule({
-    declarations: [HomeComponent, ProfileComponent, ContactsComponent, HeadComponent],
+    declarations: [HomeComponent, ProfileComponent, ContactsComponent, HeadComponent, EditorComponent],
     imports: [
         CommonModule,
         HomeRoutingModule,
