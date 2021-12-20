@@ -38,21 +38,26 @@ export class UserProfileComponent implements OnInit {
     constructor(
         private auth: AuthenticationService,
         private storage: StorageService
-    ) { }
+    ) {
+    }
 
     ngOnInit(): void {
-        this.user = this.auth.user;
+        setTimeout(() => {
+            this.user = this.auth.user;
 
-        // Set default value to formUpdateProfile
-        this.formUpdateProfile.controls.firstName.setValue(
-            this.user.firstName
-        );
-        this.formUpdateProfile.controls.lastName.setValue(
-            this.user.lastName
-        );
 
-        // Set default value to formUpdateEmail
-        this.formUpdateEmail.controls.email.setValue(this.user.email);
+            // Set default value to formUpdateProfile
+            this.formUpdateProfile.controls.firstName.setValue(
+                this.user.firstName
+            );
+            this.formUpdateProfile.controls.lastName.setValue(
+                this.user.lastName
+            );
+
+            // Set default value to formUpdateEmail
+            this.formUpdateEmail.controls.email.setValue(this.user.email);
+        }, 1500);
+
     }
 
     uploadProfilePicture = () => {
