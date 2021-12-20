@@ -9,7 +9,7 @@ export const environment = {
 };
 
 
-const firebaseConfig = {
+export const firebaseConfig = {
     apiKey: 'AIzaSyAhod5EQ_wRW3eEz8Zsaw3Ya6WCQ9sldlg',
     authDomain: 'messaging-db163.firebaseapp.com',
     projectId: 'messaging-db163',
