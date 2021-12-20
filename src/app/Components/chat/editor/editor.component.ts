@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { StorageService } from '../../../Services/storage/storage.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FirestoreService } from '../../../Services/firestore/firestore.service';
@@ -9,7 +9,6 @@ import { FirestoreService } from '../../../Services/firestore/firestore.service'
     styleUrls: ['./editor.component.scss']
 })
 export class EditorComponent {
-
 
     newMessage: string;
 
