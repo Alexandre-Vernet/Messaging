@@ -6,7 +6,7 @@
             <div class="nk-header nk-header-fixed is-light">
                 <div class="container-lg wide-xl">
                     <app-navbar></app-navbar>
-                </div><!-- .container-fliud -->
+                </div><!-- .container-fluid -->
             </div>
             <!-- main header @e -->
             <!-- content @s -->
@@ -24,79 +24,21 @@
                                 </div><!-- .nk-block-head -->
                                 <div class="nk-chat nk-chat-boxed">
 
-                                    <!-- Chat aside -->
-                                    <app-aside></app-aside>
+                                    <!-- List contacts -->
+                                    <app-contacts></app-contacts>
 
                                     <!-- Conversation -->
                                     <div class="nk-chat-body profile-shown">
-                                        <div class="nk-chat-head">
-                                            <ul class="nk-chat-head-info">
-                                                <li class="nk-chat-body-close">
-                                                    <a href="#" class="btn btn-icon btn-trigger nk-chat-hide ml-n1"><em
-                                                        class="icon ni ni-arrow-left"></em></a>
-                                                </li>
-                                                <li class="nk-chat-head-user">
-                                                    <div class="user-card">
-                                                        <div class="user-avatar bg-purple">
-                                                            <span>ALL</span>
-                                                        </div>
-                                                        <div class="user-info">
-                                                            <div class="lead-text">All</div>
-                                                            <div class="sub-text"><span
-                                                                class="d-none d-sm-inline mr-1">Active </span> 35m
-                                                                ago
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                            <ul class="nk-chat-head-tools">
-                                                <li><a href="#" class="btn btn-icon btn-trigger text-primary"><em
-                                                    class="icon ni ni-call-fill"></em></a></li>
-                                                <li><a href="#" class="btn btn-icon btn-trigger text-primary"><em
-                                                    class="icon ni ni-video-fill"></em></a></li>
-                                                <li class="d-none d-sm-block">
-                                                    <div class="dropdown">
-                                                        <a href="#"
-                                                           class="dropdown-toggle btn btn-icon btn-trigger text-primary"
-                                                           data-toggle="dropdown"><em
-                                                            class="icon ni ni-setting-fill"></em></a>
-                                                        <div class="dropdown-menu dropdown-menu-right">
-                                                            <ul class="link-list-opt no-bdr">
-                                                                <li><a class="dropdown-item" href="#"><em
-                                                                    class="icon ni ni-archive"></em><span>Make
-                                                                            as Archive</span></a></li>
-                                                                <li><a class="dropdown-item" href="#"><em
-                                                                    class="icon ni ni-cross-c"></em><span>Remove
-                                                                            Conversion</span></a></li>
-                                                                <li><a class="dropdown-item" href="#"><em
-                                                                    class="icon ni ni-setting"></em><span>More
-                                                                            Options</span></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li class="mr-n1 mr-md-n2"><a href="#"
-                                                                              class="btn btn-icon btn-trigger text-primary chat-profile-toggle"><em
-                                                    class="icon ni ni-alert-circle-fill"></em></a></li>
-                                            </ul>
-                                            <div class="nk-chat-head-search">
-                                                <div class="form-group">
-                                                    <div class="form-control-wrap">
-                                                        <div class="form-icon form-icon-left">
-                                                            <em class="icon ni ni-search"></em>
-                                                        </div>
-                                                        <input type="text" class="form-control form-round"
-                                                               id="chat-search" placeholder="Search in Conversation">
-                                                    </div>
-                                                </div>
-                                            </div><!-- .nk-chat-head-search -->
-                                        </div><!-- .nk-chat-head -->
-                                        <div class="nk-chat-panel" (click)="setCursor()" data-simplebar #scrollMe
-                                             [scrollTop]="scrollMe.scrollHeight">
+                                        <!-- Header -->
+                                        <app-head></app-head>
+
+
+                                        <div #scrollMe (click)="setCursor()" [scrollTop]="scrollMe.scrollHeight"
+                                             class="nk-chat-panel"
+                                             data-simplebar>
 
                                             <!-- Check no messages -->
-                                            <div class="d-flex justify-content-center" *ngIf="messages.length <= 0">
+                                            <div *ngIf="messages.length <= 0" class="d-flex justify-content-center">
                                                 <h4>No message</h4>
                                             </div>
 
@@ -104,7 +46,7 @@
                                             <div *ngFor="let message of messages">
                                                 <div *ngIf="message?.email !== user?.email">
 
-                                                    <!-- Other messages -->
+                                                    <!-- Other's messages -->
                                                     <div class="chat is-you">
                                                         <div class="chat-avatar">
                                                             <div class="user-avatar bg-purple">
@@ -124,17 +66,18 @@
                                                                     <!-- Image -->
                                                                     <div *ngIf="message.file">
                                                                         <a href="{{message.file}}" target="_blank">
-                                                                            <img src="{{message.file}}"
-                                                                                 alt="{{message.file}}">
+                                                                            <img alt="{{message.file}}"
+                                                                                 src="{{message.file}}">
                                                                         </a>
                                                                     </div>
 
                                                                     <!-- Action -->
                                                                     <ul class="chat-msg-more">
                                                                         <!-- Reply -->
-                                                                        <li class="d-none d-sm-block"><a href="#"
-                                                                                                         class="btn btn-icon btn-sm btn-trigger"><em
-                                                                            class="icon ni ni-reply-fill"></em></a>
+                                                                        <li class="d-none d-sm-block"><a
+                                                                                class="btn btn-icon btn-sm btn-trigger"
+                                                                                href="#"><em
+                                                                                class="icon ni ni-reply-fill"></em></a>
                                                                         </li>
                                                                     </ul>
                                                                 </div>
@@ -149,9 +92,8 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- My messages -->
+                                                <!-- User's messages -->
                                                 <div *ngIf="message?.email === user?.email">
-
 
                                                     <div class="chat is-me">
                                                         <div class="chat-content">
@@ -166,49 +108,50 @@
                                                                     <!-- Image -->
                                                                     <div *ngIf="message.file">
                                                                         <a href="{{message.file}}" target="_blank">
-                                                                            <img src="{{message.file}}"
-                                                                                 alt="{{message.file}}">
+                                                                            <img alt="{{message.file}}"
+                                                                                 src="{{message.file}}">
                                                                         </a>
                                                                     </div>
 
                                                                     <!-- Action -->
                                                                     <ul class="chat-msg-more">
-                                                                        <li class="d-none d-sm-block"><a href="#"
-                                                                                                         class="btn btn-icon btn-sm btn-trigger"><em
-                                                                            class="icon ni ni-reply-fill"></em></a>
+                                                                        <li class="d-none d-sm-block"><a
+                                                                                class="btn btn-icon btn-sm btn-trigger"
+                                                                                href="#"><em
+                                                                                class="icon ni ni-reply-fill"></em></a>
                                                                         </li>
                                                                         <li>
                                                                             <div class="dropdown">
-                                                                                <a href="#"
-                                                                                   class="btn btn-icon btn-sm btn-trigger dropdown-toggle"
-                                                                                   data-toggle="dropdown"><em
-                                                                                    class="icon ni ni-more-h"></em></a>
+                                                                                <a class="btn btn-icon btn-sm btn-trigger dropdown-toggle"
+                                                                                   data-toggle="dropdown"
+                                                                                   href="#"><em
+                                                                                        class="icon ni ni-more-h"></em></a>
                                                                                 <div
-                                                                                    class="dropdown-menu dropdown-menu-sm">
+                                                                                        class="dropdown-menu dropdown-menu-sm">
                                                                                     <ul class="link-list-opt no-bdr">
 
                                                                                         <!-- Reply -->
                                                                                         <li class="d-sm-none"><a
-                                                                                            href="#"><em
-                                                                                            class="icon ni ni-reply-fill"></em>
+                                                                                                href="#"><em
+                                                                                                class="icon ni ni-reply-fill"></em>
                                                                                             Reply</a></li>
 
                                                                                         <!-- Edit -->
                                                                                         <li>
-                                                                                            <a class="icon"
+                                                                                            <a (click)="getMessageId(message.date);"
+                                                                                               class="icon"
+                                                                                               data-target="#editMessage"
                                                                                                data-toggle="modal"
-                                                                                               id="modalEditMessage"
-                                                                                               (click)="getMessageId(message.date);"
-                                                                                               data-target="#editMessage"><em
-                                                                                                class="icon ni ni-pen-alt-fill"></em>
+                                                                                               id="modalEditMessage"><em
+                                                                                                    class="icon ni ni-pen-alt-fill"></em>
                                                                                                 Edit</a>
                                                                                         </li>
 
                                                                                         <!-- Remove -->
                                                                                         <li>
-                                                                                            <a class="icon"
-                                                                                               (click)="deleteMessage(message.date)"><em
-                                                                                                class="icon ni ni-trash-fill"></em>
+                                                                                            <a (click)="deleteMessage(message.date)"
+                                                                                               class="icon"><em
+                                                                                                    class="icon ni ni-trash-fill"></em>
                                                                                                 Remove</a>
                                                                                         </li>
                                                                                     </ul>
@@ -220,7 +163,7 @@
                                                             </div>
                                                             <!-- User & Date -->
                                                             <ul class="chat-meta">
-                                                                <li> You</li>
+                                                                <li>You</li>
                                                                 <li> {{formatDate(message.date)}} </li>
                                                             </ul>
                                                         </div>
@@ -228,170 +171,15 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-
                                         </div><!-- .nk-chat-panel -->
-                                        <div class="nk-chat-editor">
-                                            <div class="nk-chat-editor-upload  ml-n1">
-                                                <!-- <a href="#"
-                                                    class="btn btn-sm btn-icon btn-trigger text-primary toggle-opt"
-                                                    data-target="chat-upload"><em
-                                                        class="icon ni ni-plus-circle-fill"></em></a> -->
-                                                <!-- <div class="chat-upload-option" data-content="chat-upload">
-                                                    <ul class="">
-                                                        <li><a href="#"><em class="icon ni ni-img-fill"></em></a></li>
-                                                        <li><a href="#"><em class="icon ni ni-camera-fill"></em></a>
-                                                        </li>
-                                                        <li><a href="#"><em class="icon ni ni-mic"></em></a></li>
-                                                        <li><a href="#"><em class="icon ni ni-grid-sq"></em></a></li>
-                                                    </ul>
-                                                </div> -->
 
-                                                <!-- Send file -->
-                                                <div class="form-control-wrap">
-                                                    <div class="custom-file">
-                                                        <a class="btn btn-sm btn-icon btn-trigger text-primary toggle-opt"
-                                                           data-target="chat-upload">
-                                                            <input type="file" (change)="sendFile($event)"
-                                                                   accept="image/*" id="file_upload"
-                                                                   style="display: none"
-                                                                   class="icon ni ni-plus-circle-fill">
-                                                            <em (click)="uploadFile()"
-                                                                class="icon ni ni-plus-circle-fill"></em></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Write message -->
-                                            <div class="nk-chat-editor-form">
-                                                <div class="form-control-wrap">
-                                                    <input type="text" (keydown.enter)="sendMessage()"
-                                                           class="form-control form-control-simple no-resize" rows="1"
-                                                           id="inputSendMessage" placeholder="Type your message..."
-                                                           [(ngModel)]="newMessage">
-                                                </div>
-                                            </div>
-
-                                            <ul class="nk-chat-editor-tools g-2">
-
-                                                <!-- Emoji -->
-                                                <li>
-                                                    <a href="#" class="btn btn-sm btn-icon btn-trigger text-primary"><em
-                                                        class="icon ni ni-happyf-fill"></em></a>
-                                                </li>
-
-                                                <!-- Send message -->
-                                                <li>
-                                                    <button class="btn btn-round btn-primary btn-icon"><em
-                                                        class="icon ni ni-send-alt"
-                                                        (click)="sendMessage()"></em></button>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                        <!-- Chat editor -->
+                                        <app-editor></app-editor>
 
 
-                                        <!-- .nk-chat-editor -->
-                                        <!-- <div class="nk-chat-profile visible" data-simplebar>
-                      <div class="user-card user-card-s2 my-4">
-                        <div class="user-avatar md bg-purple">
-                          <span>IH</span>
-                        </div>
-                        <div class="user-info">
-                          <h5>Iliash Hossain</h5>
-                          <span class="sub-text">Active 35m ago</span>
-                        </div>
-                        <div class="user-card-menu dropdown">
-                          <a href="#" class="btn btn-icon btn-sm btn-trigger dropdown-toggle" data-toggle="dropdown"><em
-                              class="icon ni ni-more-h"></em></a>
-                          <div class="dropdown-menu dropdown-menu-right">
-                            <ul class="link-list-opt no-bdr">
-                              <li><a href="#"><em class="icon ni ni-eye"></em><span>View Profile</span></a></li>
-                              <li><a href="#"><em class="icon ni ni-na"></em><span>Block Messages</span></a></li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="chat-profile">
-                        <div class="chat-profile-group">
-                          <a href="#" class="chat-profile-head" data-toggle="collapse" data-target="#chat-options">
-                            <h6 class="title overline-title">Options</h6>
-                            <span class="indicator-icon"><em class="icon ni ni-chevron-down"></em></span>
-                          </a>
-                          <div class="chat-profile-body collapse show" id="chat-options">
-                            <div class="chat-profile-body-inner">
-                              <ul class="chat-profile-options">
-                                <li><a class="chat-option-link" href="#"><em
-                                      class="icon icon-circle bg-light ni ni-edit-alt"></em><span
-                                      class="lead-text">Nickname</span></a></li>
-                                <li><a class="chat-option-link chat-search-toggle" href="#"><em
-                                      class="icon icon-circle bg-light ni ni-search"></em><span class="lead-text">Search
-                                      In Conversation</span></a></li>
-                                <li><a class="chat-option-link" href="#"><em
-                                      class="icon icon-circle bg-light ni ni-circle-fill"></em><span
-                                      class="lead-text">Change Theme</span></a></li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="chat-profile-group">
-                          <a href="#" class="chat-profile-head" data-toggle="collapse" data-target="#chat-settings">
-                            <h6 class="title overline-title">Settings</h6>
-                            <span class="indicator-icon"><em class="icon ni ni-chevron-down"></em></span>
-                          </a>
-                          <div class="chat-profile-body collapse show" id="chat-settings">
-                            <div class="chat-profile-body-inner">
-                              <ul class="chat-profile-settings">
-                                <li>
-                                  <div class="custom-control custom-control-sm custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="customSwitch2">
-                                    <label class="custom-control-label" for="customSwitch2">Notifications</label>
-                                  </div>
-                                </li>
-                                <li>
-                                  <a class="chat-option-link" href="#">
-                                    <em class="icon icon-circle bg-light ni ni-bell-off-fill"></em>
-                                    <div>
-                                      <span class="lead-text">Ignore Messages</span>
-                                      <span class="sub-text">You won’t be notified when message you.</span>
+                                        <!-- Profile -->
+                                        <!--                                        <app-profile></app-profile>-->
                                     </div>
-                                  </a>
-                                </li>
-                                <li>
-                                  <a class="chat-option-link" href="#">
-                                    <em class="icon icon-circle bg-light ni ni-alert-fill"></em>
-                                    <div>
-                                      <span class="lead-text">Something Wrong</span>
-                                      <span class="sub-text">Give feedback and report conversion.</span>
-                                    </div>
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="chat-profile-group">
-                          <a href="#" class="chat-profile-head" data-toggle="collapse" data-target="#chat-photos">
-                            <h6 class="title overline-title">Shared Photos</h6>
-                            <span class="indicator-icon"><em class="icon ni ni-chevron-down"></em></span>
-                          </a>
-                          <div class="chat-profile-body collapse show" id="chat-photos">
-                            <div class="chat-profile-body-inner">
-                              <ul class="chat-profile-media">
-                                <li><a href="#"><img src="./images/slides/slide-a.jpg" alt=""></a></li>
-                                <li><a href="#"><img src="./images/slides/slide-b.jpg" alt=""></a></li>
-                                <li><a href="#"><img src="./images/slides/slide-c.jpg" alt=""></a></li>
-                              </ul>
-                            </div>
-                          </div>
-
-                        </div>
-
-                      </div>
-
-                    </div> -->
-
-                                    </div>
-
                                 </div>
                             </div>
                         </div>
@@ -407,27 +195,28 @@
 
 
 <!-- Edit message -->
-<div class="modal fade" tabindex="-1" id="editMessage">
+<div class="modal fade" id="editMessage" tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Edit message</h5>
-                <a href="#" class="close" data-dismiss="modal" #modalEditMessage aria-label="Close">
+                <a #modalEditMessage aria-label="Close" class="close" data-dismiss="modal" href="#">
                     <em class="icon ni ni-cross"></em>
                 </a>
             </div>
             <div class="modal-body">
-                <form [formGroup]="formEditMessage" (ngSubmit)="formEditMessage.valid && editMessage()"
+                <form (ngSubmit)="formEditMessage.valid && editMessage()" [formGroup]="formEditMessage"
                       class="form-validate is-alter">
                     <div class="form-group">
                         <label class="form-label" for="editedMessage">Your edited message</label>
                         <div class="form-control-wrap">
-                            <input type="text" formControlName="editedMessage" id="editedMessage" class="form-control"
+                            <input [ngClass]="{'is-invalid': formEditMessage.get('editedMessage')?.touched && formEditMessage.get('editedMessage')?.invalid}"
+                                   class="form-control" formControlName="editedMessage" id="editedMessage"
                                    required
-                                   [ngClass]="{'is-invalid': formEditMessage.get('editedMessage')?.touched && formEditMessage.get('editedMessage')?.invalid}">
+                                   type="text">
                             <div
-                                *ngIf="formEditMessage.get('editedMessage')?.touched && formEditMessage.get('editedMessage')?.invalid"
-                                class="invalid-feedback">
+                                    *ngIf="formEditMessage.get('editedMessage')?.touched && formEditMessage.get('editedMessage')?.invalid"
+                                    class="invalid-feedback">
                                 <div *ngIf="formEditMessage.get('editedMessage')?.errors?.required">
                                     Edited message is required
                                 </div>
@@ -435,8 +224,8 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <button type="submit" [disabled]="!formEditMessage.valid"
-                                class="btn btn-lg btn-primary">Save
+                        <button [disabled]="!formEditMessage.valid" class="btn btn-lg btn-primary"
+                                type="submit">Save
                         </button>
                     </div>
                 </form>
@@ -445,4 +234,4 @@
     </div>
 </div>
 
-<input type="button" hidden data-toggle="modal" data-target="#editMessage" id="modalEditLastMessage">
+<input data-target="#editMessage" data-toggle="modal" hidden id="modalEditLastMessage" type="button">

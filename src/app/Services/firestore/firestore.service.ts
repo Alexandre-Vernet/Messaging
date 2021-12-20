@@ -113,17 +113,12 @@ export class FirestoreService {
 
     // Edit message
     editMessage = async (newMessage: string, date: Date, messageId: string) => {
-        console.log('messageId: ', messageId);
-
         const messageRef = doc(this.db, 'messages', messageId);
 
         await updateDoc(messageRef, {
             message: newMessage,
             date: date,
         })
-            .then(() => {
-                Toast.success('Message successfully updated');
-            })
             .catch((error) => {
                 console.error(error);
                 Toast.error('Error updating message', error.message);
@@ -135,17 +130,6 @@ export class FirestoreService {
      * @param date
      */
     deleteMessage = async (date: Date) => {
-        // firebase
-        //     .firestore()
-        //     .collection('messages')
-        //     .where('date', '==', date)
-        //     .get()
-        //     .then((querySnapshot) => {
-        //         querySnapshot.forEach((doc) => {
-        //             doc.ref.delete();
-        //         });
-        //     });
-
         const q = query(
             collection(this.db, 'messages'),
             where('date', '==', date)
@@ -154,7 +138,6 @@ export class FirestoreService {
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach(async (docRef) => {
             // doc.data() is never undefined for query doc snapshots
-            console.log(docRef.id, ' => ', docRef.data());
             await deleteDoc(doc(this.db, 'messages', docRef.id));
         });
     };

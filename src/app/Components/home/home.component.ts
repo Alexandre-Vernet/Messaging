@@ -1,10 +1,16 @@
-import { AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild, } from '@angular/core';
+import {
+    AfterContentChecked,
+    AfterViewInit,
+    ChangeDetectorRef,
+    Component,
+    OnInit,
+    ViewChild,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { File } from 'src/app/class/file';
 import { User } from 'src/app/class/user';
 import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
 import { FirestoreService } from 'src/app/Services/firestore/firestore.service';
-import { StorageService } from 'src/app/Services/storage/storage.service';
 import { Message } from '../../class/message';
 
 @Component({
@@ -20,7 +26,6 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
     messages: Message[] = [];
     files: File[] = [];
 
-    newMessage: String;
 
     formEditMessage = new FormGroup({
         editedMessage: new FormControl('', [Validators.required]),
@@ -29,7 +34,6 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
     constructor(
         private auth: AuthenticationService,
         private firestore: FirestoreService,
-        private storage: StorageService,
         private cdref: ChangeDetectorRef
     ) {
     }
@@ -54,22 +58,6 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
         document.getElementById('inputSendMessage')?.focus();
     };
 
-    sendMessage() {
-        if (this.newMessage.length > 0) {
-            this.firestore.sendMessage(this.newMessage);
-
-            // Clear input
-            this.newMessage = '';
-        }
-    };
-
-    uploadFile() {
-        document.getElementById('file_upload')?.click();
-    };
-
-    sendFile(file: Event) {
-        this.storage.sendFile(file);
-    };
 
     ngAfterViewInit() {
         // Shortcut keyboard
@@ -110,7 +98,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked
             this.messageId = lastMessage['id'];
 
             // Set message in input
-            this.formEditMessage.get('editedMessage').setValue(message['message']);
+            this.formEditMessage.get('editedMessage').setValue(message);
         });
     }
 
