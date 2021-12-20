@@ -57,11 +57,7 @@ export class FirestoreService {
         return this.messages;
     }
 
-    /**
-     * Send message
-     * @param newMessage
-     */
-    sendMessage = async (newMessage: String) => {
+    async sendMessage(newMessage: string) {
         await addDoc(collection(this.db, 'messages'), {
             email: this.auth.user.email,
             firstName: this.auth.user.firstName,
@@ -112,7 +108,7 @@ export class FirestoreService {
     }
 
     // Edit message
-    editMessage = async (newMessage: string, date: Date, messageId: string) => {
+    async editMessage(newMessage: string, date: Date, messageId: string) {
         const messageRef = doc(this.db, 'messages', messageId);
 
         await updateDoc(messageRef, {
@@ -125,11 +121,7 @@ export class FirestoreService {
             });
     };
 
-    /**
-     * Delete message
-     * @param date
-     */
-    deleteMessage = async (date: Date) => {
+    async deleteMessage(date: Date) {
         const q = query(
             collection(this.db, 'messages'),
             where('date', '==', date)

@@ -24,6 +24,7 @@ import {
 } from 'firebase/firestore';
 import { CryptoService } from '../crypto/crypto.service';
 import { Toast } from '../../class/Toast';
+import { deleteObject, getStorage, ref } from 'firebase/storage';
 
 @Injectable({
     providedIn: 'root',
@@ -32,13 +33,14 @@ export class AuthenticationService {
     user: User;
     db = getFirestore();
     auth = getAuth();
+    storage = getStorage();
     provider = new GoogleAuthProvider();
     firebaseError: string = '';
 
     constructor(
         private router: Router,
         private cookieService: CookieService,
-        private cryptoService: CryptoService
+        private cryptoService: CryptoService,
     ) {
     }
 
@@ -285,41 +287,7 @@ export class AuthenticationService {
 
 
     async updateProfile(firstName: string, lastName: string) {
-        // const userId: string = firebase.auth().currentUser.uid;
-        // const user = firebase.firestore().collection('users').doc(userId);
-
-        // user.update({
-        //     firstName: firstName,
-        //     lastName: lastName,
-        // })
-        //     .then(() => {
-        //         // User has been successfully updated
-        //         console.log('User has been successfully updated');
-
-        //         Swal.fire({
-        //             position: 'top-end',
-        //             icon: 'success',
-        //             title: 'Your account has been successfully updated',
-        //             showConfirmButton: false,
-        //             timer: 1500,
-        //         });
-
-        //         // Update values
-        //         this.user.firstName = firstName;
-        //         this.user.lastName = lastName;
-        //     })
-        //     .catch((error) => {
-        //         // The document probably doesn't exist.
-        //         console.error('Error updating document: ', error);
-
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: error,
-        //             showConfirmButton: true,
-        //         });
-        //     });
-
-        const userId = this.auth.currentUser.uid;
+        const userId = this.user.id;
         const userRef = doc(this.db, 'users', userId);
 
         await updateDoc(userRef, {
@@ -340,90 +308,20 @@ export class AuthenticationService {
             });
     }
 
-
     updateEmail = (email: string) => {
-        // const userId = firebase.auth().currentUser.uid;
-        // const user = firebase.auth().currentUser;
-
-        // user.updateEmail(email)
-        //     .then(() => {
-        //         // Update successful
-
-        //         firebase
-        //             .firestore()
-        //             .collection('users')
-        //             .doc(userId)
-        //             .update({
-        //                 email: email,
-        //             })
-        //             .then(() => {
-        //                 // Disconnect
-        //                 this.signOut();
-        //                 Swal.fire({
-        //                     position: 'top-end',
-        //                     icon: 'success',
-        //                     title: 'Your email has been successfully updated',
-        //                     showConfirmButton: false,
-        //                     timer: 1500,
-        //                 });
-        //             })
-        //             .catch((error) => {
-        //                 Swal.fire({
-        //                     icon: 'error',
-        //                     title: error,
-        //                     showConfirmButton: true,
-        //                 });
-        //             });
-        //     })
-        //     .catch((error) => {
-        //         // An error occurred
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: error,
-        //             showConfirmButton: true,
-        //         });
-        //     });
-
-        const userId = this.auth.currentUser.uid;
+        const userId = this.user.id;
         const userRef = doc(this.db, 'users', userId);
 
         updateEmail(this.auth.currentUser, email)
             .then(async () => {
-                // // Update successful
-                // firebase
-                //     .firestore()
-                //     .collection('users')
-                //     .doc(userId)
-                //     .update({
-                //         email: email,
-                //     })
-                //     .then(() => {
-                //         // Disconnect
-                //         this.signOut();
-                //         Swal.fire({
-                //             position: 'top-end',
-                //             icon: 'success',
-                //             title: 'Your email has been successfully updated',
-                //             showConfirmButton: false,
-                //             timer: 1500,
-                //         });
-                //     })
-                //     .catch((error) => {
-                //         Swal.fire({
-                //             icon: 'error',
-                //             title: error,
-                //             showConfirmButton: true,
-                //         });
-                //     });
-
                 await updateDoc(userRef, {
                     email: email,
                 }).then(() => {
                     // Disconnect
                     this.signOut();
 
+                    // Display message
                     Toast.success('Your email has been successfully updated');
-
                 });
             })
             .catch((error) => {
@@ -434,28 +332,6 @@ export class AuthenticationService {
 
 
     updatePassword(newPassword: string) {
-        // let user: any = firebase.auth().currentUser;
-
-        // user.updatePassword(password)
-        //     .then(() => {
-        //         console.log('Password has been successfully updated');
-        //         Swal.fire({
-        //             position: 'top-end',
-        //             icon: 'success',
-        //             title: `Password has been successfully updated`,
-        //             showConfirmButton: false,
-        //             timer: 1500,
-        //         });
-        //     })
-        //     .catch((error: string) => {
-        //         console.log('error: ', error);
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: error,
-        //             showConfirmButton: true,
-        //         });
-        //     });
-
         const user = this.auth.currentUser;
 
         updatePassword(user, newPassword)
@@ -466,8 +342,7 @@ export class AuthenticationService {
                 console.error(error);
                 Toast.error('Error in updating password', error.message);
             });
-    };
-
+    }
 
     signOut() {
         signOut(this.auth)
@@ -484,73 +359,43 @@ export class AuthenticationService {
     }
 
     deleteAccount() {
-        // let userId = firebase.auth().currentUser?.uid;
-        // let user = firebase.firestore().collection('users').doc(userId);
-
-        // user.delete()
-        //     .then(() => {
-        //         console.log('All data of the user has been deleted');
-
-        //         firebase
-        //             .auth()
-        //             .currentUser?.delete()
-        //             .then(() => {
-        //                 // User deleted.
-        //                 console.log('User has been deleted');
-
-        //                 Swal.fire({
-        //                     position: 'top-end',
-        //                     icon: 'success',
-        //                     title: `User has been deleted`,
-        //                     showConfirmButton: false,
-        //                     timer: 1500,
-        //                 });
-
-        //                 // Go to sign up
-        //                 this.router.navigate(['/sign-up']);
-        //             })
-        //             .catch((error) => {
-        //                 console.log(`Error while deleting the user : ${error}`);
-
-        //                 Swal.fire({
-        //                     icon: 'error',
-        //                     title: error,
-        //                     showConfirmButton: true,
-        //                 });
-        //             });
-        //     })
-        //     .catch((error) => {
-        //         console.error(`Error deleting data of user : ${error}`);
-
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: error,
-        //             showConfirmButton: true,
-        //         });
-        //     });
-
         const user = this.auth.currentUser;
-        const userId = this.auth.currentUser.uid;
+        const userId = this.user.id;
 
         deleteUser(user)
             .then(async () => {
-                console.log('All data of the user has been deleted');
 
-                await deleteDoc(doc(this.db, 'users', userId))
-                    .then(() => {
-                        Toast.success('User has been deleted');
+                // Get user's profile picture
+                const profilePicture = this.user.profilePicture;
+                this.deleteProfilePicture(profilePicture).then(async () => {
+                    // Delete user from database
+                    await deleteDoc(doc(this.db, 'users', userId))
+                        .then(() => {
+                            Toast.success('User has been deleted');
 
-                        // Go to sign up
-                        this.router.navigate(['/sign-up']);
-                    })
+                            // Go to sign up
+                            this.router.navigate(['/sign-up']);
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                            Toast.error('Error while deleting the user', error.message);
+                        });
+                })
                     .catch((error) => {
                         console.error(error);
-                        Toast.error('Error while deleting the user', error.message);
+                        Toast.error('Error deleting data of user : ', error.message);
                     });
-            })
-            .catch((error) => {
-                console.error(error);
-                Toast.error('Error deleting data of user : ', error.message);
             });
+    }
+
+    async deleteProfilePicture(profilePicture: string) {
+        // Create a reference to the file to delete
+        const profilePictureRef = ref(this.storage, `profilePictures/${ profilePicture }`);
+
+        // Delete the file
+        deleteObject(profilePictureRef).then(() => {
+        }).catch((error) => {
+            Toast.error('Error while deleting profile picture', error.message);
+        });
     }
 }
