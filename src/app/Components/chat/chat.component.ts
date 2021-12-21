@@ -1,24 +1,17 @@
-import {
-    AfterContentChecked,
-    AfterViewInit,
-    ChangeDetectorRef,
-    Component,
-    OnInit,
-    ViewChild,
-} from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { File } from 'src/app/class/file';
-import { User } from 'src/app/class/user';
-import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
-import { FirestoreService } from 'src/app/Services/firestore/firestore.service';
+import { AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { User } from '../../class/user';
 import { Message } from '../../class/message';
+import { File } from '../../class/file';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuthenticationService } from '../../Services/authentication/authentication.service';
+import { FirestoreService } from '../../Services/firestore/firestore.service';
 
 @Component({
-    selector: 'app-home',
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.scss'],
+    selector: 'app-chat',
+    templateUrl: './chat.component.html',
+    styleUrls: ['./chat.component.scss']
 })
-export class HomeComponent implements OnInit, AfterViewInit, AfterContentChecked {
+export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked {
     @ViewChild('modalEditMessage') modalEditMessage;
     messageId: string;
 
