@@ -109,7 +109,6 @@ export class AuthenticationService {
             .then(async (userCredential) => {
                 // Signed in
                 const user = userCredential.user;
-                console.log('user: ', user.uid);
 
                 await setDoc(doc(this.db, 'users', user.uid), {
                     firstName: firstName,
@@ -137,72 +136,15 @@ export class AuthenticationService {
         return this.firebaseError;
     }
 
-
     googleSignUp() {
-        // let provider = new firebase.auth.GoogleAuthProvider();
-
-        // firebase
-        //     .auth()
-        //     .signInWithPopup(provider)
-        //     .then((result) => {
-        //         let userId: string = firebase.auth().currentUser.uid;
-
-        //         // Get data from google account
-        //         const firstName = result.user?.displayName?.split(' ')[0];
-        //         const lastName = result.user?.displayName?.split(' ')[1];
-        //         const email = result.user?.email;
-        //         const profilePicture = result.user?.photoURL;
-
-        //         // Set data
-        //         this.user.firstName = firstName;
-        //         this.user.lastName = lastName;
-        //         this.user.email = email;
-        //         this.user.profilePicture = profilePicture;
-
-        //         // Store informations of user
-        //         firebase
-        //             .firestore()
-        //             .collection('users')
-        //             .doc(userId)
-        //             .set({
-        //                 firstName: firstName,
-        //                 lastName: lastName,
-        //                 email: email,
-        //                 profilePicture: profilePicture,
-        //                 dateCreation: new Date(),
-        //             })
-        //             .then(() => {
-        //                 // User data has been created
-        //                 console.log('User data has been saved !');
-
-        //                 this.router.navigate(['home']);
-        //             })
-        //             .catch((error) => {
-        //                 console.log(
-        //                     `Error in creation of the data of the user ${error.message}`
-        //                 );
-        //                 this.firebaseError = error.message;
-        //             });
-
-        //         this.router.navigate(['home']);
-        //     })
-        //     .catch((error) => {
-        //         console.log(error.message);
-        //         this.firebaseError = error.message;
-        //     });
-
         signInWithPopup(this.auth, this.provider)
             .then(async (result) => {
-                // This gives you a Google Access Token. You can use it to access the Google API.
                 const credential =
                     GoogleAuthProvider.credentialFromResult(result);
                 const token = credential.accessToken;
-                console.log('token: ', token);
-                // The signed-in user info.
                 const user = result.user;
-                console.log('user: ', user);
 
-                // Get data from google account
+                // Get data from Google account
                 const firstName = result.user?.displayName?.split(' ')[0];
                 const lastName = result.user?.displayName?.split(' ')[1];
                 const email = result.user?.email;
@@ -215,7 +157,7 @@ export class AuthenticationService {
                     lastName,
                     email,
                     profilePicture,
-                    new Date()
+                    new Date(),
                 );
 
                 await setDoc(doc(this.db, 'users', user.uid), {
@@ -223,11 +165,9 @@ export class AuthenticationService {
                     lastName: lastName,
                     email: email,
                     dateCreation: new Date(),
+                    profilePicture: profilePicture
                 })
                     .then(() => {
-                        //  User data has been created
-                        console.log('User is logged with google account');
-
                         // Clear error
                         this.firebaseError = '';
 
@@ -343,18 +283,18 @@ export class AuthenticationService {
                 // Delete user
                 deleteUser(user)
                     .then(async () => {
-                        Toast.success('User has been deleted');
+                        Toast.success('Your account has been successfully deleted');
 
                         this.router.navigate(['/sign-up']);
                     })
                     .catch((error) => {
                         console.error(error);
-                        Toast.error('Error while deleting the user', error.message);
+                        Toast.error('Error while deleting your account', error.message);
                     });
             })
             .catch((error) => {
                 console.error(error);
-                Toast.error('Error deleting data of user : ', error.message);
+                Toast.error('Error deleting your data', error.message);
             });
     }
 }
