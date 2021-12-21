@@ -4,7 +4,6 @@ import { File } from 'src/app/class/file';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { addDoc, collection, doc, getFirestore, updateDoc } from 'firebase/firestore';
-import Swal from 'sweetalert2';
 import { Toast } from '../../class/Toast';
 
 @Injectable({
@@ -43,14 +42,6 @@ export class StorageService {
                         lastName: this.auth.user.lastName,
                         file: url,
                         date: new Date(),
-                    });
-
-                    await Swal.fire({
-                        position: 'top-end',
-                        icon: 'success',
-                        title: 'File has been successfully uploaded',
-                        showConfirmButton: false,
-                        timer: 1500,
                     });
                 });
         });

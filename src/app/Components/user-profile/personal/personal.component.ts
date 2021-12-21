@@ -26,15 +26,17 @@ export class PersonalComponent implements OnInit {
 
     ngOnInit(): void {
         setTimeout(() => {
-            this.user = this.auth.user;
+            this.auth.getAuth().then(user => {
+                this.user = user;
 
-            // Set default value to formUpdateProfile
-            this.formUpdateProfile.controls.firstName.setValue(
-                this.user.firstName
-            );
-            this.formUpdateProfile.controls.lastName.setValue(
-                this.user.lastName
-            );
+                // Set default value to formUpdateProfile
+                this.formUpdateProfile.controls.firstName.setValue(
+                    this.user.firstName
+                );
+                this.formUpdateProfile.controls.lastName.setValue(
+                    this.user.lastName
+                );
+            });
         }, 1500);
     }
 
@@ -47,9 +49,10 @@ export class PersonalComponent implements OnInit {
         this.auth.updateProfile(firstName, lastName);
     };
 
-
     uploadProfilePicture() {
+        // if (!this.user.googleAccount) {
         document.getElementById('file_upload')?.click();
+        // }
     };
 
     updateProfilePicture(event) {
