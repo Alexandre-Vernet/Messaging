@@ -262,9 +262,12 @@ export class AuthenticationService {
     signOut() {
         signOut(this.auth)
             .then(() => {
-                // Delete cookie
-                this.cookieService.delete('password');
+                this.user = null;
 
+                // Delete local storage
+                localStorage.removeItem('password');
+
+                // Navigate to home
                 this.router.navigate(['/sign-in']);
             })
             .catch((error) => {
