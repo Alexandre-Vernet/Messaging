@@ -29,36 +29,39 @@ export class FirestoreService {
         this.user = this.auth.user;
     }
 
-    async getMessages(): Promise<Message[]> {
-        const q = query(collection(this.db, 'messages'), orderBy('date', 'asc'));
-        onSnapshot(q, (querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                const id = doc.id;
-                const email = doc.get('email');
-                const firstName = doc.get('firstName');
-                const lastName = doc.get('lastName');
-                const message = doc.get('message');
-                const file = doc.get('file');
-                const date = doc.get('date');
+    async getMessages(conversationId: string): Promise<Message[]> {
+        const docRef = doc(this.db, 'conversations', conversationId);
 
-                const newMessage = new Message(
-                    id,
-                    email,
-                    firstName,
-                    lastName,
-                    message,
-                    file,
-                    date
-                );
-                this.messages.push(newMessage);
-            });
+        onSnapshot(docRef, (doc) => {
+
+            console.log(doc.data());
+            // querySnapshot.forEach((doc) => {
+            //     const id = doc.id;
+            //     const email = doc.get('email');
+            //     const firstName = doc.get('firstName');
+            //     const lastName = doc.get('lastName');
+            //     const message = doc.get('message');
+            //     const file = doc.get('file');
+            //     const date = doc.get('date');
+            //
+            //     const newMessage = new Message(
+            //         id,
+            //         email,
+            //         firstName,
+            //         lastName,
+            //         message,
+            //         file,
+            //         date
+            //     );
+            //     this.messages.push(newMessage);
+            // });
         });
 
         return this.messages;
     }
 
-    async sendMessage(newMessage: string) {
-        await addDoc(collection(this.db, 'messages'), {
+    async sendMessage(conversationId: string, newMessage: string) {
+        await addDoc(collection(this.db, 'conversations', conversationId), {
             email: this.auth.user.email,
             firstName: this.auth.user.firstName,
             lastName: this.auth.user.lastName,
@@ -133,4 +136,30 @@ export class FirestoreService {
             await deleteDoc(doc(this.db, 'messages', docRef.id));
         });
     };
+
+    async getUsers() {
+        const q = query(collection(this.db, 'users'));
+        const users: User[] = [];
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((docRef) => {
+            const id = docRef.id;
+            const email = docRef.get('email');
+            const firstName = docRef.get('firstName');
+            const lastName = docRef.get('lastName');
+            const profilePicture = docRef.get('profilePicture');
+            const dateCreation = docRef.get('dateCreation');
+
+            const newUser = new User(
+                id,
+                firstName,
+                lastName,
+                email,
+                profilePicture,
+                dateCreation
+            );
+            users.push(newUser);
+        });
+
+        return users;
+    }
 }

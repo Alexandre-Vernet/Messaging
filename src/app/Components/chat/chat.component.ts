@@ -5,6 +5,7 @@ import { File } from '../../class/file';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../Services/authentication/authentication.service';
 import { FirestoreService } from '../../Services/firestore/firestore.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-chat',
@@ -14,6 +15,7 @@ import { FirestoreService } from '../../Services/firestore/firestore.service';
 export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked {
     @ViewChild('modalEditMessage') modalEditMessage;
     messageId: string;
+    conversationId: string;
 
     user: User;
     messages: Message[] = [];
@@ -27,20 +29,25 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
     constructor(
         private auth: AuthenticationService,
         private firestore: FirestoreService,
-        private cdref: ChangeDetectorRef
+        private cdref: ChangeDetectorRef,
+        private route: ActivatedRoute
     ) {
+        // Get id conversation
+        this.route.params.subscribe(params => {
+            this.conversationId = params.id;
+        });
     }
 
     ngOnInit() {
+        this.firestore.getMessages(this.conversationId).then((messages: Message[]) => {
+            this.messages = messages;
+        });
+
         setTimeout(() => {
             this.auth.getAuth().then((user: User) => {
                 this.user = user;
             });
         }, 2000);
-
-        this.firestore.getMessages().then((messages: Message[]) => {
-            this.messages = messages;
-        });
     }
 
     ngAfterContentChecked() {

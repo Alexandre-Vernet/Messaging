@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { StorageService } from '../../../Services/storage/storage.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FirestoreService } from '../../../Services/firestore/firestore.service';
@@ -8,9 +8,10 @@ import { FirestoreService } from '../../../Services/firestore/firestore.service'
     templateUrl: './editor.component.html',
     styleUrls: ['./editor.component.scss']
 })
-export class EditorComponent {
+export class EditorComponent implements OnChanges {
 
     newMessage: string;
+    @Input() conversationId: string;
 
     formNewMessage = new FormGroup({
         newMessage: new FormControl('', [Validators.required]),
@@ -22,9 +23,13 @@ export class EditorComponent {
     ) {
     }
 
+    ngOnChanges(changes: SimpleChanges): void {
+        this.conversationId = changes.conversationId.currentValue;
+    }
+
     sendMessage() {
         if (this.newMessage.length > 0) {
-            this.firestore.sendMessage(this.newMessage);
+            this.firestore.sendMessage(this.conversationId, this.newMessage);
 
             // Clear input
             this.newMessage = '';
