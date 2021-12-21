@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/Messagerie",
+    "public": "dist/Messaging",
     "ignore": [
       "firebase.json",
       "**/.*",
