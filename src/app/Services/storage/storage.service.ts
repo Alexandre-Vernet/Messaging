@@ -40,7 +40,11 @@ export class StorageService {
                         email: this.auth.user.email,
                         firstName: this.auth.user.firstName,
                         lastName: this.auth.user.lastName,
-                        file: url,
+                        file: {
+                            name: file.name,
+                            url: url,
+                            type: file.type,
+                        },
                         date: new Date(),
                     });
                 });
