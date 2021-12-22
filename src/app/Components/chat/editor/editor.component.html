@@ -1,48 +1,50 @@
-<div class="nk-chat-editor">
-    <div class="nk-chat-editor-upload  ml-n1">
+<form (ngSubmit)="sendMessage()" [formGroup]="formNewMessage">
+    <div class="nk-chat-editor">
+        <div class="nk-chat-editor-upload  ml-n1">
 
-        <!-- Send file -->
-        <div class="form-control-wrap">
-            <div class="custom-file">
-                <a class="btn btn-sm btn-icon btn-trigger text-primary toggle-opt"
-                   data-target="chat-upload">
-                    <input (change)="sendFile($event)" accept="image/*"
-                           class="icon ni ni-plus-circle-fill" id="file_upload"
-                           style="display: none"
-                           type="file">
-                    <em (click)="uploadFile()"
-                        class="icon ni ni-plus-circle-fill"></em></a>
+            <!-- Send file -->
+            <div class="form-control-wrap">
+                <div class="custom-file">
+                    <a class="btn btn-sm btn-icon btn-trigger text-primary toggle-opt"
+                       data-target="chat-upload">
+                        <input (change)="sendFile($event)" accept="image/*"
+                               class="icon ni ni-plus-circle-fill" id="file_upload"
+                               style="display: none"
+                               type="file">
+                        <em (click)="uploadFile()"
+                            class="icon ni ni-plus-circle-fill"></em></a>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Write message -->
-    <div class="nk-chat-editor-form">
-        <div class="form-control-wrap">
-            <input
-                    (keydown.enter)="sendMessage()"
-                    [(ngModel)]="newMessage"
-                    autocomplete="off"
-                    class="form-control form-control-simple no-resize"
-                    id="inputSendMessage"
-                    placeholder="Type your message..."
-                    type="text">
+        <!-- Write message -->
+        <div class="nk-chat-editor-form">
+            <div class="form-control-wrap">
+                <input
+                        autocomplete="off"
+                        class="form-control form-control-simple no-resize"
+                        formControlName="newMessage"
+                        id="inputSendMessage"
+                        placeholder="Type your message..."
+                        type="text">
+            </div>
         </div>
+
+        <ul class="nk-chat-editor-tools g-2">
+
+            <!-- Emoji -->
+            <li>
+                <a class="btn btn-sm btn-icon btn-trigger text-primary" href="#"><em
+                        class="icon ni ni-happyf-fill"></em></a>
+            </li>
+
+            <!-- Send message -->
+            <li>
+                <button [disabled]="!formNewMessage.valid"
+                        class="btn btn-round btn-primary btn-icon"
+                        type="submit">
+                    <em class="icon ni ni-send-alt"></em></button>
+            </li>
+        </ul>
     </div>
-
-    <ul class="nk-chat-editor-tools g-2">
-
-        <!-- Emoji -->
-        <li>
-            <a class="btn btn-sm btn-icon btn-trigger text-primary" href="#"><em
-                    class="icon ni ni-happyf-fill"></em></a>
-        </li>
-
-        <!-- Send message -->
-        <li>
-            <button class="btn btn-round btn-primary btn-icon"><em
-                    (click)="sendMessage()"
-                    class="icon ni ni-send-alt"></em></button>
-        </li>
-    </ul>
-</div>
+</form>
