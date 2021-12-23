@@ -161,6 +161,7 @@
                                                                             <a href="{{message.file.url}}"
                                                                                target="_blank">
                                                                                 <img alt="{{message.file.name}}"
+                                                                                     class="media"
                                                                                      src="{{message.file.url}}">
                                                                             </a>
                                                                         </ng-container>
@@ -170,9 +171,8 @@
                                                                                 *ngIf="message?.file.type === 'video'">
                                                                             <a href="{{message.file.url}}"
                                                                                target="_blank">
-                                                                                <video controls>
-                                                                                    <source src="{{message.file.url}}"
-                                                                                            type="{{message.file.type}}">
+                                                                                <video class="media" controls>
+                                                                                    <source src="{{message.file.url}}">
                                                                                     Your browser does not support the
                                                                                     video tag.
                                                                                 </video>
@@ -183,8 +183,7 @@
                                                                         <ng-container
                                                                                 *ngIf="message?.file.type === 'audio'">
                                                                             <audio controls>
-                                                                                <source src="{{message.file.url}}"
-                                                                                        type="{{message.file.type}}">
+                                                                                <source src="{{message.file.url}}">
                                                                                 Your browser does not support the
                                                                                 audio tag.
                                                                             </audio>
