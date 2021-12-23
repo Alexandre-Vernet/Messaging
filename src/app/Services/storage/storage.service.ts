@@ -27,6 +27,12 @@ export class StorageService {
         // Get file
         const file = event.target.files[0];
 
+        const fileName = file.name;
+        const url = null;
+        const type = file.type.split('/')[0];   /* Parse type file : image/png => image */
+
+        const newFile = new File(fileName, url, type);
+
         // Set file source
         const fileSource = `files/${ file.name }`;
         const storageRef = ref(this.storage, fileSource);
@@ -41,9 +47,9 @@ export class StorageService {
                         firstName: this.auth.user.firstName,
                         lastName: this.auth.user.lastName,
                         file: {
-                            name: file.name,
+                            name: newFile.name,
                             url: url,
-                            type: file.type,
+                            type: newFile.type,
                         },
                         date: new Date(),
                     });

@@ -101,10 +101,4 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
     formatDate(date) {
         return date.toDate().toLocaleTimeString('fr-FR');
     }
-
-    getTypeFile(fileType: string) {
-        console.log(fileType);
-        const type = fileType.split('/')[0];
-        return type;
-    }
 }
