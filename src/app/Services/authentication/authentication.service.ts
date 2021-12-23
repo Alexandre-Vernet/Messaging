@@ -23,7 +23,7 @@ import {
     deleteDoc,
 } from 'firebase/firestore';
 import { CryptoService } from '../crypto/crypto.service';
-import { Toast } from '../../class/Toast';
+import { Toast } from '../../class/toast';
 import { getStorage } from 'firebase/storage';
 
 @Injectable({

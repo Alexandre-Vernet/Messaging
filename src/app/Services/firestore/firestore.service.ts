@@ -15,7 +15,7 @@ import {
 import { Message } from 'src/app/class/message';
 import { User } from 'src/app/class/user';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { Toast } from '../../class/Toast';
+import { Toast } from '../../class/toast';
 
 @Injectable({
     providedIn: 'root',

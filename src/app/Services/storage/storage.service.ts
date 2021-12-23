@@ -4,7 +4,7 @@ import { File } from 'src/app/class/file';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { addDoc, collection, doc, getFirestore, updateDoc } from 'firebase/firestore';
-import { Toast } from '../../class/Toast';
+import { Toast } from '../../class/toast';
 
 @Injectable({
     providedIn: 'root',
