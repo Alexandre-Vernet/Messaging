@@ -26,7 +26,11 @@ export class FirestoreService {
     messages: Message[] = [];
 
     constructor(private auth: AuthenticationService) {
-        this.user = this.auth.user;
+        setTimeout(() => {
+            this.auth.getAuth().then((user) => {
+                this.user = user;
+            });
+        }, 2000);
     }
 
     async getMessages(): Promise<Message[]> {
@@ -88,23 +92,24 @@ export class FirestoreService {
     async getLastMessage() {
         const messageRef = query(collection(this.db, 'messages'));
 
+        // Get message with the highest date
         const q = query(
             messageRef,
-            where('email', '==', 'alexandre.vernet@g-mail.fr'),
+            where('email', '==', this.user.email),
             orderBy('date', 'desc'),
             limit(1)
         );
 
         const querySnapshot = await getDocs(q);
 
-        let a = {};
-        querySnapshot.forEach((docRef) => {
-            a['message'] = docRef.get('message');
-            a['id'] = docRef.id;
-            return a;
-        });
+        let lastMessage: Message;
 
-        return a;
+        querySnapshot.forEach((docRef) => {
+            const id = docRef.id;
+            const { email, firstName, lastName, message, file, date } = docRef.data();
+            lastMessage = new Message(id, email, firstName, lastName, message, file, date);
+        });
+        return lastMessage;
     }
 
     // Edit message

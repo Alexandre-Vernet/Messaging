@@ -86,8 +86,8 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
 
         // Get last message
         this.firestore.getLastMessage().then((lastMessage) => {
-            const message = lastMessage['message'];
-            this.messageId = lastMessage['id'];
+            const message = lastMessage.message;
+            this.messageId = lastMessage.id;
 
             // Set message in input
             this.formEditMessage.get('editedMessage').setValue(message);
