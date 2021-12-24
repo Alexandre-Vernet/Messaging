@@ -10,8 +10,6 @@ import { FirestoreService } from '../../../Services/firestore/firestore.service'
 })
 export class EditorComponent {
 
-    newMessage: string;
-
     formNewMessage = new FormGroup({
         newMessage: new FormControl('', [Validators.required]),
     });
@@ -23,18 +21,10 @@ export class EditorComponent {
     }
 
     sendMessage() {
-        if (this.newMessage.length > 0) {
-            this.firestore.sendMessage(this.newMessage);
-
-            // Clear input
-            this.newMessage = '';
-        }
-
-        // const newMessage = this.formNewMessage.value;
-        //
-        // if (newMessage.length > 0) {
-        //     this.firestore.sendMessage(newMessage);
-        // }
+        const newMessage = this.formNewMessage.value.newMessage;
+        this.firestore.sendMessage(newMessage).then(() => {
+            this.formNewMessage.reset();
+        });
     };
 
     uploadFile() {

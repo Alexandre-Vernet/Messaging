@@ -4,7 +4,7 @@ import { File } from 'src/app/class/file';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { addDoc, collection, doc, getFirestore, updateDoc } from 'firebase/firestore';
-import { Toast } from '../../class/Toast';
+import { Toast } from '../../class/toast';
 
 @Injectable({
     providedIn: 'root',
@@ -27,6 +27,12 @@ export class StorageService {
         // Get file
         const file = event.target.files[0];
 
+        const fileName = file.name;
+        const url = null;
+        const type = file.type.split('/')[0];   /* Parse type file : image/png => image */
+
+        const newFile = new File(fileName, url, type);
+
         // Set file source
         const fileSource = `files/${ file.name }`;
         const storageRef = ref(this.storage, fileSource);
@@ -40,7 +46,11 @@ export class StorageService {
                         email: this.auth.user.email,
                         firstName: this.auth.user.firstName,
                         lastName: this.auth.user.lastName,
-                        file: url,
+                        file: {
+                            name: newFile.name,
+                            url: url,
+                            type: newFile.type,
+                        },
                         date: new Date(),
                     });
                 });

@@ -59,17 +59,63 @@
                                                                 <div class="chat-bubble">
 
                                                                     <!-- Message -->
-                                                                    <div *ngIf="message.message" class="chat-msg">
+                                                                    <div *ngIf="message.message"
+                                                                         class="chat-msg">
                                                                         {{message.message}}
                                                                     </div>
 
-                                                                    <!-- Image -->
-                                                                    <div *ngIf="message.file">
-                                                                        <a href="{{message.file}}" target="_blank">
-                                                                            <img alt="{{message.file}}"
-                                                                                 src="{{message.file}}">
-                                                                        </a>
-                                                                    </div>
+                                                                    <!-- File -->
+                                                                    <ng-container *ngIf="message.file">
+
+                                                                        <!-- Image -->
+                                                                        <ng-container
+                                                                                *ngIf="message.file.type === 'image/png'">
+                                                                            <a href="{{message.file.url}}"
+                                                                               target="_blank">
+                                                                                <img alt="{{message.file.name}}"
+                                                                                     src="{{message.file.url}}">
+                                                                            </a>
+                                                                        </ng-container>
+
+                                                                        <!-- Video -->
+                                                                        <ng-container
+                                                                                *ngIf="message.file.type === 'video/mp4'">
+                                                                            <a href="{{message.file.url}}"
+                                                                               target="_blank">
+                                                                                <video controls>
+                                                                                    <source src="{{message.file.url}}"
+                                                                                            type="{{message.file.type}}">
+                                                                                    Your browser does not support the
+                                                                                    video tag.
+                                                                                </video>
+                                                                            </a>
+                                                                        </ng-container>
+
+                                                                        <!-- Audio -->
+                                                                        <ng-container
+                                                                                *ngIf="message.file.type === 'audio/mpeg'">
+                                                                            <a href="{{message.file.url}}"
+                                                                               target="_blank">
+                                                                                <audio controls>
+                                                                                    <source src="{{message.file.url}}"
+                                                                                            type="{{message.file.type}}">
+                                                                                    Your browser does not support the
+                                                                                    audio tag.
+                                                                                </audio>
+                                                                            </a>
+                                                                        </ng-container>
+
+                                                                        <!-- Other type -->
+                                                                        <ng-container
+                                                                                *ngIf="message.file.type !== 'video/mp4' &&
+                                                                                message.file.type !== 'image/png' &&
+                                                                                message.file.type !== 'audio/mpeg'">
+                                                                            <a href="{{message.file.url}}"
+                                                                               target="_blank">
+                                                                                <h5>{{message.file.name}}</h5>
+                                                                            </a>
+                                                                        </ng-container>
+                                                                    </ng-container>
 
                                                                     <!-- Action -->
                                                                     <ul class="chat-msg-more">
@@ -101,17 +147,59 @@
                                                                 <div class="chat-bubble">
 
                                                                     <!-- Message -->
-                                                                    <div *ngIf="message.message" class="chat-msg">
+                                                                    <div *ngIf="message.message"
+                                                                         class="chat-msg">
                                                                         {{message.message}}
                                                                     </div>
 
-                                                                    <!-- Image -->
-                                                                    <div *ngIf="message.file">
-                                                                        <a href="{{message.file}}" target="_blank">
-                                                                            <img alt="{{message.file}}"
-                                                                                 src="{{message.file}}">
-                                                                        </a>
-                                                                    </div>
+                                                                    <!-- File -->
+                                                                    <ng-container *ngIf="message.file">
+
+                                                                        <!-- Image -->
+                                                                        <ng-container
+                                                                                *ngIf="message?.file.type === 'image'">
+                                                                            <a href="{{message.file.url}}"
+                                                                               target="_blank">
+                                                                                <img alt="{{message.file.name}}"
+                                                                                     class="media"
+                                                                                     src="{{message.file.url}}">
+                                                                            </a>
+                                                                        </ng-container>
+
+                                                                        <!-- Video -->
+                                                                        <ng-container
+                                                                                *ngIf="message?.file.type === 'video'">
+                                                                            <a href="{{message.file.url}}"
+                                                                               target="_blank">
+                                                                                <video class="media" controls>
+                                                                                    <source src="{{message.file.url}}">
+                                                                                    Your browser does not support the
+                                                                                    video tag.
+                                                                                </video>
+                                                                            </a>
+                                                                        </ng-container>
+
+                                                                        <!-- Audio -->
+                                                                        <ng-container
+                                                                                *ngIf="message?.file.type === 'audio'">
+                                                                            <audio controls>
+                                                                                <source src="{{message.file.url}}">
+                                                                                Your browser does not support the
+                                                                                audio tag.
+                                                                            </audio>
+                                                                        </ng-container>
+
+                                                                        <!-- Other type -->
+                                                                        <ng-container
+                                                                                *ngIf="message.file.type !== 'video' &&
+                                                                                    message.file.type !== 'image' &&
+                                                                                    message.file.type !== 'audio'">
+                                                                            <a href="{{message.file.url}}"
+                                                                               target="_blank">
+                                                                                <h6>{{message.file.name}}</h6>
+                                                                            </a>
+                                                                        </ng-container>
+                                                                    </ng-container>
 
                                                                     <!-- Action -->
                                                                     <ul class="chat-msg-more">

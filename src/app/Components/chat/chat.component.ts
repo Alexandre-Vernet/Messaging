@@ -27,7 +27,7 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
     constructor(
         private auth: AuthenticationService,
         private firestore: FirestoreService,
-        private cdref: ChangeDetectorRef
+        private changeDetectorRef: ChangeDetectorRef
     ) {
     }
 
@@ -43,15 +43,6 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
         });
     }
 
-    ngAfterContentChecked() {
-        this.cdref.detectChanges();
-    }
-
-    setCursor = () => {
-        document.getElementById('inputSendMessage')?.focus();
-    };
-
-
     ngAfterViewInit() {
         // Shortcut keyboard
         window.addEventListener('keydown', (e) => {
@@ -62,6 +53,14 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
             }
         });
     }
+
+    ngAfterContentChecked() {
+        this.changeDetectorRef.detectChanges();
+    }
+
+    setCursor() {
+        document.getElementById('inputSendMessage')?.focus();
+    };
 
     getMessageId(date: Date) {
         this.firestore.getMessageId(date).then((message: string) => {
@@ -79,7 +78,7 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
 
         // Close modal
         this.modalEditMessage.nativeElement.click();
-    };
+    }
 
     editLastMessage() {
         // Open modal
@@ -97,20 +96,9 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
 
     deleteMessage(date: Date) {
         this.firestore.deleteMessage(date);
-    };
+    }
 
-    /**
-     *  Format date to locale zone
-     * @param date
-     */
     formatDate(date) {
-        const option = {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-        };
-        const time = date.toDate().toLocaleTimeString('fr-FR');
-
-        return time;
-    };
+        return date.toDate().toLocaleTimeString('fr-FR');
+    }
 }
