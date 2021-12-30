@@ -40,6 +40,7 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
 
         this.firestore.getMessages().then((messages: Message[]) => {
             this.messages = messages;
+            console.log(messages);
         });
     }
 
