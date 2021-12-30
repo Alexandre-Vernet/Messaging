@@ -94,15 +94,12 @@
                                                                         <!-- Audio -->
                                                                         <ng-container
                                                                                 *ngIf="message.file.type === 'audio/mpeg'">
-                                                                            <a href="{{message.file.url}}"
-                                                                               target="_blank">
-                                                                                <audio controls>
-                                                                                    <source src="{{message.file.url}}"
-                                                                                            type="{{message.file.type}}">
-                                                                                    Your browser does not support the
-                                                                                    audio tag.
-                                                                                </audio>
-                                                                            </a>
+                                                                            <audio controls>
+                                                                                <source src="{{message.file.url}}"
+                                                                                        type="{{message.file.type}}">
+                                                                                Your browser does not support the
+                                                                                audio tag.
+                                                                            </audio>
                                                                         </ng-container>
 
                                                                         <!-- Other type -->

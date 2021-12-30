@@ -72,10 +72,9 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
 
     async editMessage() {
         const editedMessage = this.formEditMessage.value.editedMessage,
-            date = new Date(),
             messageId = this.messageId;
 
-        await this.firestore.editMessage(editedMessage, date, messageId);
+        await this.firestore.editMessage(editedMessage, messageId);
 
         // Close modal
         this.modalEditMessage.nativeElement.click();
