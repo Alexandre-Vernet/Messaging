@@ -36,28 +36,14 @@ export class FirestoreService {
     async getMessages(): Promise<Message[]> {
         const q = query(collection(this.db, 'messages'), orderBy('date', 'asc'));
         onSnapshot(q, (querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                const id = doc.id;
-                const email = doc.get('email');
-                const firstName = doc.get('firstName');
-                const lastName = doc.get('lastName');
-                const message = doc.get('message');
-                const file = doc.get('file');
-                const date = doc.get('date');
+            querySnapshot.docChanges().forEach((change) => {
 
-                const newMessage = new Message(
-                    id,
-                    email,
-                    firstName,
-                    lastName,
-                    message,
-                    file,
-                    date
-                );
-                this.messages.push(newMessage);
+                // Listen for new messages added
+                if (change.type === 'added') {
+                    this.messages.push(change.doc.data() as Message);
+                }
             });
         });
-
         return this.messages;
     }
 
