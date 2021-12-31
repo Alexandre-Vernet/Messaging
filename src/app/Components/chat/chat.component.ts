@@ -58,25 +58,27 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
         this.changeDetectorRef.detectChanges();
     }
 
-    setCursor() {
+    focusTextArea() {
         document.getElementById('inputSendMessage')?.focus();
-    };
+    }
 
-    getMessageId(date: Date) {
-        this.firestore.getMessageId(date).then((message: string) => {
-            this.messageId = message['id'];
-            this.formEditMessage.get('editedMessage').setValue(message['message']);
+    getMessageId(messageId: string) {
+        this.firestore.getMessageId(messageId).then((message: Message) => {
+            // Save id
+            this.messageId = message.id;
+
+            // Set message in modal
+            this.formEditMessage.get('editedMessage').setValue(message.message);
         });
     }
 
     async editMessage() {
-        const editedMessage = this.formEditMessage.value.editedMessage,
-            messageId = this.messageId;
+        const editedMessage = this.formEditMessage.value.editedMessage;
 
-        await this.firestore.editMessage(editedMessage, messageId);
-
-        // Close modal
-        this.modalEditMessage.nativeElement.click();
+        this.firestore.editMessage(editedMessage, this.messageId).then(() => {
+            // Close modal
+            this.modalEditMessage.nativeElement.click();
+        });
     }
 
     editLastMessage() {
@@ -93,8 +95,8 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
         });
     }
 
-    deleteMessage(date: Date) {
-        this.firestore.deleteMessage(date);
+    async deleteMessage(date: Date) {
+        await this.firestore.deleteMessage(date);
     }
 
     formatDate(date) {

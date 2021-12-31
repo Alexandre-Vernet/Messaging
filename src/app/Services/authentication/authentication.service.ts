@@ -85,11 +85,11 @@ export class AuthenticationService {
                     // this.firebaseError = '';
 
                     let url = window.location.pathname;
-                    if (url != '/sign-in') this.router.navigate([url]);
-                    else this.router.navigate(['/home']);
-                } else {
-                    // doc.data() will be undefined in this case
-                    console.log('No such document!');
+                    if (url != '/sign-in') {
+                        await this.router.navigate([url]);
+                    } else {
+                        await this.router.navigate(['/home']);
+                    }
                 }
             })
             .catch((error) => {

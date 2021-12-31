@@ -3,7 +3,7 @@ import {
     addDoc,
     collection,
     deleteDoc,
-    doc,
+    doc, getDoc,
     getDocs,
     getFirestore,
     limit, onSnapshot,
@@ -38,9 +38,28 @@ export class FirestoreService {
         onSnapshot(q, (querySnapshot) => {
             querySnapshot.docChanges().forEach((change) => {
 
-                // Listen for new messages added
+                // Message added
                 if (change.type === 'added') {
-                    this.messages.push(change.doc.data() as Message);
+                    const id = change.doc.id;
+                    const { email, firstName, lastName, message, file, date } = change.doc.data();
+                    const newMessage = new Message(id, email, firstName, lastName, message, file, date);
+                    this.messages.push(newMessage);
+                }
+
+                // Message modified
+                if (change.type === 'modified') {
+                    const id = change.doc.id;
+                    const { email, firstName, lastName, message, file, date } = change.doc.data();
+                    const newMessage = new Message(id, email, firstName, lastName, message, file, date);
+                    const index = this.messages.findIndex((m) => m.id === id);
+                    this.messages[index] = newMessage;
+                }
+
+                // Message deleted
+                if (change.type === 'removed') {
+                    const id = change.doc.id;
+                    const index = this.messages.findIndex((m) => m.id === id);
+                    this.messages.splice(index, 1);
                 }
             });
         });
@@ -55,23 +74,20 @@ export class FirestoreService {
             message: newMessage,
             date: new Date(),
         });
-    };
+    }
 
-    async getMessageId(date: Date) {
-        const message = {};
+    async getMessageId(messageId: string) {
+        const messageRef = doc(this.db, 'messages', messageId);
 
-        const q = query(
-            collection(this.db, 'messages'),
-            where('date', '==', date)
-        );
+        const docSnap = await getDoc(messageRef);
+        let a: Message;
 
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((docRef) => {
-            message['id'] = docRef.id;
-            message['message'] = docRef.get('message');
-        });
-
-        return message;
+        if (docSnap.exists()) {
+            const id = docSnap.id;
+            const { email, firstName, lastName, message, file, date } = docSnap.data();
+            a = new Message(id, email, firstName, lastName, message, file, date);
+        }
+        return a;
     }
 
     // Get last message send by user
@@ -109,7 +125,7 @@ export class FirestoreService {
                 console.error(error);
                 Toast.error('Error updating message', error.message);
             });
-    };
+    }
 
     async deleteMessage(date: Date) {
         const q = query(
@@ -122,5 +138,5 @@ export class FirestoreService {
             // doc.data() is never undefined for query doc snapshots
             await deleteDoc(doc(this.db, 'messages', docRef.id));
         });
-    };
+    }
 }

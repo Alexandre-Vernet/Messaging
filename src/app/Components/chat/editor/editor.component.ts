@@ -29,9 +29,9 @@ export class EditorComponent {
 
     uploadFile() {
         document.getElementById('file_upload')?.click();
-    };
+    }
 
     sendFile(file: Event) {
         this.storage.sendFile(file);
-    };
+    }
 }
