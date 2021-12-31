@@ -99,12 +99,11 @@ export class FirestoreService {
     }
 
     // Edit message
-    async editMessage(newMessage: string, date: Date, messageId: string) {
+    async editMessage(newMessage: string, messageId: string) {
         const messageRef = doc(this.db, 'messages', messageId);
 
         await updateDoc(messageRef, {
             message: newMessage,
-            date: date,
         })
             .catch((error) => {
                 console.error(error);
