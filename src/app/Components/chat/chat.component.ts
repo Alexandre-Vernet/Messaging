@@ -73,10 +73,10 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
         const editedMessage = this.formEditMessage.value.editedMessage;
         const messageId = this.messageId;
 
-        await this.firestore.editMessage(editedMessage, messageId);
-
-        // Close modal
-        this.modalEditMessage.nativeElement.click();
+        this.firestore.editMessage(editedMessage, messageId).then(() => {
+            // Close modal
+            this.modalEditMessage.nativeElement.click();
+        });
     }
 
     editLastMessage() {
@@ -93,8 +93,8 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
         });
     }
 
-    deleteMessage(date: Date) {
-        this.firestore.deleteMessage(date);
+    async deleteMessage(date: Date) {
+        await this.firestore.deleteMessage(date);
     }
 
     formatDate(date) {

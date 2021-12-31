@@ -39,7 +39,7 @@ export class FirestoreService {
             querySnapshot.docChanges().forEach((change) => {
 
                 // New message added
-                if (change.type === 'added' || change.type === 'modified') {
+                if (change.type === 'added' || change.type === 'modified' || change.type === 'removed') {
                     this.messages.push(change.doc.data() as Message);
                 }
 
@@ -67,7 +67,7 @@ export class FirestoreService {
             message: newMessage,
             date: new Date(),
         });
-    };
+    }
 
     async getMessageId(date: Date) {
         const message = {};
