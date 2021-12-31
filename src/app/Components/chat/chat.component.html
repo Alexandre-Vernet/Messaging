@@ -274,7 +274,9 @@
                         <label class="form-label" for="editedMessage">Your edited message</label>
                         <div class="form-control-wrap">
                             <input [ngClass]="{'is-invalid': formEditMessage.get('editedMessage')?.touched && formEditMessage.get('editedMessage')?.invalid}"
-                                   class="form-control" formControlName="editedMessage" id="editedMessage"
+                                   autocomplete="off" class="form-control" formControlName="editedMessage"
+                                   id="editedMessage"
+                                   placeholder="Your edited message"
                                    required
                                    type="text">
                             <div

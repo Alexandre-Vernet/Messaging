@@ -38,10 +38,22 @@ export class FirestoreService {
         onSnapshot(q, (querySnapshot) => {
             querySnapshot.docChanges().forEach((change) => {
 
-                // Listen for new messages added
-                if (change.type === 'added') {
+                // New message added
+                if (change.type === 'added' || change.type === 'modified') {
                     this.messages.push(change.doc.data() as Message);
                 }
+
+                // // Message modified
+                // if (change.type === 'modified') {
+                //     const index = this.messages.findIndex((m) => m.id === change.doc.id);
+                //     this.messages[index] = change.doc.data() as Message;
+                // }
+                //
+                // // Message removed
+                // if (change.type === 'removed') {
+                //     const index = this.messages.findIndex((m) => m.id === change.doc.id);
+                //     this.messages.splice(index, 1);
+                // }
             });
         });
         return this.messages;
@@ -109,7 +121,7 @@ export class FirestoreService {
                 console.error(error);
                 Toast.error('Error updating message', error.message);
             });
-    };
+    }
 
     async deleteMessage(date: Date) {
         const q = query(
@@ -122,5 +134,5 @@ export class FirestoreService {
             // doc.data() is never undefined for query doc snapshots
             await deleteDoc(doc(this.db, 'messages', docRef.id));
         });
-    };
+    }
 }
