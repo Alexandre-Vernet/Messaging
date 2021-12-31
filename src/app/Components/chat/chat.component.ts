@@ -62,18 +62,20 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
         document.getElementById('inputSendMessage')?.focus();
     }
 
-    getMessageId(date: Date) {
-        this.firestore.getMessageId(date).then((message: string) => {
-            this.messageId = message['id'];
-            this.formEditMessage.get('editedMessage').setValue(message['message']);
+    getMessageId(messageId: string) {
+        this.firestore.getMessageId(messageId).then((message: Message) => {
+            // Save id
+            this.messageId = message.id;
+
+            // Set message in modal
+            this.formEditMessage.get('editedMessage').setValue(message.message);
         });
     }
 
     async editMessage() {
         const editedMessage = this.formEditMessage.value.editedMessage;
-        const messageId = this.messageId;
 
-        this.firestore.editMessage(editedMessage, messageId).then(() => {
+        this.firestore.editMessage(editedMessage, this.messageId).then(() => {
             // Close modal
             this.modalEditMessage.nativeElement.click();
         });

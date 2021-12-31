@@ -3,7 +3,7 @@ import {
     addDoc,
     collection,
     deleteDoc,
-    doc,
+    doc, getDoc,
     getDocs,
     getFirestore,
     limit, onSnapshot,
@@ -40,7 +40,10 @@ export class FirestoreService {
 
                 // New message added
                 if (change.type === 'added' || change.type === 'modified') {
-                    this.messages.push(change.doc.data() as Message);
+                    const id = change.doc.id;
+                    const { email, firstName, lastName, message, file, date } = change.doc.data();
+                    const newMessage = new Message(id, email, firstName, lastName, message, file, date);
+                    this.messages.push(newMessage);
                 }
 
                 // Message removed
@@ -63,21 +66,19 @@ export class FirestoreService {
         });
     }
 
-    async getMessageId(date: Date) {
-        const message = {};
+    async getMessageId(messageId: string) {
+        const messageRef = doc(this.db, 'messages', messageId);
 
-        const q = query(
-            collection(this.db, 'messages'),
-            where('date', '==', date)
-        );
+        const docSnap = await getDoc(messageRef);
+        let a: Message;
 
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((docRef) => {
-            message['id'] = docRef.id;
-            message['message'] = docRef.get('message');
-        });
-
-        return message;
+        if (docSnap.exists()) {
+            console.log(docSnap.data());
+            const id = docSnap.id;
+            const { email, firstName, lastName, message, file, date } = docSnap.data();
+            a = new Message(id, email, firstName, lastName, message, file, date);
+        }
+        return a;
     }
 
     // Get last message send by user
