@@ -200,7 +200,7 @@
                                                                                         class="dropdown-menu dropdown-menu-sm">
                                                                                     <ul class="link-list-opt no-bdr">
                                                                                         <!-- Edit -->
-                                                                                        <li>
+                                                                                        <li *ngIf="message.message">
                                                                                             <a (click)="getMessageId(message.id);"
                                                                                                class="icon"
                                                                                                data-target="#editMessage"
