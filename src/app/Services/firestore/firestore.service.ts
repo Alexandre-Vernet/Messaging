@@ -38,17 +38,27 @@ export class FirestoreService {
         onSnapshot(q, (querySnapshot) => {
             querySnapshot.docChanges().forEach((change) => {
 
-                // New message added
-                if (change.type === 'added' || change.type === 'modified') {
+                // Message added
+                if (change.type === 'added') {
                     const id = change.doc.id;
                     const { email, firstName, lastName, message, file, date } = change.doc.data();
                     const newMessage = new Message(id, email, firstName, lastName, message, file, date);
                     this.messages.push(newMessage);
                 }
 
-                // Message removed
+                // Message modified
+                if (change.type === 'modified') {
+                    const id = change.doc.id;
+                    const { email, firstName, lastName, message, file, date } = change.doc.data();
+                    const newMessage = new Message(id, email, firstName, lastName, message, file, date);
+                    const index = this.messages.findIndex((m) => m.id === id);
+                    this.messages[index] = newMessage;
+                }
+
+                // Message deleted
                 if (change.type === 'removed') {
-                    const index = this.messages.findIndex((m) => m.id === change.doc.id);
+                    const id = change.doc.id;
+                    const index = this.messages.findIndex((m) => m.id === id);
                     this.messages.splice(index, 1);
                 }
             });
@@ -73,7 +83,6 @@ export class FirestoreService {
         let a: Message;
 
         if (docSnap.exists()) {
-            console.log(docSnap.data());
             const id = docSnap.id;
             const { email, firstName, lastName, message, file, date } = docSnap.data();
             a = new Message(id, email, firstName, lastName, message, file, date);
