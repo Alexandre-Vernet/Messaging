@@ -39,21 +39,15 @@ export class FirestoreService {
             querySnapshot.docChanges().forEach((change) => {
 
                 // New message added
-                if (change.type === 'added' || change.type === 'modified' || change.type === 'removed') {
+                if (change.type === 'added' || change.type === 'modified') {
                     this.messages.push(change.doc.data() as Message);
                 }
 
-                // // Message modified
-                // if (change.type === 'modified') {
-                //     const index = this.messages.findIndex((m) => m.id === change.doc.id);
-                //     this.messages[index] = change.doc.data() as Message;
-                // }
-                //
-                // // Message removed
-                // if (change.type === 'removed') {
-                //     const index = this.messages.findIndex((m) => m.id === change.doc.id);
-                //     this.messages.splice(index, 1);
-                // }
+                // Message removed
+                if (change.type === 'removed') {
+                    const index = this.messages.findIndex((m) => m.id === change.doc.id);
+                    this.messages.splice(index, 1);
+                }
             });
         });
         return this.messages;
