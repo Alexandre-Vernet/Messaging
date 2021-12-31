@@ -58,9 +58,9 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
         this.changeDetectorRef.detectChanges();
     }
 
-    setCursor() {
+    focusTextArea() {
         document.getElementById('inputSendMessage')?.focus();
-    };
+    }
 
     getMessageId(date: Date) {
         this.firestore.getMessageId(date).then((message: string) => {
