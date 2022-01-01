@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import {
-    addDoc,
     collection,
     deleteDoc,
     doc, getDoc,
     getDocs,
     getFirestore,
-    limit, onSnapshot,
+    limit,
     orderBy,
-    query,
+    query, setDoc,
     updateDoc,
     where,
 } from 'firebase/firestore';
@@ -33,47 +32,83 @@ export class FirestoreService {
         }, 2000);
     }
 
-    async getMessages(): Promise<Message[]> {
-        const q = query(collection(this.db, 'messages'), orderBy('date', 'asc'));
-        onSnapshot(q, (querySnapshot) => {
-            querySnapshot.docChanges().forEach((change) => {
+    async getMessages(conversationId: string): Promise<Message[]> {
+        // const q = query(collection(this.db, 'conversations'), orderBy('date', 'asc'));
+        // onSnapshot(q, (querySnapshot) => {
+        //     querySnapshot.docChanges().forEach((change) => {
+        //
+        //         // Message added
+        //         if (change.type === 'added') {
+        //             const id = change.doc.id;
+        //             const { email, firstName, lastName, message, file, date } = change.doc.data();
+        //             const newMessage = new Message(id, email, firstName, lastName, message, file, date);
+        //             this.messages.push(newMessage);
+        //         }
+        //
+        //         // Message modified
+        //         if (change.type === 'modified') {
+        //             const id = change.doc.id;
+        //             const { email, firstName, lastName, message, file, date } = change.doc.data();
+        //             const newMessage = new Message(id, email, firstName, lastName, message, file, date);
+        //             const index = this.messages.findIndex((m) => m.id === id);
+        //             this.messages[index] = newMessage;
+        //         }
+        //
+        //         // Message deleted
+        //         if (change.type === 'removed') {
+        //             const id = change.doc.id;
+        //             const index = this.messages.findIndex((m) => m.id === id);
+        //             this.messages.splice(index, 1);
+        //         }
+        //     });
+        // });
 
-                // Message added
-                if (change.type === 'added') {
-                    const id = change.doc.id;
-                    const { email, firstName, lastName, message, file, date } = change.doc.data();
-                    const newMessage = new Message(id, email, firstName, lastName, message, file, date);
-                    this.messages.push(newMessage);
-                }
-
-                // Message modified
-                if (change.type === 'modified') {
-                    const id = change.doc.id;
-                    const { email, firstName, lastName, message, file, date } = change.doc.data();
-                    const newMessage = new Message(id, email, firstName, lastName, message, file, date);
-                    const index = this.messages.findIndex((m) => m.id === id);
-                    this.messages[index] = newMessage;
-                }
-
-                // Message deleted
-                if (change.type === 'removed') {
-                    const id = change.doc.id;
-                    const index = this.messages.findIndex((m) => m.id === id);
-                    this.messages.splice(index, 1);
-                }
-            });
-        });
+        // const docRef = doc(this.db, 'conversations', conversationId);
+        //
+        // onSnapshot(docRef, (doc) => {
+        //
+        //     console.log(doc.data());
+        //     querySnapshot.forEach((doc) => {
+        //         const id = doc.id;
+        //         const email = doc.get('email');
+        //         const firstName = doc.get('firstName');
+        //         const lastName = doc.get('lastName');
+        //         const message = doc.get('message');
+        //         const file = doc.get('file');
+        //         const date = doc.get('date');
+        //
+        //         const newMessage = new Message(
+        //             id,
+        //             email,
+        //             firstName,
+        //             lastName,
+        //             message,
+        //             file,
+        //             date
+        //         );
+        //         this.messages.push(newMessage);
+        //     });
+        // });
         return this.messages;
     }
 
-    async sendMessage(newMessage: string) {
-        await addDoc(collection(this.db, 'messages'), {
-            email: this.auth.user.email,
-            firstName: this.auth.user.firstName,
-            lastName: this.auth.user.lastName,
-            message: newMessage,
-            date: new Date(),
-        });
+    async sendMessage(conversationId: string, elt) {
+        const messageRef = doc(this.db, 'conversations', conversationId);
+
+        // const messageId = Object.keys(elt.messages);
+        // const found = messageId.find((id) => id === elt.messages[id].id);
+        // console.log(found);
+        //
+        // await setDoc(messageRef, {
+        //     messages: {
+        //         [elt.messages.id]: {
+        //             message: elt.messages[found].message,
+        //             date: elt.messages[found].date,
+        //         }
+        //     }
+        // }, { merge: true });
+
+        await setDoc(messageRef, elt);
     }
 
     async getMessageId(messageId: string) {
@@ -138,5 +173,31 @@ export class FirestoreService {
             // doc.data() is never undefined for query doc snapshots
             await deleteDoc(doc(this.db, 'messages', docRef.id));
         });
+    }
+
+    async getUsers() {
+        const q = query(collection(this.db, 'users'));
+        const users: User[] = [];
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((docRef) => {
+            const id = docRef.id;
+            const email = docRef.get('email');
+            const firstName = docRef.get('firstName');
+            const lastName = docRef.get('lastName');
+            const profilePicture = docRef.get('profilePicture');
+            const dateCreation = docRef.get('dateCreation');
+
+            const newUser = new User(
+                id,
+                firstName,
+                lastName,
+                email,
+                profilePicture,
+                dateCreation
+            );
+            users.push(newUser);
+        });
+
+        return users;
     }
 }

@@ -39,7 +39,7 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
     }
 
     ngOnInit() {
-        this.firestore.getMessages(this.conversationId).then((messages: Message[]) => {
+        this.firestore.getMessages('ZsPWwcDMASeNVjYMk4kc').then((messages: Message[]) => {
             this.messages = messages;
         });
 
@@ -49,15 +49,6 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
             });
         }, 2000);
     }
-
-    ngAfterContentChecked() {
-        this.cdref.detectChanges();
-    }
-
-    setCursor = () => {
-        document.getElementById('inputSendMessage')?.focus();
-    };
-
 
     ngAfterViewInit() {
         // Shortcut keyboard
