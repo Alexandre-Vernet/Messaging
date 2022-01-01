@@ -6,6 +6,7 @@ import {
     getDocs,
     getFirestore,
     limit,
+    onSnapshot,
     orderBy,
     query, setDoc,
     updateDoc,
@@ -32,7 +33,27 @@ export class FirestoreService {
         }, 2000);
     }
 
-    async getMessages(conversationId: string): Promise<Message[]> {
+    async getMessages(conversationId: string = 'ZsPWwcDMASeNVjYMk4kc'): Promise<Message[]> {
+
+        onSnapshot(doc(this.db, 'conversations', conversationId), (doc) => {
+            // Get email user
+            const email = Object.keys(doc.data())[0];
+
+            // Extract userInf
+            const userInfo = doc.data()[email].userInfo;
+            const { id, firstName, lastName } = userInfo;
+
+            // Extract messages
+            const messages = doc.data()[email].messages;
+
+            // Create array of messages
+            const messagesArray = Object.values(messages);
+            messagesArray.forEach((message: Message) => {
+                const newMessage = new Message(id, email, firstName, lastName, message.message, message.file, message.date);
+                this.messages.push(newMessage);
+            });
+        });
+
         // const q = query(collection(this.db, 'conversations'), orderBy('date', 'asc'));
         // onSnapshot(q, (querySnapshot) => {
         //     querySnapshot.docChanges().forEach((change) => {

@@ -39,10 +39,9 @@ export class EditorComponent implements OnChanges {
 
     sendMessage() {
         const newMessage = this.formNewMessage.value.newMessage;
-
         const messageId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
-        const elmt = {
+        const message = {
             [this.user.email]:
                 {
                     userInfo: {
@@ -61,7 +60,7 @@ export class EditorComponent implements OnChanges {
                 }
         };
 
-        this.firestore.sendMessage(this.conversationId, elmt).then(() => {
+        this.firestore.sendMessage(this.conversationId, message).then(() => {
             this.formNewMessage.reset();
         });
     }
