@@ -95,20 +95,7 @@ export class FirestoreService {
     async sendMessage(conversationId: string, elt) {
         const messageRef = doc(this.db, 'conversations', conversationId);
 
-        // const messageId = Object.keys(elt.messages);
-        // const found = messageId.find((id) => id === elt.messages[id].id);
-        // console.log(found);
-        //
-        // await setDoc(messageRef, {
-        //     messages: {
-        //         [elt.messages.id]: {
-        //             message: elt.messages[found].message,
-        //             date: elt.messages[found].date,
-        //         }
-        //     }
-        // }, { merge: true });
-
-        await setDoc(messageRef, elt);
+        await setDoc(messageRef, elt, { merge: true });
     }
 
     async getMessageId(messageId: string) {
