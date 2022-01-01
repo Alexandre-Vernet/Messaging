@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
 
@@ -19,15 +19,6 @@ export class SignInComponent {
             Validators.minLength(6),
         ]),
     });
-
-    formReset = new FormGroup({
-        emailReset: new FormControl('', [
-            Validators.required,
-            Validators.email,
-        ]),
-    });
-
-    @ViewChild('modalResetPassword') modalResetPassword;
 
     constructor(
         private auth: AuthenticationService
@@ -54,17 +45,6 @@ export class SignInComponent {
 
     googleSignUp = () => {
         this.auth.googleSignUp();
-    };
-
-    resetPassword = () => {
-        // Hide modalResetPassword
-        this.modalResetPassword.nativeElement.click();
-
-        // Get email
-        const emailAddress = this.formReset.value.emailReset;
-
-        // Send email reset password
-        this.auth.resetPassword(emailAddress);
     };
 
     viewPassword = () => {

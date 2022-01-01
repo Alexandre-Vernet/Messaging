@@ -1,3 +1,5 @@
+import { File } from './file';
+
 export class Message {
 
     private _id: string;
@@ -5,11 +7,10 @@ export class Message {
     private _firstName: string;
     private _lastName: string;
     private _message: string;
-    private _file: string;
+    private _file: File;
     private _date: Date;
 
-
-    constructor(id: string, email: string, firstName: string, lastName: string, message: string, file: string, date: Date) {
+    constructor(id: string, email: string, firstName: string, lastName: string, message: string, file: File, date: Date) {
         this._id = id;
         this._email = email;
         this._firstName = firstName;
@@ -28,6 +29,7 @@ export class Message {
         this._id = value;
     }
 
+
     get email(): string {
         return this._email;
     }
@@ -35,6 +37,7 @@ export class Message {
     set email(value: string) {
         this._email = value;
     }
+
 
     get firstName(): string {
         return this._firstName;
@@ -44,6 +47,7 @@ export class Message {
         this._firstName = value;
     }
 
+
     get lastName(): string {
         return this._lastName;
     }
@@ -51,6 +55,7 @@ export class Message {
     set lastName(value: string) {
         this._lastName = value;
     }
+
 
     get message(): string {
         return this._message;
@@ -60,13 +65,15 @@ export class Message {
         this._message = value;
     }
 
-    get file(): string {
+
+    get file(): File {
         return this._file;
     }
 
-    set file(value: string) {
+    set file(value: File) {
         this._file = value;
     }
+
 
     get date(): Date {
         return this._date;

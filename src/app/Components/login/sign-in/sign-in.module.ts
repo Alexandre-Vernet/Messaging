@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { SignInRoutingModule } from './sign-in-routing.module';
 import { SignInComponent } from './sign-in.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { ForgotPasswordComponent } from '../forgot-password/forgot-password.component';
 
 @NgModule({
-    declarations: [SignInComponent],
+    declarations: [SignInComponent, ForgotPasswordComponent],
     imports: [
         CommonModule,
         SignInRoutingModule,
@@ -14,4 +14,5 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         ReactiveFormsModule,
     ]
 })
-export class SignInModule { }
+export class SignInModule {
+}

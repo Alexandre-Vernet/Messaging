@@ -29,7 +29,9 @@ export class EditorComponent implements OnChanges {
 
     sendMessage() {
         if (this.newMessage.length > 0) {
-            this.firestore.sendMessage(this.conversationId, this.newMessage);
+            this.firestore.sendMessage(this.conversationId, this.newMessage).then(() => {
+                this.formNewMessage.reset();
+            });
 
             // Clear input
             this.newMessage = '';
@@ -44,9 +46,9 @@ export class EditorComponent implements OnChanges {
 
     uploadFile() {
         document.getElementById('file_upload')?.click();
-    };
+    }
 
     sendFile(file: Event) {
         this.storage.sendFile(file);
-    };
+    }
 }

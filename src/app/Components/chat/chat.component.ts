@@ -29,7 +29,7 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
     constructor(
         private auth: AuthenticationService,
         private firestore: FirestoreService,
-        private cdref: ChangeDetectorRef,
+        private changeDetectorRef: ChangeDetectorRef,
         private route: ActivatedRoute
     ) {
         // Get id conversation
@@ -70,23 +70,32 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
         });
     }
 
-    getMessageId(date: Date) {
-        this.firestore.getMessageId(date).then((message: string) => {
-            this.messageId = message['id'];
-            this.formEditMessage.get('editedMessage').setValue(message['message']);
+    ngAfterContentChecked() {
+        this.changeDetectorRef.detectChanges();
+    }
+
+    focusTextArea() {
+        document.getElementById('inputSendMessage')?.focus();
+    }
+
+    getMessageId(messageId: string) {
+        this.firestore.getMessageId(messageId).then((message: Message) => {
+            // Save id
+            this.messageId = message.id;
+
+            // Set message in modal
+            this.formEditMessage.get('editedMessage').setValue(message.message);
         });
     }
 
     async editMessage() {
-        const editedMessage = this.formEditMessage.value.editedMessage,
-            date = new Date(),
-            messageId = this.messageId;
+        const editedMessage = this.formEditMessage.value.editedMessage;
 
-        await this.firestore.editMessage(editedMessage, date, messageId);
-
-        // Close modal
-        this.modalEditMessage.nativeElement.click();
-    };
+        this.firestore.editMessage(editedMessage, this.messageId).then(() => {
+            // Close modal
+            this.modalEditMessage.nativeElement.click();
+        });
+    }
 
     editLastMessage() {
         // Open modal
@@ -94,30 +103,19 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
 
         // Get last message
         this.firestore.getLastMessage().then((lastMessage) => {
-            const message = lastMessage['message'];
-            this.messageId = lastMessage['id'];
+            const message = lastMessage.message;
+            this.messageId = lastMessage.id;
 
             // Set message in input
             this.formEditMessage.get('editedMessage').setValue(message);
         });
     }
 
-    deleteMessage(date: Date) {
-        this.firestore.deleteMessage(date);
-    };
+    async deleteMessage(date: Date) {
+        await this.firestore.deleteMessage(date);
+    }
 
-    /**
-     *  Format date to locale zone
-     * @param date
-     */
     formatDate(date) {
-        const option = {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-        };
-        const time = date.toDate().toLocaleTimeString('fr-FR');
-
-        return time;
-    };
+        return date.toDate().toLocaleTimeString('fr-FR');
+    }
 }

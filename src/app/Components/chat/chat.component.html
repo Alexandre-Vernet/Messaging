@@ -33,7 +33,7 @@
                                         <app-head></app-head>
 
 
-                                        <div #scrollMe (click)="setCursor()" [scrollTop]="scrollMe.scrollHeight"
+                                        <div #scrollMe (click)="focusTextArea()" [scrollTop]="scrollMe.scrollHeight"
                                              class="nk-chat-panel"
                                              data-simplebar>
 
@@ -59,27 +59,60 @@
                                                                 <div class="chat-bubble">
 
                                                                     <!-- Message -->
-                                                                    <div *ngIf="message.message" class="chat-msg">
+                                                                    <div *ngIf="message.message"
+                                                                         class="chat-msg">
                                                                         {{message.message}}
                                                                     </div>
 
-                                                                    <!-- Image -->
-                                                                    <div *ngIf="message.file">
-                                                                        <a href="{{message.file}}" target="_blank">
-                                                                            <img alt="{{message.file}}"
-                                                                                 src="{{message.file}}">
-                                                                        </a>
-                                                                    </div>
+                                                                    <!-- File -->
+                                                                    <ng-container *ngIf="message.file">
 
-                                                                    <!-- Action -->
-                                                                    <ul class="chat-msg-more">
-                                                                        <!-- Reply -->
-                                                                        <li class="d-none d-sm-block"><a
-                                                                                class="btn btn-icon btn-sm btn-trigger"
-                                                                                href="#"><em
-                                                                                class="icon ni ni-reply-fill"></em></a>
-                                                                        </li>
-                                                                    </ul>
+                                                                        <!-- Image -->
+                                                                        <ng-container
+                                                                                *ngIf="message.file.type === 'image/png'">
+                                                                            <a href="{{message.file.url}}"
+                                                                               target="_blank">
+                                                                                <img alt="{{message.file.name}}"
+                                                                                     src="{{message.file.url}}">
+                                                                            </a>
+                                                                        </ng-container>
+
+                                                                        <!-- Video -->
+                                                                        <ng-container
+                                                                                *ngIf="message.file.type === 'video/mp4'">
+                                                                            <a href="{{message.file.url}}"
+                                                                               target="_blank">
+                                                                                <video controls>
+                                                                                    <source src="{{message.file.url}}"
+                                                                                            type="{{message.file.type}}">
+                                                                                    Your browser does not support the
+                                                                                    video tag.
+                                                                                </video>
+                                                                            </a>
+                                                                        </ng-container>
+
+                                                                        <!-- Audio -->
+                                                                        <ng-container
+                                                                                *ngIf="message.file.type === 'audio/mpeg'">
+                                                                            <audio controls>
+                                                                                <source src="{{message.file.url}}"
+                                                                                        type="{{message.file.type}}">
+                                                                                Your browser does not support the
+                                                                                audio tag.
+                                                                            </audio>
+                                                                        </ng-container>
+
+                                                                        <!-- Other type -->
+                                                                        <ng-container
+                                                                                *ngIf="message.file.type !== 'video/mp4' &&
+                                                                                message.file.type !== 'image/png' &&
+                                                                                message.file.type !== 'audio/mpeg'">
+                                                                            <a href="{{message.file.url}}"
+                                                                               target="_blank">
+                                                                                <h5>{{message.file.name}}</h5>
+                                                                            </a>
+                                                                        </ng-container>
+                                                                    </ng-container>
                                                                 </div>
                                                             </div>
                                                             <!-- User & Date -->
@@ -101,25 +134,62 @@
                                                                 <div class="chat-bubble">
 
                                                                     <!-- Message -->
-                                                                    <div *ngIf="message.message" class="chat-msg">
+                                                                    <div *ngIf="message.message"
+                                                                         class="chat-msg">
                                                                         {{message.message}}
                                                                     </div>
 
-                                                                    <!-- Image -->
-                                                                    <div *ngIf="message.file">
-                                                                        <a href="{{message.file}}" target="_blank">
-                                                                            <img alt="{{message.file}}"
-                                                                                 src="{{message.file}}">
-                                                                        </a>
-                                                                    </div>
+                                                                    <!-- File -->
+                                                                    <ng-container *ngIf="message.file">
+
+                                                                        <!-- Image -->
+                                                                        <ng-container
+                                                                                *ngIf="message?.file.type === 'image'">
+                                                                            <a href="{{message.file.url}}"
+                                                                               target="_blank">
+                                                                                <img alt="{{message.file.name}}"
+                                                                                     class="media"
+                                                                                     src="{{message.file.url}}">
+                                                                            </a>
+                                                                        </ng-container>
+
+                                                                        <!-- Video -->
+                                                                        <ng-container
+                                                                                *ngIf="message?.file.type === 'video'">
+                                                                            <a href="{{message.file.url}}"
+                                                                               target="_blank">
+                                                                                <video class="media" controls>
+                                                                                    <source src="{{message.file.url}}">
+                                                                                    Your browser does not support the
+                                                                                    video tag.
+                                                                                </video>
+                                                                            </a>
+                                                                        </ng-container>
+
+                                                                        <!-- Audio -->
+                                                                        <ng-container
+                                                                                *ngIf="message?.file.type === 'audio'">
+                                                                            <audio controls>
+                                                                                <source src="{{message.file.url}}">
+                                                                                Your browser does not support the
+                                                                                audio tag.
+                                                                            </audio>
+                                                                        </ng-container>
+
+                                                                        <!-- Other type -->
+                                                                        <ng-container
+                                                                                *ngIf="message.file.type !== 'video' &&
+                                                                                    message.file.type !== 'image' &&
+                                                                                    message.file.type !== 'audio'">
+                                                                            <a href="{{message.file.url}}"
+                                                                               target="_blank">
+                                                                                <h6>{{message.file.name}}</h6>
+                                                                            </a>
+                                                                        </ng-container>
+                                                                    </ng-container>
 
                                                                     <!-- Action -->
                                                                     <ul class="chat-msg-more">
-                                                                        <li class="d-none d-sm-block"><a
-                                                                                class="btn btn-icon btn-sm btn-trigger"
-                                                                                href="#"><em
-                                                                                class="icon ni ni-reply-fill"></em></a>
-                                                                        </li>
                                                                         <li>
                                                                             <div class="dropdown">
                                                                                 <a class="btn btn-icon btn-sm btn-trigger dropdown-toggle"
@@ -129,16 +199,9 @@
                                                                                 <div
                                                                                         class="dropdown-menu dropdown-menu-sm">
                                                                                     <ul class="link-list-opt no-bdr">
-
-                                                                                        <!-- Reply -->
-                                                                                        <li class="d-sm-none"><a
-                                                                                                href="#"><em
-                                                                                                class="icon ni ni-reply-fill"></em>
-                                                                                            Reply</a></li>
-
                                                                                         <!-- Edit -->
-                                                                                        <li>
-                                                                                            <a (click)="getMessageId(message.date);"
+                                                                                        <li *ngIf="message.message">
+                                                                                            <a (click)="getMessageId(message.id);"
                                                                                                class="icon"
                                                                                                data-target="#editMessage"
                                                                                                data-toggle="modal"
@@ -211,7 +274,9 @@
                         <label class="form-label" for="editedMessage">Your edited message</label>
                         <div class="form-control-wrap">
                             <input [ngClass]="{'is-invalid': formEditMessage.get('editedMessage')?.touched && formEditMessage.get('editedMessage')?.invalid}"
-                                   class="form-control" formControlName="editedMessage" id="editedMessage"
+                                   autocomplete="off" class="form-control" formControlName="editedMessage"
+                                   id="editedMessage"
+                                   placeholder="Your edited message"
                                    required
                                    type="text">
                             <div

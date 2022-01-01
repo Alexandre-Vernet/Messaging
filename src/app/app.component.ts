@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
     ) {
     }
 
-    ngOnInit() {
+    async ngOnInit() {
         // Get local storage
         const email = localStorage.getItem('email');
         const password = localStorage.getItem('password');
@@ -30,11 +30,13 @@ export class AppComponent implements OnInit {
         // Check connection
         if (email && password) {
             const hashPassword = this.cryptoService.decrypt(password);
-
             this.auth.signIn(email, hashPassword);
         } else {
-            if (url == '/sign-up') this.router.navigate(['/sign-up']);
-            else this.router.navigate(['sign-in']);
+            if (url == '/sign-up') {
+                await this.router.navigate(['/sign-up']);
+            } else {
+                await this.router.navigate(['sign-in']);
+            }
         }
     }
 }
