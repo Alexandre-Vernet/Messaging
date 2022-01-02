@@ -112,10 +112,34 @@ export class FirestoreService {
         return this.messages;
     }
 
-    async sendMessage(conversationId: string, newMessage) {
+    async sendMessage(conversationId: string, newMessage: string, isAFile?) {
         const messageRef = doc(this.db, 'conversations', conversationId);
+        const messageId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
-        await setDoc(messageRef, newMessage, { merge: true });
+        if (!isAFile) {
+            const message = {
+                [this.user.email]:
+                    {
+                        userInfo: {
+                            id: this.user.id,
+                            firstName: this.user.firstName,
+                            lastName: this.user.lastName,
+                            profilePicture: this.user.profilePicture ? this.user.profilePicture : 'photo',
+                            dateCreation: this.user.dateCreation
+                        },
+                        messages: {
+                            [messageId]: {
+                                message: newMessage,
+                                date: new Date(),
+                            }
+                        }
+                    }
+            };
+            await setDoc(messageRef, message, { merge: true });
+        }
+        if (isAFile) {
+            await setDoc(messageRef, isAFile, { merge: true });
+        }
     }
 
     async getMessageId(messageId: string) {
