@@ -102,8 +102,9 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
         });
     }
 
-    async deleteMessage(date: Date) {
-        await this.firestore.deleteMessage(date);
+    async deleteMessage(messageId: string) {
+        // await this.firestore.deleteMessage(this.conversationId, messageId);
+        await this.firestore.deleteMessage('ZsPWwcDMASeNVjYMk4kc', 'o67qg9mqjtv6sp3b9jx1n');
     }
 
     formatDate(date) {

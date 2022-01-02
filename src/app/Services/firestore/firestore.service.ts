@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
     collection,
-    deleteDoc,
     doc, getDoc,
     getDocs,
     getFirestore,
@@ -39,7 +38,7 @@ export class FirestoreService {
             // Get email user
             const email = Object.keys(doc.data())[0];
 
-            // Extract userInf
+            // Extract userInfo
             const userInfo = doc.data()[email].userInfo;
             const { id, firstName, lastName } = userInfo;
 
@@ -113,10 +112,10 @@ export class FirestoreService {
         return this.messages;
     }
 
-    async sendMessage(conversationId: string, elt) {
+    async sendMessage(conversationId: string, newMessage) {
         const messageRef = doc(this.db, 'conversations', conversationId);
 
-        await setDoc(messageRef, elt, { merge: true });
+        await setDoc(messageRef, newMessage, { merge: true });
     }
 
     async getMessageId(messageId: string) {
@@ -170,17 +169,16 @@ export class FirestoreService {
             });
     }
 
-    async deleteMessage(date: Date) {
-        const q = query(
-            collection(this.db, 'messages'),
-            where('date', '==', date)
-        );
+    async deleteMessage(conversationId: string, messageId: string) {
 
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach(async (docRef) => {
-            // doc.data() is never undefined for query doc snapshots
-            await deleteDoc(doc(this.db, 'messages', docRef.id));
-        });
+        // Remove messageId from this.messages
+        const found = this.messages.find((m) => m.id === messageId);
+        console.log(found);
+        console.log(this.messages);
+
+        // // Update firestore
+        // const messageRef = doc(this.db, 'conversations', conversationId);
+        // await updateDoc(messageRef, this.messages);
     }
 
     async getUsers() {
@@ -189,11 +187,7 @@ export class FirestoreService {
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((docRef) => {
             const id = docRef.id;
-            const email = docRef.get('email');
-            const firstName = docRef.get('firstName');
-            const lastName = docRef.get('lastName');
-            const profilePicture = docRef.get('profilePicture');
-            const dateCreation = docRef.get('dateCreation');
+            const { email, firstName, lastName, profilePicture, dateCreation } = docRef.data();
 
             const newUser = new User(
                 id,
