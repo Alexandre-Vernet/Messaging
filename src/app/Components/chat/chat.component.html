@@ -30,7 +30,7 @@
                                     <!-- Conversation -->
                                     <div class="nk-chat-body profile-shown">
                                         <!-- Header -->
-                                        <app-head></app-head>
+                                        <app-head [conversationId]="conversationId"></app-head>
 
 
                                         <div #scrollMe (click)="focusTextArea()" [scrollTop]="scrollMe.scrollHeight"
