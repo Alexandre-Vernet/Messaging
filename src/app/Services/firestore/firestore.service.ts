@@ -124,7 +124,7 @@ export class FirestoreService {
                             id: this.user.id,
                             firstName: this.user.firstName,
                             lastName: this.user.lastName,
-                            profilePicture: this.user.profilePicture ? this.user.profilePicture : 'photo',
+                            profilePicture: this.user.profilePicture ? this.user.profilePicture : null,
                             dateCreation: this.user.dateCreation
                         },
                         messages: {

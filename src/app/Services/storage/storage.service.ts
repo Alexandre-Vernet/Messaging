@@ -53,7 +53,7 @@ export class StorageService {
                                     id: this.user.id,
                                     firstName: this.user.firstName,
                                     lastName: this.user.lastName,
-                                    profilePicture: this.user.profilePicture ? this.user.profilePicture : 'photo',
+                                    profilePicture: this.user.profilePicture ? this.user.profilePicture : null,
                                     dateCreation: this.user.dateCreation
                                 },
                                 messages: {
@@ -69,9 +69,8 @@ export class StorageService {
                             }
                     };
 
-
                     // Upload file to firestore
-                    this.firestore.sendMessage(conversationId, 'message', message);
+                    await this.firestore.sendMessage(conversationId, 'message', message);
                 });
         });
     };
