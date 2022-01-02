@@ -70,6 +70,6 @@ export class EditorComponent implements OnChanges {
     }
 
     sendFile(file: Event) {
-        this.storage.sendFile(file);
+        this.storage.sendFile(this.conversationId, file);
     }
 }

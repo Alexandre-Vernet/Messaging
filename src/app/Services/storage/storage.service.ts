@@ -5,6 +5,7 @@ import { AuthenticationService } from '../authentication/authentication.service'
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { addDoc, collection, doc, getFirestore, updateDoc } from 'firebase/firestore';
 import { Toast } from '../../class/toast';
+import { FirestoreService } from '../firestore/firestore.service';
 
 @Injectable({
     providedIn: 'root',
@@ -17,13 +18,14 @@ export class StorageService {
     db = getFirestore();
     storage = getStorage();
 
-    constructor(private auth: AuthenticationService) {
+    constructor(private auth: AuthenticationService,
+                private firestore: FirestoreService) {
         setTimeout(() => {
             this.user = this.auth.user;
         }, 1500);
     }
 
-    sendFile(event) {
+    sendFile(conversationId: string, event) {
         // Get file
         const file = event.target.files[0];
 
@@ -41,18 +43,46 @@ export class StorageService {
         uploadBytes(storageRef, file).then(() => {
             getDownloadURL(ref(this.storage, fileSource))
                 .then(async (url) => {
+                    const messageId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+                    const message = {
+                        [this.user.email]:
+                            {
+                                userInfo: {
+                                    id: this.user.id,
+                                    firstName: this.user.firstName,
+                                    lastName: this.user.lastName,
+                                    profilePicture: this.user.profilePicture ? this.user.profilePicture : 'photo',
+                                    dateCreation: this.user.dateCreation
+                                },
+                                messages: {
+                                    [messageId]: {
+                                        file: {
+                                            name: newFile.name,
+                                            url: url,
+                                            type: newFile.type,
+                                        },
+                                        date: new Date(),
+                                    }
+                                }
+                            }
+                    };
+
+
                     // Upload file to firestore
-                    await addDoc(collection(this.db, 'messages'), {
-                        email: this.auth.user.email,
-                        firstName: this.auth.user.firstName,
-                        lastName: this.auth.user.lastName,
-                        file: {
-                            name: newFile.name,
-                            url: url,
-                            type: newFile.type,
-                        },
-                        date: new Date(),
-                    });
+                    this.firestore.sendMessage(conversationId, message);
+
+                    // await addDoc(collection(this.db, 'messages'), {
+                    //     email: this.auth.user.email,
+                    //     firstName: this.auth.user.firstName,
+                    //     lastName: this.auth.user.lastName,
+                    //     file: {
+                    //         name: newFile.name,
+                    //         url: url,
+                    //         type: newFile.type,
+                    //     },
+                    //     date: new Date(),
+                    // });
                 });
         });
     };
