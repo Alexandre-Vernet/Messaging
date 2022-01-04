@@ -15,7 +15,6 @@ import { Message } from 'src/app/class/message';
 import { User } from 'src/app/class/user';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { Toast } from '../../class/toast';
-import { debuglog } from 'util';
 
 @Injectable({
     providedIn: 'root',
@@ -34,129 +33,61 @@ export class FirestoreService {
     }
 
     async getMessages(conversationId: string = 'ZsPWwcDMASeNVjYMk4kc'): Promise<Message[]> {
-        const q = query(collection(this.db, 'conversations'));
         // Listen for new messages
-        onSnapshot(q, (querySnapshot) => {
 
-            querySnapshot.docChanges().forEach((change) => {
-                // Listen only for the current conversation
-                if (change.doc.id === conversationId) {
+        onSnapshot(doc(this.db, 'conversations', conversationId), (doc) => {
+            // Listen only for the current conversation
+            if (doc.id === conversationId) {
 
-                    // Message added
-                    if (change.type === 'added') {
-                        const dataObject = change.doc.data();
-                        // console.log(dataObject);
+                // Message added
+                // if (type === 'added') {
+                const dataObject = doc.data();
+                console.log(dataObject);
+                const dataArray = Object.keys(dataObject).map((k) => {
+                    return dataObject[k];
+                });
 
-                        // // Get email user
-                        // const email = Object.keys(dataObject)[i];
-                        // console.log(email);
-                        //
-                        // // Extract userInfo
-                        // const userInfo = change.doc.data()[email].userInfo;
-                        // const { firstName, lastName } = userInfo;
-                        //
-                        // // Extract messages
-                        // const messages = change.doc.data()[email].messages;
-                        // const id = Object.keys(messages)[i];
-                        //
-                        // // Create array of messages
-                        // const messagesArray = Object.values(messages);
-                        // messagesArray.forEach((message: Message) => {
-                        //     const newMessage = new Message(id, email, firstName, lastName, message.message, message.file, message.date);
-                        //     this.messages.push(newMessage);
-                        // });
-                        // console.log(this.messages);
+                dataArray.forEach((data: any, i) => {
+                    const { userInfo, messages } = data;
+                    const { firstName, lastName, email } = userInfo;
+                    const id = Object.keys(messages);
+                    const messagesArray = Object.values(messages);
+                    messagesArray.forEach((message: Message, index) => {
+                        const newMessage = new Message(id[index], email, firstName, lastName, message.message, message.file, message.date);
+                        this.messages.push(newMessage);
+                    });
+                });
 
-
-                        const dataArray = Object.keys(dataObject).map((k) => {
-                            return dataObject[k];
-                        });
-
-                        dataArray.forEach((data: any, i) => {
-                            const { userInfo, messages } = data;
-                            const { firstName, lastName, email } = userInfo;
-                            const id = Object.keys(messages);
-                            const messagesArray = Object.values(messages);
-                            messagesArray.forEach((message: Message, index) => {
-                                const newMessage = new Message(id[index], email, firstName, lastName, message.message, message.file, message.date);
-                                this.messages.push(newMessage);
-                            });
-                        });
-
-                        console.log(this.messages);
-                    }
-
-                    // // Get emails
-                    // const emails = [];
-                    // for (const documentDataKey in change.doc.data()) {
-                    //     emails.push(documentDataKey);
-                    // }
-                    //
-                    // emails.forEach((email) => {
-                    //     console.log(Object.values(change.doc.data()[email]));
-                    // });
-
-
-                    // // Extract userInfo
-                    // const userInfo = change.doc.data()[email].userInfo;
-                    // const { id, firstName, lastName } = userInfo;
-                    //
-                    // // Extract messages
-                    // const messages = change.doc.data()[email].messages;
-                    //
-                    // // Create array of messages
-                    // const messagesArray = Object.values(messages);
-                    // messagesArray.forEach((message: Message) => {
-                    //     const newMessage = new Message(id, email, firstName, lastName, message.message, message.file, message.date);
-                    //     this.messages.push(newMessage);
-                    // });
-
-                    // console.log(this.messages);
-                    // Get email user
-                    // const email = Object.keys(change.doc.data())[index];
-                    // console.log(email);
-
-                    // // Extract userInfo
-                    // const userInfo = change.doc.data()[email].userInfo;
-                    // const { id, firstName, lastName } = userInfo;
-                    //
-                    // // Extract messages
-                    // const messages = change.doc.data()[email].messages;
-                    //
-                    // // Create array of messages
-                    // const messagesArray = Object.values(messages);
-                    // messagesArray.forEach((message: Message) => {
-                    //     const newMessage = new Message(id, email, firstName, lastName, message.message, message.file, message.date);
-                    //     this.messages.push(newMessage);
-                    // });
-
-
-                    // // Message added
-                    // if (change.type === 'added') {
-                    //     const id = change.doc.id;
-                    //     const { email, firstName, lastName, message, file, date } = change.doc.data();
-                    //     const newMessage = new Message(id, email, firstName, lastName, message, file, date);
-                    //     this.messages.push(newMessage);
-                    // }
-                    //
-                    // // Message modified
-                    // if (change.type === 'modified') {
-                    //     const id = change.doc.id;
-                    //     const { email, firstName, lastName, message, file, date } = change.doc.data();
-                    //     const newMessage = new Message(id, email, firstName, lastName, message, file, date);
-                    //     const index = this.messages.findIndex((m) => m.id === id);
-                    //     this.messages[index] = newMessage;
-                    // }
-                    //
-                    // // Message deleted
-                    // if (change.type === 'removed') {
-                    //     const id = change.doc.id;
-                    //     const index = this.messages.findIndex((m) => m.id === id);
-                    //     this.messages.splice(index, 1);
-                    // }
-                }
-            });
+                console.log(this.messages);
+            }
         });
+
+
+        // // Message added
+        // if (change.type === 'added') {
+        //     const id = change.doc.id;
+        //     const { email, firstName, lastName, message, file, date } = change.doc.data();
+        //     const newMessage = new Message(id, email, firstName, lastName, message, file, date);
+        //     this.messages.push(newMessage);
+        // }
+        //
+        // // Message modified
+        // if (change.type === 'modified') {
+        //     const id = change.doc.id;
+        //     const { email, firstName, lastName, message, file, date } = change.doc.data();
+        //     const newMessage = new Message(id, email, firstName, lastName, message, file, date);
+        //     const index = this.messages.findIndex((m) => m.id === id);
+        //     this.messages[index] = newMessage;
+        // }
+        //
+        // // Message deleted
+        // if (change.type === 'removed') {
+        //     const id = change.doc.id;
+        //     const index = this.messages.findIndex((m) => m.id === id);
+        //     this.messages.splice(index, 1);
+        // }
+        // }
+        // });
 
         // const q = query(collection(this.db, 'conversations'), orderBy('date', 'asc'));
         // onSnapshot(q, (querySnapshot) => {

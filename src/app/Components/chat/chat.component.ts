@@ -38,7 +38,7 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
         });
     }
 
-    ngOnInit() {
+    async ngOnInit() {
         this.firestore.getMessages('ZsPWwcDMASeNVjYMk4kc').then((messages: Message[]) => {
             this.messages = messages;
         });
