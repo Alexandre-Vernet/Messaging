@@ -33,9 +33,9 @@ export class HeadComponent implements OnChanges {
     }
 
     getContactName() {
-        this.firestore.getMessages(this.conversationId).then((messages) => {
-            // console.log(messages);
-        });
+        // this.firestore.getMessages(this.conversationId).then((messages) => {
+        //     // console.log(messages);
+        // });
     }
 
     rightPanel() {
