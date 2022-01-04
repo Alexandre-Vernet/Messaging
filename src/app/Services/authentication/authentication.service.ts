@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
 import { User } from 'src/app/class/user';
 import {
     getAuth,
@@ -39,7 +38,6 @@ export class AuthenticationService {
 
     constructor(
         private router: Router,
-        private cookieService: CookieService,
         private cryptoService: CryptoService,
     ) {
     }
