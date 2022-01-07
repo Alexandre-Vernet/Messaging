@@ -43,14 +43,12 @@ export class FirestoreService {
                 // Listen only for the current conversation
                 if (change.doc.id === conversationId) {
 
-
-                    // Message added
+                    // Message added or modified
                     if (change.type === 'added' || change.type === 'modified') {
                         const dataObject = change.doc.data();
                         const dataArray = Object.keys(dataObject).map((k) => {
                             return dataObject[k];
                         });
-                        console.log('dataArray', dataArray);
 
                         // Loop on all users in conversation
                         dataArray.forEach((data) => {
@@ -70,7 +68,6 @@ export class FirestoreService {
                                     date,
                                 });
                             }
-                            console.log(messagesArray);
 
                             messagesArray.forEach((message) => {
                                 const messageObject = new Message(message.messageId, email, firstName, lastName, message.message, message.file, message.date);
@@ -85,6 +82,10 @@ export class FirestoreService {
                         this.messages.splice(index, 1);
                     }
                 }
+            });
+            // Sort messages by date
+            this.messages.sort((a: any, b: any) => {
+                return a.date - b.date;
             });
         });
 
