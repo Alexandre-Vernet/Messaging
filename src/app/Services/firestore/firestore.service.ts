@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import {
     collection,
-    doc, getDoc,
+    doc,
+    getDoc,
     getDocs,
     getFirestore,
     limit,
     onSnapshot,
     orderBy,
-    query, setDoc,
+    query,
+    setDoc,
     updateDoc,
     where,
 } from 'firebase/firestore';
@@ -15,7 +17,6 @@ import { Message } from 'src/app/class/message';
 import { User } from 'src/app/class/user';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { Toast } from '../../class/toast';
-import { debuglog } from 'util';
 
 @Injectable({
     providedIn: 'root',
@@ -42,110 +43,51 @@ export class FirestoreService {
                 // Listen only for the current conversation
                 if (change.doc.id === conversationId) {
 
+
                     // Message added
-                    if (change.type === 'added') {
+                    if (change.type === 'added' || change.type === 'modified') {
                         const dataObject = change.doc.data();
                         const dataArray = Object.keys(dataObject).map((k) => {
                             return dataObject[k];
                         });
+                        console.log('dataArray', dataArray);
 
-                        dataArray.forEach((data: any, i) => {
+                        // Loop on all users in conversation
+                        dataArray.forEach((data) => {
                             const { userInfo, messages } = data;
-                            const { firstName, lastName, email } = userInfo;
-                            const id = Object.keys(messages);
-                            const messagesArray = Object.values(messages);
-                            messagesArray.forEach((message: Message, index) => {
-                                const newMessage = new Message(id[index], email, firstName, lastName, message.message, message.file, message.date);
-                                this.messages.push(newMessage);
+
+                            // User infos
+                            const { userId, firstName, lastName, email, profilePicture, dateCreation } = userInfo;
+
+                            // Push all messages in messagesArray
+                            const messagesArray = [];
+                            for (const messagesKey in messages) {
+                                const { messageId, message, file, date } = messages[messagesKey];
+                                messagesArray.push({
+                                    messageId,
+                                    message,
+                                    file,
+                                    date,
+                                });
+                            }
+                            console.log(messagesArray);
+
+                            messagesArray.forEach((message) => {
+                                const messageObject = new Message(message.messageId, email, firstName, lastName, message.message, message.file, message.date);
+                                this.messages.findIndex(x => x.id === message.messageId) === -1 ? this.messages.push(messageObject) : console.log('This item already exists');
                             });
                         });
-
-                        console.log(this.messages);
                     }
-
-                    // // Message added
-                    // if (change.type === 'added') {
-                    //     const id = change.doc.id;
-                    //     const { email, firstName, lastName, message, file, date } = change.doc.data();
-                    //     const newMessage = new Message(id, email, firstName, lastName, message, file, date);
-                    //     this.messages.push(newMessage);
-                    // }
-                    //
-                    // // Message modified
-                    // if (change.type === 'modified') {
-                    //     const id = change.doc.id;
-                    //     const { email, firstName, lastName, message, file, date } = change.doc.data();
-                    //     const newMessage = new Message(id, email, firstName, lastName, message, file, date);
-                    //     const index = this.messages.findIndex((m) => m.id === id);
-                    //     this.messages[index] = newMessage;
-                    // }
-                    //
-                    // // Message deleted
-                    // if (change.type === 'removed') {
-                    //     const id = change.doc.id;
-                    //     const index = this.messages.findIndex((m) => m.id === id);
-                    //     this.messages.splice(index, 1);
-                    // }
+                    // Message deleted
+                    if (change.type === 'removed') {
+                        const id = change.doc.id;
+                        const index = this.messages.findIndex((m) => m.id === id);
+                        this.messages.splice(index, 1);
+                    }
                 }
             });
         });
 
-        // const q = query(collection(this.db, 'conversations'), orderBy('date', 'asc'));
-        // onSnapshot(q, (querySnapshot) => {
-        //     querySnapshot.docChanges().forEach((change) => {
-        //
-        //         // Message added
-        //         if (change.type === 'added') {
-        //             const id = change.doc.id;
-        //             const { email, firstName, lastName, message, file, date } = change.doc.data();
-        //             const newMessage = new Message(id, email, firstName, lastName, message, file, date);
-        //             this.messages.push(newMessage);
-        //         }
-        //
-        //         // Message modified
-        //         if (change.type === 'modified') {
-        //             const id = change.doc.id;
-        //             const { email, firstName, lastName, message, file, date } = change.doc.data();
-        //             const newMessage = new Message(id, email, firstName, lastName, message, file, date);
-        //             const index = this.messages.findIndex((m) => m.id === id);
-        //             this.messages[index] = newMessage;
-        //         }
-        //
-        //         // Message deleted
-        //         if (change.type === 'removed') {
-        //             const id = change.doc.id;
-        //             const index = this.messages.findIndex((m) => m.id === id);
-        //             this.messages.splice(index, 1);
-        //         }
-        //     });
-        // });
-
-        // const docRef = doc(this.db, 'conversations', conversationId);
-        //
-        // onSnapshot(docRef, (doc) => {
-        //
-        //     console.log(doc.data());
-        //     querySnapshot.forEach((doc) => {
-        //         const id = doc.id;
-        //         const email = doc.get('email');
-        //         const firstName = doc.get('firstName');
-        //         const lastName = doc.get('lastName');
-        //         const message = doc.get('message');
-        //         const file = doc.get('file');
-        //         const date = doc.get('date');
-        //
-        //         const newMessage = new Message(
-        //             id,
-        //             email,
-        //             firstName,
-        //             lastName,
-        //             message,
-        //             file,
-        //             date
-        //         );
-        //         this.messages.push(newMessage);
-        //     });
-        // });
         return this.messages;
     }
 
@@ -158,7 +100,7 @@ export class FirestoreService {
                 [this.user.email]:
                     {
                         userInfo: {
-                            id: this.user.id,
+                            userId: this.user.id,
                             email: this.user.email,
                             firstName: this.user.firstName,
                             lastName: this.user.lastName,
@@ -169,6 +111,7 @@ export class FirestoreService {
                             [messageId]: {
                                 message: newMessage,
                                 date: new Date(),
+                                messageId: messageId
                             }
                         }
                     }

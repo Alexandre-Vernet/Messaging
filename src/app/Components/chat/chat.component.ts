@@ -108,6 +108,7 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
     }
 
     formatDate(date) {
-        return date.toDate().toLocaleTimeString('fr-FR');
+        return date;
+        // return date.toDate().toLocaleTimeString('fr-FR');
     }
 }
