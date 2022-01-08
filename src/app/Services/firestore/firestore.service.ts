@@ -210,19 +210,29 @@ export class FirestoreService {
     }
 
     async getContactName(conversationId: string) {
+        let contactName: string;
+
+        // Get conversation
         const docRef = doc(this.db, 'conversations', conversationId);
         const docSnap = await getDoc(docRef);
 
-        let contactName: string;
-
         if (docSnap.exists()) {
             const dataObject = docSnap.data();
-            for (const dataObjectKey in dataObject) {
-                dataObjectKey !== this.user.email ? contactName = dataObjectKey : null;
-            }
+            // Store conversation data
+            const dataArray = Object.keys(dataObject).map((k) => {
+                return dataObject[k];
+            });
+
+            // Loop on all users in conversation
+            dataArray.forEach((data) => {
+                const { userInfo } = data;
+                // Get email of person in conversation
+                if (userInfo.email !== this.user.email) {
+                    contactName = userInfo.firstName + ' ' + userInfo.lastName;
+                }
+            });
         } else {
-            // doc.data() will be undefined in this case
-            console.log('No such document!');
+            Toast.error('Error getting contact name');
         }
 
         return contactName;
