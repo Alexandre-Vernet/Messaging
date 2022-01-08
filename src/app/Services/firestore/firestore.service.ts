@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
     collection,
+    deleteField,
     doc,
     getDoc,
     getDocs,
@@ -176,15 +177,19 @@ export class FirestoreService {
     }
 
     async deleteMessage(conversationId: string, messageId: string) {
+        // Remove message from messages
+        const index = this.messages.findIndex((m) => m.id === messageId);
+        this.messages.splice(index, 1);
 
-        // Remove messageId from this.messages
-        const found = this.messages.find((m) => m.id === messageId);
-        console.log(found);
-        console.log(this.messages);
-
-        // // Update firestore
-        // const messageRef = doc(this.db, 'conversations', conversationId);
-        // await updateDoc(messageRef, this.messages);
+        // Update firestore
+        // const docSnap = await getDoc(messageRef);
+        //
+        // if (docSnap.exists()) {
+        //     console.log("Document data:", docSnap.data());
+        // } else {
+        //     // doc.data() will be undefined in this case
+        //     console.log("No such document!");
+        // }
     }
 
     async getUsers() {
