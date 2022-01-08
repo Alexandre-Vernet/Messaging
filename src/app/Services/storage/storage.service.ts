@@ -47,7 +47,7 @@ export class StorageService {
                     const messageId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
                     const message = {
-                        [this.user.email]:
+                        [this.user.id]:
                             {
                                 userInfo: {
                                     id: this.user.id,

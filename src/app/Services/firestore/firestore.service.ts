@@ -99,7 +99,7 @@ export class FirestoreService {
 
         if (!isAFile) {
             const message = {
-                [this.user.email]:
+                [this.user.id]:
                     {
                         userInfo: {
                             userId: this.user.id,
@@ -174,11 +174,15 @@ export class FirestoreService {
     }
 
     // Edit message
-    async editMessage(newMessage: string, messageId: string) {
-        const messageRef = doc(this.db, 'messages', messageId);
+    async editMessage(conversationId: string, messageId: string, newMessage: string) {
+        const messageRef = doc(this.db, 'conversations', conversationId);
 
         await updateDoc(messageRef, {
-            message: newMessage,
+            [`${ this.user.id }.messages.${ messageId }`]: {
+                messageId: messageId,
+                message: newMessage,
+                date: new Date(),
+            }
         })
             .catch((error) => {
                 console.error(error);
