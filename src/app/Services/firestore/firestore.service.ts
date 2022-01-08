@@ -125,18 +125,28 @@ export class FirestoreService {
         }
     }
 
-    async getMessageId(messageId: string) {
-        const messageRef = doc(this.db, 'messages', messageId);
+    async getMessageId(conversationId: string, messageId: string) {
+        const messageRef = doc(this.db, 'conversations', conversationId);
 
         const docSnap = await getDoc(messageRef);
-        let a: Message;
+
+        let messageToEdit: Message;
 
         if (docSnap.exists()) {
-            const id = docSnap.id;
-            const { email, firstName, lastName, message, file, date } = docSnap.data();
-            a = new Message(id, email, firstName, lastName, message, file, date);
+            const dataObject = docSnap.data();
+            const dataArray = Object.keys(dataObject).map((k) => {
+                return dataObject[k];
+            });
+
+            // If object messageId in dataArray contain messageId
+            if (dataArray.some(x => x.messages.hasOwnProperty(messageId))) {
+                const message = dataArray.find(x => x.messages.hasOwnProperty(messageId));
+                messageToEdit = new Message(message.messages[messageId].messageId, message.userInfo.email, message.userInfo.firstName, message.userInfo.lastName, message.messages[messageId].message, message.messages[messageId].file, message.messages[messageId].date);
+            }
+        } else {
+            Toast.error('This conversation does not exist');
         }
-        return a;
+        return messageToEdit;
     }
 
     // Get last message send by user
@@ -181,15 +191,13 @@ export class FirestoreService {
         const index = this.messages.findIndex((m) => m.id === messageId);
         this.messages.splice(index, 1);
 
-        // Update firestore
-        // const docSnap = await getDoc(messageRef);
-        //
-        // if (docSnap.exists()) {
-        //     console.log("Document data:", docSnap.data());
-        // } else {
-        //     // doc.data() will be undefined in this case
-        //     console.log("No such document!");
-        // }
+        // const conversationRef = doc(this.db, 'conversations', conversationId);
+        // // Update firestore
+        // await setDoc(conversationRef, {
+        //     [this.user.email]: {
+        //         messages: this.messages
+        //     }
+        // });
     }
 
     async getUsers() {

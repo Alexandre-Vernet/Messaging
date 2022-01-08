@@ -70,7 +70,7 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
     }
 
     getMessageId(messageId: string) {
-        this.firestore.getMessageId(messageId).then((message: Message) => {
+        this.firestore.getMessageId(this.conversationId, messageId).then((message: Message) => {
             // Save id
             this.messageId = message.id;
 
