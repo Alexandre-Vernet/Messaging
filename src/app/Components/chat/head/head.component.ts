@@ -26,15 +26,15 @@ export class HeadComponent implements OnChanges {
         this.conversationId = changes.conversationId.currentValue;
 
         setTimeout(() => {
-            this.auth.getAuth().then((user: User) => {
+            this.auth.getAuth().then(async (user: User) => {
                 this.user = user;
-                this.getContactName();
+                await this.getContactName();
             });
         }, 2000);
     }
 
-    getContactName() {
-        this.firestore.getContactName(this.conversationId).then((contactName) => {
+    async getContactName() {
+        await this.firestore.getContactName(this.conversationId).then((contactName) => {
             this.contactName = contactName;
         });
     }

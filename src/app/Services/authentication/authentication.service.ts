@@ -46,6 +46,37 @@ export class AuthenticationService {
         return this.user;
     }
 
+    async getById(userId: string) {
+        const docRef = doc(this.db, 'users', userId);
+        const docSnap = await getDoc(docRef);
+        let user: User;
+
+        if (docSnap.exists()) {
+            const id = docSnap.id;
+            const {
+                firstName,
+                lastName,
+                email,
+                profilePicture,
+                dateCreation,
+            } = docSnap.data();
+
+            user = new User(
+                id,
+                firstName,
+                lastName,
+                email,
+                profilePicture,
+                dateCreation,
+            );
+        } else {
+            // doc.data() will be undefined in this case
+            console.log('No such document!');
+        }
+
+        return user;
+    }
+
     signIn(email: string, password: string) {
         signInWithEmailAndPassword(this.auth, email, password)
             .then(async (userCredential) => {

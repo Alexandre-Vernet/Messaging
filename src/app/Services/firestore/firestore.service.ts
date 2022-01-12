@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
     collection,
-    deleteField,
     doc,
     getDoc,
     getDocs,
@@ -40,41 +39,68 @@ export class FirestoreService {
         // Listen for new messages
         onSnapshot(q, (querySnapshot) => {
 
-            querySnapshot.docChanges().forEach((change) => {
+            querySnapshot.docChanges().forEach(async (change) => {
                 // Listen only for the current conversation
                 if (change.doc.id === conversationId) {
 
                     // Message added or modified
                     if (change.type === 'added' || change.type === 'modified') {
                         const dataObject = change.doc.data();
-                        const dataArray = Object.keys(dataObject).map((k) => {
-                            return dataObject[k];
-                        });
+                        // console.log('dataObject', dataObject);
+
+                        for (let userId in dataObject) {
+                            // Get user infos
+                            await this.auth.getById(userId).then((user) => {
+
+                                // Get id message
+                                const idMessage = Object.keys(dataObject[userId]);
+                                idMessage.forEach((msg) => {
+                                    // Users info
+                                    const { message, file, date } = dataObject[userId][msg];
+
+                                    const messageObject = new Message(msg, user.email, user.firstName, user.lastName, message, file, date);
+                                    this.messages.push(messageObject);
+                                });
+
+
+                                // console.log(messageObject);
+                                // this.messages.push(messageObject);
+                            });
+                        }
+                        // dataArray.forEach((msg, i) => {
+                        //     console.log(i);
+                        //     const id = Object.keys(msg);
+                        //     console.log(msg[id[i]]);
+                        // const { message, file, date } = msg;
+
+                        // const a = new Message(id, 'email', 'FN', 'LN', message, file, date);
+                        // console.log(a);
+                        // });
+
+                        // Push all messages in messagesArray
+                        // const messagesArray = [];
+                        // for (const messagesKey in messages) {
+                        //     const { messageId, message, file, date } = messages[messagesKey];
+                        //     messagesArray.push({
+                        //         messageId,
+                        //         message,
+                        //         file,
+                        //         date,
+                        //     });
+                        // }
+
 
                         // Loop on all users in conversation
-                        dataArray.forEach((data) => {
-                            const { userInfo, messages } = data;
+                        // dataArray.forEach((data, i) => {
+                        // const { messageId, message, file, date } = messages[messagesKey];
 
-                            // User infos
-                            const { userId, firstName, lastName, email, profilePicture, dateCreation } = userInfo;
 
-                            // Push all messages in messagesArray
-                            const messagesArray = [];
-                            for (const messagesKey in messages) {
-                                const { messageId, message, file, date } = messages[messagesKey];
-                                messagesArray.push({
-                                    messageId,
-                                    message,
-                                    file,
-                                    date,
-                                });
-                            }
-
-                            messagesArray.forEach((message) => {
-                                const messageObject = new Message(message.messageId, email, firstName, lastName, message.message, message.file, message.date);
-                                this.messages.findIndex(x => x.id === message.messageId) === -1 ? this.messages.push(messageObject) : console.log('This item already exists');
-                            });
-                        });
+                        // Create message object if not already exists
+                        // messagesArray.forEach((message) => {
+                        //     const messageObject = new Message(message.messageId, email, firstName, lastName, message.message, message.file, message.date);
+                        //     this.messages.findIndex(x => x.id === message.messageId) === -1 ? this.messages.push(messageObject) : console.log('This item already exists');
+                        // });
+                        // });
                     }
                     // Message deleted
                     if (change.type === 'removed') {
@@ -99,24 +125,12 @@ export class FirestoreService {
 
         if (!isAFile) {
             const message = {
-                [this.user.id]:
-                    {
-                        userInfo: {
-                            userId: this.user.id,
-                            email: this.user.email,
-                            firstName: this.user.firstName,
-                            lastName: this.user.lastName,
-                            profilePicture: this.user.profilePicture ? this.user.profilePicture : null,
-                            dateCreation: this.user.dateCreation
-                        },
-                        messages: {
-                            [messageId]: {
-                                message: newMessage,
-                                date: new Date(),
-                                messageId: messageId
-                            }
-                        }
+                [this.user.id]: {
+                    [messageId]: {
+                        message: newMessage,
+                        date: new Date(),
                     }
+                }
             };
             await setDoc(messageRef, message, { merge: true });
         }
@@ -178,7 +192,7 @@ export class FirestoreService {
         const messageRef = doc(this.db, 'conversations', conversationId);
 
         await updateDoc(messageRef, {
-            [`${ this.user.id }.messages.${ messageId }`]: {
+            [`${ this.user.id }.${ messageId }`]: {
                 messageId: messageId,
                 message: newMessage,
                 date: new Date(),
