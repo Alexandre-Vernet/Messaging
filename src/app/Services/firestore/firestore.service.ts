@@ -46,7 +46,6 @@ export class FirestoreService {
                     // Message added or modified
                     if (change.type === 'added' || change.type === 'modified') {
                         const dataObject = change.doc.data();
-                        // console.log('dataObject', dataObject);
 
                         for (let userId in dataObject) {
                             // Get user infos
@@ -61,46 +60,8 @@ export class FirestoreService {
                                     const messageObject = new Message(msg, user.email, user.firstName, user.lastName, message, file, date);
                                     this.messages.findIndex(x => x.id === msg) === -1 ? this.messages.push(messageObject) : '';
                                 });
-
-
-                                // console.log(messageObject);
-                                // this.messages.push(messageObject);
                             });
                         }
-                        // dataArray.forEach((msg, i) => {
-                        //     console.log(i);
-                        //     const id = Object.keys(msg);
-                        //     console.log(msg[id[i]]);
-                        // const { message, file, date } = msg;
-
-                        // const a = new Message(id, 'email', 'FN', 'LN', message, file, date);
-                        // console.log(a);
-                        // });
-
-                        // Push all messages in messagesArray
-                        // const messagesArray = [];
-                        // for (const messagesKey in messages) {
-                        //     const { messageId, message, file, date } = messages[messagesKey];
-                        //     messagesArray.push({
-                        //         messageId,
-                        //         message,
-                        //         file,
-                        //         date,
-                        //     });
-                        // }
-
-
-                        // Loop on all users in conversation
-                        // dataArray.forEach((data, i) => {
-                        // const { messageId, message, file, date } = messages[messagesKey];
-
-
-                        // Create message object if not already exists
-                        // messagesArray.forEach((message) => {
-                        //     const messageObject = new Message(message.messageId, email, firstName, lastName, message.message, message.file, message.date);
-                        //     this.messages.findIndex(x => x.id === message.messageId) === -1 ? this.messages.push(messageObject) : console.log('This item already exists');
-                        // });
-                        // });
                     }
                     // Message deleted
                     if (change.type === 'removed') {
