@@ -59,7 +59,7 @@ export class FirestoreService {
                                     const { message, file, date } = dataObject[userId][msg];
 
                                     const messageObject = new Message(msg, user.email, user.firstName, user.lastName, message, file, date);
-                                    this.messages.push(messageObject);
+                                    this.messages.findIndex(x => x.id === msg) === -1 ? this.messages.push(messageObject) : '';
                                 });
 
 
