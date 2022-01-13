@@ -13,7 +13,7 @@ export class HeadComponent implements OnChanges {
     @Input() conversationId;
     user: User;
     _rightPanel: boolean = false;
-    contactName: string;
+    contactName: User;
 
     constructor(
         private storage: StorageService,

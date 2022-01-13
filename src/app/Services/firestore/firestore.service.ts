@@ -203,7 +203,7 @@ export class FirestoreService {
     }
 
     async getContactName(conversationId: string) {
-        let contactName: string;
+        let contactName: User;
 
         // Get conversation
         const docRef = doc(this.db, 'conversations', conversationId);
@@ -211,19 +211,15 @@ export class FirestoreService {
 
         if (docSnap.exists()) {
             const dataObject = docSnap.data();
-            // Store conversation data
-            const dataArray = Object.keys(dataObject).map((k) => {
-                return dataObject[k];
-            });
+            for (let dataObjectKey in dataObject) {
 
-            // Loop on all users in conversation
-            dataArray.forEach((data) => {
-                const { userInfo } = data;
-                // Get email of person in conversation
-                if (userInfo.email !== this.user.email) {
-                    contactName = userInfo.firstName + ' ' + userInfo.lastName;
+                if (dataObjectKey !== this.user.id) {
+                    await this.auth.getById(dataObjectKey).then((user) => {
+                        contactName = user;
+                    });
                 }
-            });
+            }
+
         } else {
             Toast.error('Error getting contact name');
         }
