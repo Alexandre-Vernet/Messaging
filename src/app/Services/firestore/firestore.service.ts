@@ -53,12 +53,13 @@ export class FirestoreService {
 
                                 // Get id message
                                 const idMessage = Object.keys(dataObject[userId]);
-                                idMessage.forEach((msg) => {
+                                idMessage.forEach((msgId) => {
                                     // Users info
-                                    const { message, file, date } = dataObject[userId][msg];
+                                    const { message, file, date } = dataObject[userId][msgId];
 
-                                    const messageObject = new Message(msg, user.email, user.firstName, user.lastName, message, file, date);
-                                    this.messages.findIndex(x => x.id === msg) === -1 ? this.messages.push(messageObject) : '';
+                                    const messageObject = new Message(msgId, user.email, user.firstName, user.lastName, message, file, date);
+                                    // console.log(messageObject);
+                                    this.messages.findIndex(x => x.id === msgId) === -1 ? this.messages.push(messageObject) : '';
                                 });
                             });
                         }

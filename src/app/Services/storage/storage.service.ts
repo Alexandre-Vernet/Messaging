@@ -47,26 +47,16 @@ export class StorageService {
                     const messageId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
                     const message = {
-                        [this.user.id]:
-                            {
-                                userInfo: {
-                                    id: this.user.id,
-                                    firstName: this.user.firstName,
-                                    lastName: this.user.lastName,
-                                    profilePicture: this.user.profilePicture ? this.user.profilePicture : null,
-                                    dateCreation: this.user.dateCreation
+                        [this.user.id]: {
+                            [messageId]: {
+                                file: {
+                                    name: newFile.name,
+                                    url: url,
+                                    type: newFile.type,
                                 },
-                                messages: {
-                                    [messageId]: {
-                                        file: {
-                                            name: newFile.name,
-                                            url: url,
-                                            type: newFile.type,
-                                        },
-                                        date: new Date(),
-                                    }
-                                }
+                                date: new Date(),
                             }
+                        }
                     };
 
                     // Upload file to firestore
