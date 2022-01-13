@@ -12,6 +12,8 @@ import {
     signOut,
     GoogleAuthProvider,
     signInWithPopup,
+    GithubAuthProvider,
+    FacebookAuthProvider
 } from 'firebase/auth';
 import {
     doc,
@@ -33,7 +35,6 @@ export class AuthenticationService {
     db = getFirestore();
     auth = getAuth();
     storage = getStorage();
-    provider = new GoogleAuthProvider();
     firebaseError: string = '';
 
     constructor(
@@ -165,13 +166,24 @@ export class AuthenticationService {
         return this.firebaseError;
     }
 
-    googleSignUp() {
-        signInWithPopup(this.auth, this.provider)
+    signInWithPopup(type: string) {
+        let provider;
+        switch (type) {
+            case'google':
+                provider = new GoogleAuthProvider();
+                break;
+            case'facebook':
+                provider = new FacebookAuthProvider();
+                break;
+            case 'github':
+                provider = new GithubAuthProvider();
+                break;
+        }
+
+        signInWithPopup(this.auth, provider)
             .then(async (result) => {
-                const credential =
-                    GoogleAuthProvider.credentialFromResult(result);
-                const token = credential.accessToken;
                 const user = result.user;
+                console.log(user);
 
                 // Get data from Google account
                 const firstName = result.user?.displayName?.split(' ')[0];
@@ -214,21 +226,6 @@ export class AuthenticationService {
                 this.firebaseError = errorMessage;
             });
     }
-
-    facebookSignUp() {
-        
-    }
-
-    githubSignUp() {
-        // signInWithPopup(this.auth, this.providerGithub)
-        //     .then(async (result) => {
-        //         const credential =
-        //             GithubAuthProvider.credentialFromResult(result);
-        //         const token = credential.accessToken;
-        //         const user = result.user
-        //     });
-    }
-
 
     resetPassword(emailAddress: string) {
         sendPasswordResetEmail(this.auth, emailAddress)
