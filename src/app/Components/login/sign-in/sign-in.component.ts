@@ -25,7 +25,7 @@ export class SignInComponent {
     ) {
     }
 
-    signIn = () => {
+    signIn() {
         // Get email & psd
         const email = this.form.value.email;
         const password = this.form.value.password;
@@ -43,11 +43,19 @@ export class SignInComponent {
         }
     };
 
-    googleSignUp = () => {
+    googleSignUp() {
         this.auth.googleSignUp();
-    };
+    }
 
-    viewPassword = () => {
+    facebookSignUp() {
+        this.auth.facebookSignUp();
+    }
+
+    githubSignUp() {
+        this.auth.githubSignUp();
+    }
+
+    viewPassword() {
         this._viewPassword = !this._viewPassword;
-    };
+    }
 }

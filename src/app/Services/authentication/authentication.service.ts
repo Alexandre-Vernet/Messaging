@@ -215,6 +215,20 @@ export class AuthenticationService {
             });
     }
 
+    facebookSignUp() {
+        
+    }
+
+    githubSignUp() {
+        // signInWithPopup(this.auth, this.providerGithub)
+        //     .then(async (result) => {
+        //         const credential =
+        //             GithubAuthProvider.credentialFromResult(result);
+        //         const token = credential.accessToken;
+        //         const user = result.user
+        //     });
+    }
+
 
     resetPassword(emailAddress: string) {
         sendPasswordResetEmail(this.auth, emailAddress)

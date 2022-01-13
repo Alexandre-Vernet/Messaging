@@ -32,7 +32,7 @@ export class SignUpComponent implements OnInit {
         this.firebaseError = this.auth.firebaseError;
     }
 
-    signUp = () => {
+    signUp() {
         // Get value from form
         const firstName = this.form.value.firstName;
         const lastName = this.form.value.lastName;
@@ -46,13 +46,21 @@ export class SignUpComponent implements OnInit {
                 this.firebaseError = 'Email is already in use.';
                 break;
         }
-    };
+    }
 
-    googleSignUp = () => {
+    googleSignUp() {
         this.auth.googleSignUp();
-    };
+    }
 
-    viewPassword = () => {
+    facebookSignUp() {
+        this.auth.facebookSignUp();
+    }
+
+    githubSignUp() {
+        this.auth.githubSignUp();
+    }
+
+    viewPassword() {
         this._viewPassword = !this._viewPassword;
-    };
+    }
 }
