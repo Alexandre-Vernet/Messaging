@@ -175,17 +175,13 @@ export class FirestoreService {
     }
 
     async deleteMessage(conversationId: string, messageId: string) {
-        // Remove message from messages
-        const index = this.messages.findIndex((m) => m.id === messageId);
-        this.messages.splice(index, 1);
-
-        // const conversationRef = doc(this.db, 'conversations', conversationId);
-        // // Update firestore
-        // await setDoc(conversationRef, {
-        //     [this.user.email]: {
-        //         messages: this.messages
-        //     }
-        // });
+        const conversationRef = doc(this.db, 'conversations', conversationId);
+        // Update firestore
+        await setDoc(conversationRef, {
+            [this.user.email]: {
+                messages: this.messages
+            }
+        });
     }
 
     async getUsers() {
@@ -219,15 +215,14 @@ export class FirestoreService {
 
         if (docSnap.exists()) {
             const dataObject = docSnap.data();
-            for (let dataObjectKey in dataObject) {
+            for (let userId in dataObject) {
 
-                if (dataObjectKey !== this.user.id) {
-                    await this.auth.getById(dataObjectKey).then((user) => {
+                if (userId !== this.user.id) {
+                    await this.auth.getById(userId).then((user) => {
                         contactName = user;
                     });
                 }
             }
-
         } else {
             Toast.error('Error getting contact name');
         }
