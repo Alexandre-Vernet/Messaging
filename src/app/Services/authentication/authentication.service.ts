@@ -18,7 +18,6 @@ import {
 import { deleteDoc, doc, getDoc, getFirestore, setDoc, updateDoc, } from 'firebase/firestore';
 import { CryptoService } from '../crypto/crypto.service';
 import { Toast } from '../../class/toast';
-import { getStorage } from 'firebase/storage';
 
 @Injectable({
     providedIn: 'root',
@@ -27,7 +26,6 @@ export class AuthenticationService {
     user: User;
     db = getFirestore();
     auth = getAuth();
-    storage = getStorage();
     firebaseError: string = '';
 
     constructor(
