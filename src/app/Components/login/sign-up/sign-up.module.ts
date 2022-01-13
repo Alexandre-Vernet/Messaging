@@ -4,7 +4,6 @@ import { SignUpRoutingModule } from './sign-up-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SignUpComponent } from './sign-up.component';
 
-
 @NgModule({
     declarations: [SignUpComponent],
     imports: [
@@ -14,4 +13,5 @@ import { SignUpComponent } from './sign-up.component';
         ReactiveFormsModule,
     ]
 })
-export class SignUpModule { }
+export class SignUpModule {
+}

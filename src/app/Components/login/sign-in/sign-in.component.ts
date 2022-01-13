@@ -13,8 +13,8 @@ export class SignInComponent {
 
     email!: string;
     form = new FormGroup({
-        email: new FormControl('alexandre.vernet@g-mail.fr', [Validators.required, Validators.email]),
-        password: new FormControl('alexandre', [
+        email: new FormControl('', [Validators.required, Validators.email]),
+        password: new FormControl('', [
             Validators.required,
             Validators.minLength(6),
         ]),

@@ -7,10 +7,13 @@
         <li class="nk-chat-head-user">
             <div class="user-card">
                 <div class="user-avatar bg-purple">
-                    <span>ALL</span>
+                    <span>
+                        {{contactName?.firstName.charAt(0) + "" +
+                    contactName?.lastName.charAt(0)}}
+                    </span>
                 </div>
                 <div class="user-info">
-                    <div class="lead-text">All</div>
+                    <div class="lead-text">{{contactName?.firstName + ' ' + contactName?.lastName}}</div>
                     <div class="sub-text"><span
                             class="d-none d-sm-inline mr-1">Active </span> 35m
                         ago

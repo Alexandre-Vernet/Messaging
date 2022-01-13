@@ -30,7 +30,7 @@
                                     <!-- Conversation -->
                                     <div class="nk-chat-body profile-shown">
                                         <!-- Header -->
-                                        <app-head></app-head>
+                                        <app-head [conversationId]="conversationId"></app-head>
 
 
                                         <div #scrollMe (click)="focusTextArea()" [scrollTop]="scrollMe.scrollHeight"
@@ -69,22 +69,22 @@
 
                                                                         <!-- Image -->
                                                                         <ng-container
-                                                                                *ngIf="message.file.type === 'image/png'">
+                                                                                *ngIf="message?.file.type === 'image'">
                                                                             <a href="{{message.file.url}}"
                                                                                target="_blank">
                                                                                 <img alt="{{message.file.name}}"
+                                                                                     class="media"
                                                                                      src="{{message.file.url}}">
                                                                             </a>
                                                                         </ng-container>
 
                                                                         <!-- Video -->
                                                                         <ng-container
-                                                                                *ngIf="message.file.type === 'video/mp4'">
+                                                                                *ngIf="message?.file.type === 'video'">
                                                                             <a href="{{message.file.url}}"
                                                                                target="_blank">
-                                                                                <video controls>
-                                                                                    <source src="{{message.file.url}}"
-                                                                                            type="{{message.file.type}}">
+                                                                                <video class="media" controls>
+                                                                                    <source src="{{message.file.url}}">
                                                                                     Your browser does not support the
                                                                                     video tag.
                                                                                 </video>
@@ -93,10 +93,9 @@
 
                                                                         <!-- Audio -->
                                                                         <ng-container
-                                                                                *ngIf="message.file.type === 'audio/mpeg'">
+                                                                                *ngIf="message?.file.type === 'audio'">
                                                                             <audio controls>
-                                                                                <source src="{{message.file.url}}"
-                                                                                        type="{{message.file.type}}">
+                                                                                <source src="{{message.file.url}}">
                                                                                 Your browser does not support the
                                                                                 audio tag.
                                                                             </audio>
@@ -104,15 +103,16 @@
 
                                                                         <!-- Other type -->
                                                                         <ng-container
-                                                                                *ngIf="message.file.type !== 'video/mp4' &&
-                                                                                message.file.type !== 'image/png' &&
-                                                                                message.file.type !== 'audio/mpeg'">
+                                                                                *ngIf="message.file.type !== 'video' &&
+                                                                                    message.file.type !== 'image' &&
+                                                                                    message.file.type !== 'audio'">
                                                                             <a href="{{message.file.url}}"
                                                                                target="_blank">
-                                                                                <h5>{{message.file.name}}</h5>
+                                                                                <h6>{{message.file.name}}</h6>
                                                                             </a>
                                                                         </ng-container>
                                                                     </ng-container>
+                                                                    
                                                                 </div>
                                                             </div>
                                                             <!-- User & Date -->
@@ -212,7 +212,7 @@
 
                                                                                         <!-- Remove -->
                                                                                         <li>
-                                                                                            <a (click)="deleteMessage(message.date)"
+                                                                                            <a (click)="deleteMessage(message.id)"
                                                                                                class="icon"><em
                                                                                                     class="icon ni ni-trash-fill"></em>
                                                                                                 Remove</a>
@@ -237,7 +237,7 @@
                                         </div><!-- .nk-chat-panel -->
 
                                         <!-- Chat editor -->
-                                        <app-editor></app-editor>
+                                        <app-editor [conversationId]="conversationId"></app-editor>
 
 
                                         <!-- Profile -->

@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import {
-    addDoc,
     collection,
-    deleteDoc,
-    doc, getDoc,
+    doc,
+    getDoc,
     getDocs,
     getFirestore,
-    limit, onSnapshot,
+    limit,
+    onSnapshot,
     orderBy,
     query,
+    setDoc,
     updateDoc,
     where,
 } from 'firebase/firestore';
@@ -33,61 +34,102 @@ export class FirestoreService {
         }, 2000);
     }
 
-    async getMessages(): Promise<Message[]> {
-        const q = query(collection(this.db, 'messages'), orderBy('date', 'asc'));
+    async getMessages(conversationId: string = 'ZsPWwcDMASeNVjYMk4kc'): Promise<Message[]> {
+        const q = query(collection(this.db, 'conversations'));
+        // Listen for new messages
         onSnapshot(q, (querySnapshot) => {
-            querySnapshot.docChanges().forEach((change) => {
 
-                // Message added
-                if (change.type === 'added') {
-                    const id = change.doc.id;
-                    const { email, firstName, lastName, message, file, date } = change.doc.data();
-                    const newMessage = new Message(id, email, firstName, lastName, message, file, date);
-                    this.messages.push(newMessage);
-                }
+            querySnapshot.docChanges().forEach(async (change) => {
+                // Listen only for the current conversation
+                if (change.doc.id === conversationId) {
 
-                // Message modified
-                if (change.type === 'modified') {
-                    const id = change.doc.id;
-                    const { email, firstName, lastName, message, file, date } = change.doc.data();
-                    const newMessage = new Message(id, email, firstName, lastName, message, file, date);
-                    const index = this.messages.findIndex((m) => m.id === id);
-                    this.messages[index] = newMessage;
-                }
+                    // Message added or modified
+                    if (change.type === 'added' || change.type === 'modified') {
+                        const dataObject = change.doc.data();
 
-                // Message deleted
-                if (change.type === 'removed') {
-                    const id = change.doc.id;
-                    const index = this.messages.findIndex((m) => m.id === id);
-                    this.messages.splice(index, 1);
+                        for (let userId in dataObject) {
+                            // Get user id
+                            await this.auth.getById(userId).then((user) => {
+
+                                // Get id message
+                                const idMessage = Object.keys(dataObject[userId]);
+                                idMessage.forEach((msgId) => {
+                                    // Users info
+                                    const { message, file, date } = dataObject[userId][msgId];
+
+                                    // Create message
+                                    const messageObject = new Message(msgId, user.email, user.firstName, user.lastName, message, file, date);
+
+                                    // If message doesn't exist, add it to array
+                                    // Else, update it
+                                    this.messages.findIndex(x => x.id === msgId) === -1 ? this.messages.push(messageObject) : this.messages.find(x => x.id === msgId).message = message;
+                                });
+                            });
+                        }
+                    }
+                    // Message deleted
+                    if (change.type === 'removed') {
+                        const id = change.doc.id;
+                        const index = this.messages.findIndex((m) => m.id === id);
+                        this.messages.splice(index, 1);
+                    }
                 }
             });
+            // Sort messages by date
+            this.messages.sort((a: any, b: any) => {
+                return a.date - b.date;
+            });
         });
+
         return this.messages;
     }
 
-    async sendMessage(newMessage: string) {
-        await addDoc(collection(this.db, 'messages'), {
-            email: this.auth.user.email,
-            firstName: this.auth.user.firstName,
-            lastName: this.auth.user.lastName,
-            message: newMessage,
-            date: new Date(),
-        });
+    async sendMessage(conversationId: string, newMessage: string, isAFile?) {
+        const messageRef = doc(this.db, 'conversations', conversationId);
+        const messageId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+        if (!isAFile) {
+            const message = {
+                [this.user.id]: {
+                    [messageId]: {
+                        message: newMessage,
+                        date: new Date(),
+                    }
+                }
+            };
+            await setDoc(messageRef, message, { merge: true });
+        }
+        if (isAFile) {
+            await setDoc(messageRef, isAFile, { merge: true });
+        }
     }
 
-    async getMessageId(messageId: string) {
-        const messageRef = doc(this.db, 'messages', messageId);
+    async getMessageById(conversationId: string, messageId: string) {
+        const messageRef = doc(this.db, 'conversations', conversationId);
 
         const docSnap = await getDoc(messageRef);
-        let a: Message;
+
+        let messageToEdit: Message;
 
         if (docSnap.exists()) {
-            const id = docSnap.id;
-            const { email, firstName, lastName, message, file, date } = docSnap.data();
-            a = new Message(id, email, firstName, lastName, message, file, date);
+            const dataObject = docSnap.data();
+
+            for (let userId in dataObject) {
+                // Get message of user
+                if (userId === this.user.id) {
+                    const idMessage = Object.keys(dataObject[userId]);
+                    idMessage.forEach((msgId) => {
+                        if (msgId === messageId) {
+                            const { message, file, date } = dataObject[userId][msgId];
+                            messageToEdit = new Message(msgId, this.user.email, this.user.firstName, this.user.lastName, message, file, date);
+                        }
+                    });
+                }
+            }
+        } else {
+            Toast.error('This conversation does not exist');
         }
-        return a;
+        return messageToEdit;
     }
 
     // Get last message send by user
@@ -115,11 +157,16 @@ export class FirestoreService {
     }
 
     // Edit message
-    async editMessage(newMessage: string, messageId: string) {
-        const messageRef = doc(this.db, 'messages', messageId);
+    async editMessage(conversationId: string, messageId: string, newMessage: string) {
+        const messageRef = doc(this.db, 'conversations', conversationId);
 
+        // Update message in firestore
         await updateDoc(messageRef, {
-            message: newMessage,
+            [`${ this.user.id }.${ messageId }`]: {
+                messageId: messageId,
+                message: newMessage,
+                date: new Date(),
+            }
         })
             .catch((error) => {
                 console.error(error);
@@ -127,16 +174,59 @@ export class FirestoreService {
             });
     }
 
-    async deleteMessage(date: Date) {
-        const q = query(
-            collection(this.db, 'messages'),
-            where('date', '==', date)
-        );
-
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach(async (docRef) => {
-            // doc.data() is never undefined for query doc snapshots
-            await deleteDoc(doc(this.db, 'messages', docRef.id));
+    async deleteMessage(conversationId: string, messageId: string) {
+        const conversationRef = doc(this.db, 'conversations', conversationId);
+        // Update firestore
+        await setDoc(conversationRef, {
+            [this.user.email]: {
+                messages: this.messages
+            }
         });
+    }
+
+    async getUsers() {
+        const q = query(collection(this.db, 'users'));
+        const users: User[] = [];
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((docRef) => {
+            const id = docRef.id;
+            const { email, firstName, lastName, profilePicture, dateCreation } = docRef.data();
+
+            const newUser = new User(
+                id,
+                firstName,
+                lastName,
+                email,
+                profilePicture,
+                dateCreation
+            );
+            users.push(newUser);
+        });
+
+        return users;
+    }
+
+    async getContactName(conversationId: string) {
+        let contactName: User;
+
+        // Get conversation
+        const docRef = doc(this.db, 'conversations', conversationId);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            const dataObject = docSnap.data();
+            for (let userId in dataObject) {
+
+                if (userId !== this.user.id) {
+                    await this.auth.getById(userId).then((user) => {
+                        contactName = user;
+                    });
+                }
+            }
+        } else {
+            Toast.error('Error getting contact name');
+        }
+
+        return contactName;
     }
 }

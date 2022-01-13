@@ -1,7 +1,6 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
 import { AuthenticationService } from './Services/authentication/authentication.service';
 import { CryptoService } from './Services/crypto/crypto.service';
 
@@ -14,7 +13,6 @@ export class AppComponent implements OnInit {
     constructor(
         private auth: AuthenticationService,
         private router: Router,
-        private cookieService: CookieService,
         private cryptoService: CryptoService
     ) {
     }
