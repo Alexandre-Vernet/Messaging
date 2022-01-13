@@ -2,27 +2,20 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'src/app/class/user';
 import {
-    getAuth,
     createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    sendPasswordResetEmail,
-    updateEmail,
-    updatePassword,
     deleteUser,
-    signOut,
-    GoogleAuthProvider,
-    signInWithPopup,
+    FacebookAuthProvider,
+    getAuth,
     GithubAuthProvider,
-    FacebookAuthProvider
+    GoogleAuthProvider,
+    sendPasswordResetEmail,
+    signInWithEmailAndPassword,
+    signInWithPopup,
+    signOut,
+    updateEmail,
+    updatePassword
 } from 'firebase/auth';
-import {
-    doc,
-    setDoc,
-    getDoc,
-    getFirestore,
-    updateDoc,
-    deleteDoc,
-} from 'firebase/firestore';
+import { deleteDoc, doc, getDoc, getFirestore, setDoc, updateDoc, } from 'firebase/firestore';
 import { CryptoService } from '../crypto/crypto.service';
 import { Toast } from '../../class/toast';
 import { getStorage } from 'firebase/storage';
@@ -224,8 +217,7 @@ export class AuthenticationService {
             .catch((error) => {
                 console.error(error);
                 Toast.error('An error occurred, please sign in with your email and password');
-                const errorMessage = error.message;
-                this.firebaseError = errorMessage;
+                this.firebaseError = error.message;
             });
     }
 
@@ -303,14 +295,14 @@ export class AuthenticationService {
 
     signOut() {
         signOut(this.auth)
-            .then(() => {
+            .then(async () => {
                 this.user = null;
 
                 // Delete local storage
                 localStorage.removeItem('password');
 
                 // Navigate to home
-                this.router.navigate(['/sign-in']);
+                await this.router.navigate(['/sign-in']);
             })
             .catch((error) => {
                 console.error(error);
@@ -324,13 +316,13 @@ export class AuthenticationService {
 
         // Delete data user
         await deleteDoc(doc(this.db, 'users', userId))
-            .then(() => {
+            .then(async () => {
                 // Delete user
                 deleteUser(user)
                     .then(async () => {
                         Toast.success('Your account has been successfully deleted');
 
-                        this.router.navigate(['/sign-up']);
+                        await this.router.navigate(['/sign-up']);
                     })
                     .catch((error) => {
                         console.error(error);
