@@ -2,28 +2,22 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'src/app/class/user';
 import {
-    getAuth,
     createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    sendPasswordResetEmail,
-    updateEmail,
-    updatePassword,
     deleteUser,
-    signOut,
+    FacebookAuthProvider,
+    getAuth,
+    GithubAuthProvider,
     GoogleAuthProvider,
+    sendPasswordResetEmail,
+    signInWithEmailAndPassword,
     signInWithPopup,
+    signOut,
+    updateEmail,
+    updatePassword
 } from 'firebase/auth';
-import {
-    doc,
-    setDoc,
-    getDoc,
-    getFirestore,
-    updateDoc,
-    deleteDoc,
-} from 'firebase/firestore';
+import { deleteDoc, doc, getDoc, getFirestore, setDoc, updateDoc, } from 'firebase/firestore';
 import { CryptoService } from '../crypto/crypto.service';
 import { Toast } from '../../class/toast';
-import { getStorage } from 'firebase/storage';
 
 @Injectable({
     providedIn: 'root',
@@ -32,8 +26,6 @@ export class AuthenticationService {
     user: User;
     db = getFirestore();
     auth = getAuth();
-    storage = getStorage();
-    provider = new GoogleAuthProvider();
     firebaseError: string = '';
 
     constructor(
@@ -165,15 +157,25 @@ export class AuthenticationService {
         return this.firebaseError;
     }
 
-    googleSignUp() {
-        signInWithPopup(this.auth, this.provider)
+    signInWithPopup(type: string) {
+        let provider;
+        switch (type) {
+            case'google':
+                provider = new GoogleAuthProvider();
+                break;
+            case'facebook':
+                provider = new FacebookAuthProvider();
+                break;
+            case 'github':
+                provider = new GithubAuthProvider();
+                break;
+        }
+
+        signInWithPopup(this.auth, provider)
             .then(async (result) => {
-                const credential =
-                    GoogleAuthProvider.credentialFromResult(result);
-                const token = credential.accessToken;
                 const user = result.user;
 
-                // Get data from Google account
+                // Get data from account
                 const firstName = result.user?.displayName?.split(' ')[0];
                 const lastName = result.user?.displayName?.split(' ')[1];
                 const email = result.user?.email;
@@ -189,6 +191,7 @@ export class AuthenticationService {
                     new Date(),
                 );
 
+                // Save user in firestore
                 await setDoc(doc(this.db, 'users', user.uid), {
                     firstName: firstName,
                     lastName: lastName,
@@ -205,16 +208,16 @@ export class AuthenticationService {
                     })
                     .catch((error) => {
                         console.error(error);
+                        Toast.error('An error occurred, please sign in with your email and password');
                         this.firebaseError = error.message;
                     });
             })
             .catch((error) => {
                 console.error(error);
-                const errorMessage = error.message;
-                this.firebaseError = errorMessage;
+                Toast.error('An error occurred, please sign in with your email and password');
+                this.firebaseError = error.message;
             });
     }
-
 
     resetPassword(emailAddress: string) {
         sendPasswordResetEmail(this.auth, emailAddress)
@@ -290,14 +293,14 @@ export class AuthenticationService {
 
     signOut() {
         signOut(this.auth)
-            .then(() => {
+            .then(async () => {
                 this.user = null;
 
                 // Delete local storage
                 localStorage.removeItem('password');
 
                 // Navigate to home
-                this.router.navigate(['/sign-in']);
+                await this.router.navigate(['/sign-in']);
             })
             .catch((error) => {
                 console.error(error);
@@ -311,13 +314,13 @@ export class AuthenticationService {
 
         // Delete data user
         await deleteDoc(doc(this.db, 'users', userId))
-            .then(() => {
+            .then(async () => {
                 // Delete user
                 deleteUser(user)
                     .then(async () => {
                         Toast.success('Your account has been successfully deleted');
 
-                        this.router.navigate(['/sign-up']);
+                        await this.router.navigate(['/sign-up']);
                     })
                     .catch((error) => {
                         console.error(error);

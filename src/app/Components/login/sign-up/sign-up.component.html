@@ -32,13 +32,13 @@
                                                 <label class="form-label" for="firstName">First Name</label>
                                                 <div class="form-control-wrap">
                                                     <input
-                                                        [ngClass]="{'is-invalid': form.get('firstName')?.touched && form.get('firstName')?.invalid}"
-                                                        class="form-control form-control-lg"
-                                                        formControlName="firstName" id="firstName" placeholder="Bob"
-                                                        type="text">
+                                                            [ngClass]="{'is-invalid': form.get('firstName')?.touched && form.get('firstName')?.invalid}"
+                                                            class="form-control form-control-lg"
+                                                            formControlName="firstName" id="firstName" placeholder="Bob"
+                                                            type="text">
                                                     <div
-                                                        *ngIf="form.get('firstName')?.touched && form.get('firstName')?.invalid"
-                                                        class="invalid-feedback">
+                                                            *ngIf="form.get('firstName')?.touched && form.get('firstName')?.invalid"
+                                                            class="invalid-feedback">
                                                         <div *ngIf="form.get('firstName')?.errors?.required">
                                                             First name is required
                                                         </div>
@@ -54,15 +54,15 @@
                                                 <label class="form-label" for="lastName">Last Name</label>
                                                 <div class="form-control-wrap">
                                                     <input
-                                                        [ngClass]="{'is-invalid': form.get('lastName')?.touched && form.get('lastName')?.invalid}"
-                                                        class="form-control form-control-lg"
-                                                        formControlName="lastName" id="lastName"
-                                                        placeholder="Razowski"
-                                                        type="text">
+                                                            [ngClass]="{'is-invalid': form.get('lastName')?.touched && form.get('lastName')?.invalid}"
+                                                            class="form-control form-control-lg"
+                                                            formControlName="lastName" id="lastName"
+                                                            placeholder="Razowski"
+                                                            type="text">
 
                                                     <div
-                                                        *ngIf="form.get('lastName')?.touched && form.get('lastName')?.invalid"
-                                                        class="invalid-feedback">
+                                                            *ngIf="form.get('lastName')?.touched && form.get('lastName')?.invalid"
+                                                            class="invalid-feedback">
                                                         <div *ngIf="form.get('lastName')?.errors?.required">
                                                             Last name is required
                                                         </div>
@@ -77,15 +77,15 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="email">Email</label>
                                                 <input
-                                                    [ngClass]="{'is-invalid': form.get('email')?.touched && form.get('email')?.invalid || firebaseError !== ''}"
-                                                    class="form-control form-control-lg"
-                                                    formControlName="email"
-                                                    id="email" placeholder="bob.razowski@gmail.com"
-                                                    type="email">
+                                                        [ngClass]="{'is-invalid': form.get('email')?.touched && form.get('email')?.invalid || firebaseError !== ''}"
+                                                        class="form-control form-control-lg"
+                                                        formControlName="email"
+                                                        id="email" placeholder="bob.razowski@gmail.com"
+                                                        type="email">
 
                                                 <div
-                                                    *ngIf="form.get('email')?.touched && form.get('email')?.invalid || firebaseError !== ''"
-                                                    class="invalid-feedback">
+                                                        *ngIf="form.get('email')?.touched && form.get('email')?.invalid || firebaseError !== ''"
+                                                        class="invalid-feedback">
                                                     <div *ngIf="form.get('email')?.errors?.required">
                                                         Email is required
                                                     </div>
@@ -111,16 +111,16 @@
                                                         <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
                                                     </a>
                                                     <input
-                                                        [ngClass]="{'is-invalid': form.get('confirmPassword')?.touched && form.get('confirmPassword')?.invalid || form.get('confirmPassword')?.touched && form.value['password'] !== form.value['confirmPassword']}"
-                                                        [type]="_viewPassword ? 'text' : 'password'"
-                                                        class="form-control form-control-lg"
-                                                        formControlName="password"
-                                                        id="password"
-                                                        placeholder="bob123">
+                                                            [ngClass]="{'is-invalid': form.get('confirmPassword')?.touched && form.get('confirmPassword')?.invalid || form.get('confirmPassword')?.touched && form.value['password'] !== form.value['confirmPassword']}"
+                                                            [type]="_viewPassword ? 'text' : 'password'"
+                                                            class="form-control form-control-lg"
+                                                            formControlName="password"
+                                                            id="password"
+                                                            placeholder="bob123">
 
                                                     <div
-                                                        *ngIf="form.get('confirmPassword')?.touched && form.get('confirmPassword')?.invalid || form.get('confirmPassword')?.touched &&  form.value['password'] !== form.value['confirmPassword']"
-                                                        class="invalid-feedback">
+                                                            *ngIf="form.get('confirmPassword')?.touched && form.get('confirmPassword')?.invalid || form.get('confirmPassword')?.touched &&  form.value['password'] !== form.value['confirmPassword']"
+                                                            class="invalid-feedback">
                                                         <div *ngIf="form.get('password')?.errors?.required">
                                                             Password is required
                                                         </div>
@@ -128,7 +128,7 @@
                                                             Password should be at least 6 characters
                                                         </div>
                                                         <div
-                                                            *ngIf="form.value['password'] !== form.value['confirmPassword']">
+                                                                *ngIf="form.value['password'] !== form.value['confirmPassword']">
                                                             Passwords do not match
                                                         </div>
                                                     </div>
@@ -141,15 +141,15 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="confirmPassword">Confirm password</label>
                                                 <input
-                                                    [ngClass]="{'is-invalid': form.get('confirmPassword')?.touched && form.get('confirmPassword')?.invalid || form.get('confirmPassword')?.touched && form.value['password'] !== form.value['confirmPassword']}"
-                                                    class="form-control form-control-lg"
-                                                    formControlName="confirmPassword"
-                                                    id="confirmPassword" placeholder="bob123"
-                                                    type="password">
+                                                        [ngClass]="{'is-invalid': form.get('confirmPassword')?.touched && form.get('confirmPassword')?.invalid || form.get('confirmPassword')?.touched && form.value['password'] !== form.value['confirmPassword']}"
+                                                        class="form-control form-control-lg"
+                                                        formControlName="confirmPassword"
+                                                        id="confirmPassword" placeholder="bob123"
+                                                        type="password">
 
                                                 <div
-                                                    *ngIf="form.get('confirmPassword')?.touched && form.get('confirmPassword')?.invalid || form.get('confirmPassword')?.touched &&  form.value['password'] !== form.value['confirmPassword']"
-                                                    class="invalid-feedback">
+                                                        *ngIf="form.get('confirmPassword')?.touched && form.get('confirmPassword')?.invalid || form.get('confirmPassword')?.touched &&  form.value['password'] !== form.value['confirmPassword']"
+                                                        class="invalid-feedback">
                                                     <div *ngIf="form.get('confirmPassword')?.errors?.required">
                                                         Confirm password is required
                                                     </div>
@@ -157,7 +157,7 @@
                                                         Confirm password should be at least 6 characters
                                                     </div>
                                                     <div
-                                                        *ngIf="form.value['password'] !== form.value['confirmPassword']">
+                                                            *ngIf="form.value['password'] !== form.value['confirmPassword']">
                                                         Passwords do not match
                                                     </div>
                                                 </div>
@@ -169,20 +169,28 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <button
-                                                    [disabled]="!form.valid || form.value['password'] !== form.value['confirmPassword']"
-                                                    class="btn btn-lg btn-primary btn-block my-3">Sign-up
+                                                        [disabled]="!form.valid || form.value['password'] !== form.value['confirmPassword']"
+                                                        class="btn btn-lg btn-primary btn-block">Sign-up
                                                 </button>
                                             </div>
                                             <div class="form-note-s2 text-center pt-4"> Already have an account ? <a
-                                                [routerLink]=" ['/sign-in'] "><strong>Sign in instead</strong></a>
+                                                    [routerLink]=" ['/sign-in'] "><strong>Sign in instead</strong></a>
                                             </div>
                                             <div class="text-center pt-4 pb-3">
                                                 <h6 class="overline-title overline-title-sap"><span>OR</span></h6>
                                             </div>
                                             <ul class="nav justify-center gx-8">
-                                                <li class="nav-item"><a (click)="googleSignUp()"
-                                                                        class="nav-link icon">Sign-up with Google</a>
-                                                </li>
+                                                <ul class="nav justify-center gx-8">
+                                                    <li class="nav-item"><a (click)="googleSignUp()"
+                                                                            class="nav-link icon"
+                                                    >Google</a></li>
+                                                    <li class="nav-item"><a (click)="facebookSignUp()"
+                                                                            class="nav-link icon"
+                                                    >Facebook</a></li>
+                                                    <li class="nav-item"><a (click)="githubSignUp()"
+                                                                            class="nav-link icon"
+                                                    >Github</a></li>
+                                                </ul>
                                             </ul>
                                         </div>
                                     </div>
