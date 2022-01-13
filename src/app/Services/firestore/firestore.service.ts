@@ -48,7 +48,7 @@ export class FirestoreService {
                         const dataObject = change.doc.data();
 
                         for (let userId in dataObject) {
-                            // Get user infos
+                            // Get user id
                             await this.auth.getById(userId).then((user) => {
 
                                 // Get id message
@@ -57,9 +57,12 @@ export class FirestoreService {
                                     // Users info
                                     const { message, file, date } = dataObject[userId][msgId];
 
+                                    // Create message
                                     const messageObject = new Message(msgId, user.email, user.firstName, user.lastName, message, file, date);
-                                    // console.log(messageObject);
-                                    this.messages.findIndex(x => x.id === msgId) === -1 ? this.messages.push(messageObject) : '';
+
+                                    // If message doesn't exist, add it to array
+                                    // Else, update it
+                                    this.messages.findIndex(x => x.id === msgId) === -1 ? this.messages.push(messageObject) : this.messages.find(x => x.id === msgId).message = message;
                                 });
                             });
                         }
@@ -101,7 +104,7 @@ export class FirestoreService {
         }
     }
 
-    async getMessageId(conversationId: string, messageId: string) {
+    async getMessageById(conversationId: string, messageId: string) {
         const messageRef = doc(this.db, 'conversations', conversationId);
 
         const docSnap = await getDoc(messageRef);
@@ -110,14 +113,18 @@ export class FirestoreService {
 
         if (docSnap.exists()) {
             const dataObject = docSnap.data();
-            const dataArray = Object.keys(dataObject).map((k) => {
-                return dataObject[k];
-            });
 
-            // If object messageId in dataArray contain messageId
-            if (dataArray.some(x => x.messages.hasOwnProperty(messageId))) {
-                const message = dataArray.find(x => x.messages.hasOwnProperty(messageId));
-                messageToEdit = new Message(message.messages[messageId].messageId, message.userInfo.email, message.userInfo.firstName, message.userInfo.lastName, message.messages[messageId].message, message.messages[messageId].file, message.messages[messageId].date);
+            for (let userId in dataObject) {
+                // Get message of user
+                if (userId === this.user.id) {
+                    const idMessage = Object.keys(dataObject[userId]);
+                    idMessage.forEach((msgId) => {
+                        if (msgId === messageId) {
+                            const { message, file, date } = dataObject[userId][msgId];
+                            messageToEdit = new Message(msgId, this.user.email, this.user.firstName, this.user.lastName, message, file, date);
+                        }
+                    });
+                }
             }
         } else {
             Toast.error('This conversation does not exist');
@@ -153,6 +160,7 @@ export class FirestoreService {
     async editMessage(conversationId: string, messageId: string, newMessage: string) {
         const messageRef = doc(this.db, 'conversations', conversationId);
 
+        // Update message in firestore
         await updateDoc(messageRef, {
             [`${ this.user.id }.${ messageId }`]: {
                 messageId: messageId,

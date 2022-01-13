@@ -70,7 +70,7 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
     }
 
     getMessageId(messageId: string) {
-        this.firestore.getMessageId(this.conversationId, messageId).then((message: Message) => {
+        this.firestore.getMessageById(this.conversationId, messageId).then((message: Message) => {
             // Save id
             this.messageId = message.id;
 
@@ -82,7 +82,7 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
     async editMessage() {
         const editedMessage = this.formEditMessage.value.editedMessage;
 
-        this.firestore.editMessage(this.conversationId, this.messageId, editedMessage,).then(() => {
+        this.firestore.editMessage(this.conversationId, this.messageId, editedMessage).then(() => {
             // Close modal
             this.modalEditMessage.nativeElement.click();
         });
