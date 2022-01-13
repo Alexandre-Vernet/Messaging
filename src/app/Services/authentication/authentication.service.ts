@@ -183,9 +183,8 @@ export class AuthenticationService {
         signInWithPopup(this.auth, provider)
             .then(async (result) => {
                 const user = result.user;
-                console.log(user);
 
-                // Get data from Google account
+                // Get data from account
                 const firstName = result.user?.displayName?.split(' ')[0];
                 const lastName = result.user?.displayName?.split(' ')[1];
                 const email = result.user?.email;
@@ -201,6 +200,7 @@ export class AuthenticationService {
                     new Date(),
                 );
 
+                // Save user in firestore
                 await setDoc(doc(this.db, 'users', user.uid), {
                     firstName: firstName,
                     lastName: lastName,
@@ -217,11 +217,13 @@ export class AuthenticationService {
                     })
                     .catch((error) => {
                         console.error(error);
+                        Toast.error('An error occurred, please sign in with your email and password');
                         this.firebaseError = error.message;
                     });
             })
             .catch((error) => {
                 console.error(error);
+                Toast.error('An error occurred, please sign in with your email and password');
                 const errorMessage = error.message;
                 this.firebaseError = errorMessage;
             });

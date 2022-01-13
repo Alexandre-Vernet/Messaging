@@ -49,15 +49,15 @@ export class SignUpComponent implements OnInit {
     }
 
     googleSignUp() {
-        // this.auth.googleSignUp();
+        this.auth.signInWithPopup('google');
     }
 
     facebookSignUp() {
-        // this.auth.facebookSignUp();
+        this.auth.signInWithPopup('facebook');
     }
 
     githubSignUp() {
-        // this.auth.githubSignUp();
+        this.auth.signInWithPopup('github');
     }
 
     viewPassword() {
