@@ -40,16 +40,7 @@ export class SignInComponent {
         }).catch((error) => {
             this.firebaseError = error.message;
         });
-
-        // switch (error) {
-        //     case 'Firebase: Error (auth/user-not-found).':
-        //         this.firebaseError = 'Email or password is incorrect.';
-        //         break;
-        //     case 'FirebaseError: Firebase: Error (auth/user-disabled).':
-        //         this.firebaseError = 'Your account has been disabled.';
-        //         break;
-        // }
-    };
+    }
 
     googleSignUp() {
         this.auth.signInWithPopup('google');

@@ -103,35 +103,31 @@ export class AuthenticationService {
         email: string,
         password: string
     ) {
-        createUserWithEmailAndPassword(this.auth, email, password)
-            .then(async (userCredential) => {
-                // Signed in
-                const user = userCredential.user;
+        return new Promise((resolve, reject) => {
+            createUserWithEmailAndPassword(this.auth, email, password)
+                .then(async (userCredential) => {
+                    // Signed in
+                    const user = userCredential.user;
 
-                await setDoc(doc(this.db, 'users', user.uid), {
-                    firstName: firstName,
-                    lastName: lastName,
-                    email: email,
-                    dateCreation: new Date(),
-                })
-                    .then(() => {
-                        // Clear error
-                        this.firebaseError = '';
-
-                        this.router.navigate(['/sign-in']);
+                    await setDoc(doc(this.db, 'users', user.uid), {
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email,
+                        dateCreation: new Date(),
                     })
-                    .catch((error) => {
-                        console.error(error);
-
-                        this.firebaseError = error.message;
-                    });
-            })
-            .catch((error) => {
-                console.error(error);
-                this.firebaseError = error.message;
-            });
-
-        return this.firebaseError;
+                        .then(() => {
+                            resolve(user);
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                            reject(error);
+                        });
+                })
+                .catch((error) => {
+                    console.error(error);
+                    reject(error);
+                });
+        });
     }
 
     signInWithPopup(type: string) {
