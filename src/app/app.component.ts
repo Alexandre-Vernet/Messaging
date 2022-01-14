@@ -26,17 +26,17 @@ export class AppComponent implements OnInit {
         const url = window.location.pathname;
 
         // Check connection
-        // if (email && password) {
-        //     const hashPassword = this.cryptoService.decrypt(password);
-        //     this.auth.signIn(email, hashPassword).then(() => {
-        //         this.router.navigate([url]);
-        //     });
-        // } else {
-        //     if (url == '/sign-up') {
-        //         await this.router.navigate(['/sign-up']);
-        //     } else {
-        //         await this.router.navigate(['sign-in']);
-        //     }
-        // }
+        if (email && password) {
+            const hashPassword = this.cryptoService.decrypt(password);
+            this.auth.signIn(email, hashPassword).then(() => {
+                this.router.navigate([url]);
+            });
+        } else {
+            if (url == '/sign-up') {
+                await this.router.navigate(['/sign-up']);
+            } else {
+                await this.router.navigate(['sign-in']);
+            }
+        }
     }
 }
