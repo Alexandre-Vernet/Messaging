@@ -79,16 +79,6 @@ export class AuthenticationService {
 
                     // Return user
                     resolve(this.user);
-
-                    // Clear error
-                    // this.firebaseError = '';
-
-                    // let url = window.location.pathname;
-                    // if (url != '/sign-in') {
-                    //     await this.router.navigate([url]);
-                    // } else {
-                    //     await this.router.navigate(['/home']);
-                    // }
                 })
                 .catch((error) => {
                     console.error(error);

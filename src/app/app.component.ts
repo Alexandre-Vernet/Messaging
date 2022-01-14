@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
         if (email && password) {
             const hashPassword = this.cryptoService.decrypt(password);
             this.auth.signIn(email, hashPassword).then(() => {
-                this.router.navigate([url]);
+                this.router.navigate(['/conversation/ZsPWwcDMASeNVjYMk4kc']);
             });
         } else {
             if (url == '/sign-up') {

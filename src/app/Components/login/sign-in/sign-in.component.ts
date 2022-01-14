@@ -35,7 +35,7 @@ export class SignInComponent {
         // Sign-in
         this.auth.signIn(email, password).then((user) => {
             if (user) {
-                this.router.navigate(['/']);
+                this.router.navigate(['/conversation/ZsPWwcDMASeNVjYMk4kc']);
             }
         }).catch((error) => {
             this.firebaseError = error.message;

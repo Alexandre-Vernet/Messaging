@@ -8,8 +8,10 @@ import { AuthenticationService } from '../../Services/authentication/authenticat
     styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit {
-    user: User | null;
-    constructor(private auth: AuthenticationService) {}
+    user: User;
+
+    constructor(private auth: AuthenticationService) {
+    }
 
     ngOnInit(): void {
         setTimeout(() => {
@@ -17,7 +19,7 @@ export class NavbarComponent implements OnInit {
         }, 1500);
     }
 
-    signOut = () => {
+    signOut() {
         this.auth.signOut();
-    };
+    }
 }
