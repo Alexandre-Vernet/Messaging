@@ -25,19 +25,17 @@ export class PersonalComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        setTimeout(() => {
-            this.auth.getAuth().then(user => {
-                this.user = user;
+        this.auth.getAuth().then((user) => {
+            this.user = user;
 
-                // Set default value to formUpdateProfile
-                this.formUpdateProfile.controls.firstName.setValue(
-                    this.user.firstName
-                );
-                this.formUpdateProfile.controls.lastName.setValue(
-                    this.user.lastName
-                );
-            });
-        }, 1500);
+            // Set default value to formUpdateProfile
+            this.formUpdateProfile.controls.firstName.setValue(
+                this.user.firstName
+            );
+            this.formUpdateProfile.controls.lastName.setValue(
+                this.user.lastName
+            );
+        });
     }
 
     async updateProfile() {
