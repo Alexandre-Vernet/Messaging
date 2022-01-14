@@ -40,22 +40,20 @@ export class PersonalComponent implements OnInit {
         }, 1500);
     }
 
-    updateProfile() {
+    async updateProfile() {
         // Hide modal
         this.modalUpdateProfile.nativeElement.click();
 
         const firstName = this.formUpdateProfile.value.firstName;
         const lastName = this.formUpdateProfile.value.lastName;
-        this.auth.updateProfile(firstName, lastName);
+        await this.auth.updateProfile(firstName, lastName);
     };
 
     uploadProfilePicture() {
-        // if (!this.user.googleAccount) {
         document.getElementById('file_upload')?.click();
-        // }
-    };
+    }
 
     updateProfilePicture(event) {
         this.storage.updateProfilePicture(event);
-    };
+    }
 }

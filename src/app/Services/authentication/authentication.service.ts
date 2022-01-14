@@ -228,7 +228,7 @@ export class AuthenticationService {
             });
     }
 
-    updateEmail = (email: string) => {
+    updateEmail(email: string) {
         const userId = this.user.id;
         const userRef = doc(this.db, 'users', userId);
 
@@ -248,8 +248,7 @@ export class AuthenticationService {
                 console.error(error);
                 Toast.error(error.message);
             });
-    };
-
+    }
 
     updatePassword(newPassword: string) {
         const user = this.auth.currentUser;

@@ -43,7 +43,6 @@ export class SecurityComponent implements OnInit {
             // Set default value to formUpdateEmail
             this.formUpdateEmail.controls.email.setValue(this.user.email);
         }, 1500);
-
     }
 
     updateEmail() {
@@ -60,10 +59,9 @@ export class SecurityComponent implements OnInit {
 
         const password = this.formUpdatePassword.value.password;
         this.auth.updatePassword(password);
-    };
+    }
 
-    deleteAccount() {
-        this.auth.deleteAccount();
-    };
-
+    async deleteAccount() {
+        await this.auth.deleteAccount();
+    }
 }
