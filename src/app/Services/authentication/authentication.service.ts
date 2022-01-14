@@ -39,10 +39,11 @@ export class AuthenticationService {
     }
 
     async getAuth(): Promise<User> {
+        console.log(this.user);
         return this.user;
     }
 
-    async signIn(email: string, password: string) {
+    signIn(email: string, password: string) {
         return new Promise((resolve, reject) => {
             signInWithEmailAndPassword(this.auth, email, password)
                 .then(async (userCredential) => {

@@ -28,8 +28,10 @@ export class AppComponent implements OnInit {
         // Check connection
         if (email && password) {
             const hashPassword = this.cryptoService.decrypt(password);
-            this.auth.signIn(email, hashPassword).then(() => {
-                this.router.navigate(['/conversation/ZsPWwcDMASeNVjYMk4kc']);
+            this.auth.signIn(email, hashPassword).then((user) => {
+                if (user) {
+                    this.router.navigate(['/conversation/ZsPWwcDMASeNVjYMk4kc']);
+                }
             });
         } else {
             if (url == '/sign-up') {

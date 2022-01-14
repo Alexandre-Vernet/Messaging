@@ -12,7 +12,6 @@ export class SignInComponent {
     firebaseError: string = '';
     _viewPassword: boolean = false;
 
-    email!: string;
     form = new FormGroup({
         email: new FormControl('', [Validators.required, Validators.email]),
         password: new FormControl('', [
