@@ -34,59 +34,34 @@ export class AuthenticationService {
     ) {
     }
 
+    getUser() {
+        return this.user;
+    }
+
     async getAuth(): Promise<User> {
         return this.user;
     }
 
-    async getById(userId: string) {
-        const docRef = doc(this.db, 'users', userId);
-        const docSnap = await getDoc(docRef);
-        let user: User;
+    async signIn(email: string, password: string) {
+        return new Promise((resolve, reject) => {
+            signInWithEmailAndPassword(this.auth, email, password)
+                .then(async (userCredential) => {
+                    // Signed in
+                    const user = userCredential.user;
 
-        if (docSnap.exists()) {
-            const id = docSnap.id;
-            const {
-                firstName,
-                lastName,
-                email,
-                profilePicture,
-                dateCreation,
-            } = docSnap.data();
+                    // Get user data
+                    const docRef = doc(this.db, 'users', user.uid);
+                    const docSnap = await getDoc(docRef);
 
-            user = new User(
-                id,
-                firstName,
-                lastName,
-                email,
-                profilePicture,
-                dateCreation,
-            );
-        } else {
-            // doc.data() will be undefined in this case
-            console.log('No such document!');
-        }
-
-        return user;
-    }
-
-    signIn(email: string, password: string) {
-        signInWithEmailAndPassword(this.auth, email, password)
-            .then(async (userCredential) => {
-                // Signed in
-                const user = userCredential.user;
-
-                // Get user data
-                const docRef = doc(this.db, 'users', user.uid);
-                const docSnap = await getDoc(docRef);
-
-                if (docSnap.exists()) {
                     //  Set data
                     const id = docSnap.id;
-                    const firstName = docSnap.data()?.firstName;
-                    const lastName = docSnap.data()?.lastName;
-                    const email = docSnap.data()?.email;
-                    const profilePicture = docSnap.data()?.profilePicture;
-                    const dateCreation = docSnap.data()?.dateCreation;
+                    const {
+                        firstName,
+                        lastName,
+                        email,
+                        profilePicture,
+                        dateCreation,
+                    } = docSnap.data();
 
                     this.user = new User(
                         id,
@@ -102,23 +77,25 @@ export class AuthenticationService {
                     localStorage.setItem('email', email);
                     localStorage.setItem('password', hashPassword);
 
+                    // Return user
+                    resolve(this.user);
+
                     // Clear error
                     // this.firebaseError = '';
 
-                    let url = window.location.pathname;
-                    if (url != '/sign-in') {
-                        await this.router.navigate([url]);
-                    } else {
-                        await this.router.navigate(['/home']);
-                    }
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-                this.firebaseError = error.message;
-            });
-        return this.firebaseError;
-    };
+                    // let url = window.location.pathname;
+                    // if (url != '/sign-in') {
+                    //     await this.router.navigate([url]);
+                    // } else {
+                    //     await this.router.navigate(['/home']);
+                    // }
+                })
+                .catch((error) => {
+                    console.error(error);
+                    reject(error);
+                });
+        });
+    }
 
     signUp(
         firstName: string,

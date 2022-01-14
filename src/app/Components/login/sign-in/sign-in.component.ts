@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-sign-in',
@@ -13,7 +14,7 @@ export class SignInComponent {
 
     email!: string;
     form = new FormGroup({
-        email: new FormControl('', [Validators.required, Validators.email]),
+        email: new FormControl('alexandre.vernet@g-mail.fr', [Validators.required, Validators.email]),
         password: new FormControl('', [
             Validators.required,
             Validators.minLength(6),
@@ -21,26 +22,33 @@ export class SignInComponent {
     });
 
     constructor(
-        private auth: AuthenticationService
+        private auth: AuthenticationService,
+        private router: Router
     ) {
     }
 
-    signIn() {
+    async signIn() {
         // Get email & psd
         const email = this.form.value.email;
         const password = this.form.value.password;
 
         // Sign-in
-        const error = this.auth.signIn(email, password);
+        this.auth.signIn(email, password).then((user) => {
+            if (user) {
+                this.router.navigate(['/']);
+            }
+        }).catch((error) => {
+            this.firebaseError = error.message;
+        });
 
-        switch (error) {
-            case 'Firebase: Error (auth/user-not-found).':
-                this.firebaseError = 'Email or password is incorrect.';
-                break;
-            case 'FirebaseError: Firebase: Error (auth/user-disabled).':
-                this.firebaseError = 'Your account has been disabled.';
-                break;
-        }
+        // switch (error) {
+        //     case 'Firebase: Error (auth/user-not-found).':
+        //         this.firebaseError = 'Email or password is incorrect.';
+        //         break;
+        //     case 'FirebaseError: Firebase: Error (auth/user-disabled).':
+        //         this.firebaseError = 'Your account has been disabled.';
+        //         break;
+        // }
     };
 
     googleSignUp() {
