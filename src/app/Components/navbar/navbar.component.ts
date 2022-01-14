@@ -13,10 +13,10 @@ export class NavbarComponent implements OnInit {
     constructor(private auth: AuthenticationService) {
     }
 
-    ngOnInit(): void {
-        setTimeout(() => {
-            this.user = this.auth.user;
-        }, 1500);
+    async ngOnInit() {
+        await this.auth.getAuth().then((user) => {
+            this.user = user;
+        });
     }
 
     signOut() {
