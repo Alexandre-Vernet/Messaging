@@ -43,11 +43,9 @@ export class ChatComponent implements OnInit, AfterViewInit, AfterContentChecked
             this.messages = messages;
         });
 
-        setTimeout(() => {
-            this.auth.getAuth().then((user: User) => {
-                this.user = user;
-            });
-        }, 2000);
+        this.auth.getAuth().then((user: User) => {
+            this.user = user;
+        });
     }
 
     ngAfterViewInit() {
