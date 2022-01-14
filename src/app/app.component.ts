@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
                 }
             });
         } else {
-            if (url == '/sign-up') {
+            if (url === '/sign-up') {
                 await this.router.navigate(['/sign-up']);
             } else {
                 await this.router.navigate(['sign-in']);
