@@ -30,11 +30,9 @@ export class EditorComponent implements OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         this.conversationId = changes.conversationId.currentValue;
 
-        setTimeout(() => {
-            this.auth.getAuth().then((user: User) => {
-                this.user = user;
-            });
-        }, 2000);
+        this.auth.getAuth().then((user: User) => {
+            this.user = user;
+        });
     }
 
     sendMessage() {

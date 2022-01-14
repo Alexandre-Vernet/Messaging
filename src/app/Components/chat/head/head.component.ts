@@ -25,12 +25,12 @@ export class HeadComponent implements OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         this.conversationId = changes.conversationId.currentValue;
 
-        setTimeout(() => {
-            this.auth.getAuth().then(async (user: User) => {
+        this.auth.getAuth().then(async (user: User) => {
+            if (user) {
                 this.user = user;
                 await this.getContactName();
-            });
-        }, 2000);
+            }
+        });
     }
 
     async getContactName() {

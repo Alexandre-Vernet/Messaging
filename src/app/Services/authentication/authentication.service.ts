@@ -39,7 +39,6 @@ export class AuthenticationService {
     }
 
     async getAuth(): Promise<User> {
-        console.log(this.user);
         return this.user;
     }
 
