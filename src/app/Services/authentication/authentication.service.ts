@@ -26,7 +26,6 @@ export class AuthenticationService {
     user: User;
     db = getFirestore();
     auth = getAuth();
-    firebaseError: string = '';
 
     constructor(
         private router: Router,
@@ -34,59 +33,34 @@ export class AuthenticationService {
     ) {
     }
 
+    getUser() {
+        return this.user;
+    }
+
     async getAuth(): Promise<User> {
         return this.user;
     }
 
-    async getById(userId: string) {
-        const docRef = doc(this.db, 'users', userId);
-        const docSnap = await getDoc(docRef);
-        let user: User;
-
-        if (docSnap.exists()) {
-            const id = docSnap.id;
-            const {
-                firstName,
-                lastName,
-                email,
-                profilePicture,
-                dateCreation,
-            } = docSnap.data();
-
-            user = new User(
-                id,
-                firstName,
-                lastName,
-                email,
-                profilePicture,
-                dateCreation,
-            );
-        } else {
-            // doc.data() will be undefined in this case
-            console.log('No such document!');
-        }
-
-        return user;
-    }
-
     signIn(email: string, password: string) {
-        signInWithEmailAndPassword(this.auth, email, password)
-            .then(async (userCredential) => {
-                // Signed in
-                const user = userCredential.user;
+        return new Promise((resolve, reject) => {
+            signInWithEmailAndPassword(this.auth, email, password)
+                .then(async (userCredential) => {
+                    // Signed in
+                    const user = userCredential.user;
 
-                // Get user data
-                const docRef = doc(this.db, 'users', user.uid);
-                const docSnap = await getDoc(docRef);
+                    // Get user data
+                    const docRef = doc(this.db, 'users', user.uid);
+                    const docSnap = await getDoc(docRef);
 
-                if (docSnap.exists()) {
                     //  Set data
                     const id = docSnap.id;
-                    const firstName = docSnap.data()?.firstName;
-                    const lastName = docSnap.data()?.lastName;
-                    const email = docSnap.data()?.email;
-                    const profilePicture = docSnap.data()?.profilePicture;
-                    const dateCreation = docSnap.data()?.dateCreation;
+                    const {
+                        firstName,
+                        lastName,
+                        email,
+                        profilePicture,
+                        dateCreation,
+                    } = docSnap.data();
 
                     this.user = new User(
                         id,
@@ -102,23 +76,14 @@ export class AuthenticationService {
                     localStorage.setItem('email', email);
                     localStorage.setItem('password', hashPassword);
 
-                    // Clear error
-                    // this.firebaseError = '';
-
-                    let url = window.location.pathname;
-                    if (url != '/sign-in') {
-                        await this.router.navigate([url]);
-                    } else {
-                        await this.router.navigate(['/home']);
-                    }
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-                this.firebaseError = error.message;
-            });
-        return this.firebaseError;
-    };
+                    // Return user
+                    resolve(this.user);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
 
     signUp(
         firstName: string,
@@ -126,97 +91,87 @@ export class AuthenticationService {
         email: string,
         password: string
     ) {
-        createUserWithEmailAndPassword(this.auth, email, password)
-            .then(async (userCredential) => {
-                // Signed in
-                const user = userCredential.user;
+        return new Promise((resolve, reject) => {
+            createUserWithEmailAndPassword(this.auth, email, password)
+                .then(async (userCredential) => {
+                    // Signed in
+                    const user = userCredential.user;
 
-                await setDoc(doc(this.db, 'users', user.uid), {
-                    firstName: firstName,
-                    lastName: lastName,
-                    email: email,
-                    dateCreation: new Date(),
-                })
-                    .then(() => {
-                        // Clear error
-                        this.firebaseError = '';
-
-                        this.router.navigate(['/sign-in']);
+                    await setDoc(doc(this.db, 'users', user.uid), {
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email,
+                        dateCreation: new Date(),
                     })
-                    .catch((error) => {
-                        console.error(error);
-
-                        this.firebaseError = error.message;
-                    });
-            })
-            .catch((error) => {
-                console.error(error);
-                this.firebaseError = error.message;
-            });
-
-        return this.firebaseError;
+                        .then(() => {
+                            resolve(user);
+                        })
+                        .catch((error) => {
+                            reject(error);
+                        });
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
     }
 
     signInWithPopup(type: string) {
-        let provider;
-        switch (type) {
-            case'google':
-                provider = new GoogleAuthProvider();
-                break;
-            case'facebook':
-                provider = new FacebookAuthProvider();
-                break;
-            case 'github':
-                provider = new GithubAuthProvider();
-                break;
-        }
+        return new Promise((resolve, reject) => {
+            // Get provider
+            let provider;
+            switch (type) {
+                case'google':
+                    provider = new GoogleAuthProvider();
+                    break;
+                case'facebook':
+                    provider = new FacebookAuthProvider();
+                    break;
+                case 'github':
+                    provider = new GithubAuthProvider();
+                    break;
+            }
 
-        signInWithPopup(this.auth, provider)
-            .then(async (result) => {
-                const user = result.user;
+            // Sign in
+            signInWithPopup(this.auth, provider)
+                .then(async (result) => {
+                    const user = result.user;
 
-                // Get data from account
-                const firstName = result.user?.displayName?.split(' ')[0];
-                const lastName = result.user?.displayName?.split(' ')[1];
-                const email = result.user?.email;
-                const profilePicture = result.user?.photoURL;
+                    // Get data from account
+                    const firstName = result.user?.displayName?.split(' ')[0];
+                    const lastName = result.user?.displayName?.split(' ')[1];
+                    const email = result.user?.email;
+                    const profilePicture = result.user?.photoURL;
 
-                // Set users data
-                this.user = new User(
-                    user.uid,
-                    firstName,
-                    lastName,
-                    email,
-                    profilePicture,
-                    new Date(),
-                );
+                    // Set users data
+                    this.user = new User(
+                        user.uid,
+                        firstName,
+                        lastName,
+                        email,
+                        profilePicture,
+                        new Date(),
+                    );
 
-                // Save user in firestore
-                await setDoc(doc(this.db, 'users', user.uid), {
-                    firstName: firstName,
-                    lastName: lastName,
-                    email: email,
-                    dateCreation: new Date(),
-                    profilePicture: profilePicture
-                })
-                    .then(() => {
-                        // Clear error
-                        this.firebaseError = '';
-
-                        // Navigate to home
-                        this.router.navigate(['home']);
+                    // Save user in firestore
+                    await setDoc(doc(this.db, 'users', user.uid), {
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email,
+                        dateCreation: new Date(),
+                        profilePicture: profilePicture
                     })
-                    .catch((error) => {
-                        console.error(error);
-                        Toast.error('An error occurred, please sign in with your email and password');
-                        this.firebaseError = error.message;
-                    });
-            })
-            .catch((error) => {
-                console.error(error);
-                Toast.error('An error occurred, please sign in with your email and password');
-                this.firebaseError = error.message;
-            });
+                        .then(() => {
+                            resolve(user);
+                        })
+                        .catch((error) => {
+                            reject(error);
+                        });
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
     }
 
     resetPassword(emailAddress: string) {
@@ -255,7 +210,7 @@ export class AuthenticationService {
             });
     }
 
-    updateEmail = (email: string) => {
+    updateEmail(email: string) {
         const userId = this.user.id;
         const userRef = doc(this.db, 'users', userId);
 
@@ -275,8 +230,7 @@ export class AuthenticationService {
                 console.error(error);
                 Toast.error(error.message);
             });
-    };
-
+    }
 
     updatePassword(newPassword: string) {
         const user = this.auth.currentUser;
@@ -320,7 +274,11 @@ export class AuthenticationService {
                     .then(async () => {
                         Toast.success('Your account has been successfully deleted');
 
-                        await this.router.navigate(['/sign-up']);
+                        // Clear local storage
+                        localStorage.clear();
+
+                        // Sign-out
+                        await this.signOut();
                     })
                     .catch((error) => {
                         console.error(error);

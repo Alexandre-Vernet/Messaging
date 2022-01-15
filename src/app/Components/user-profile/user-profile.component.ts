@@ -16,8 +16,8 @@ export class UserProfileComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        setTimeout(() => {
-            this.user = this.auth.user;
-        }, 1500);
+        this.auth.getAuth().then((user) => {
+            this.user = user;
+        });
     }
 }

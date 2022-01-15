@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/Services/authentication/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-sign-up',
     templateUrl: './sign-up.component.html',
     styleUrls: ['./sign-up.component.scss'],
 })
-export class SignUpComponent implements OnInit {
+export class SignUpComponent {
     firebaseError: string = '';
     _viewPassword: boolean = false;
 
@@ -19,20 +20,19 @@ export class SignUpComponent implements OnInit {
             Validators.required,
             Validators.minLength(6),
         ]),
-        confirmPassword: new FormControl('alexandre', [
+        confirmPassword: new FormControl('', [
             Validators.required,
             Validators.minLength(6),
         ]),
     });
 
-    constructor(private auth: AuthenticationService) {
+    constructor(
+        private auth: AuthenticationService,
+        private router: Router
+    ) {
     }
 
-    ngOnInit() {
-        this.firebaseError = this.auth.firebaseError;
-    }
-
-    signUp() {
+    async signUp() {
         // Get value from form
         const firstName = this.form.value.firstName;
         const lastName = this.form.value.lastName;
@@ -40,24 +40,29 @@ export class SignUpComponent implements OnInit {
         const password = this.form.value.password;
 
         // Sign-up
-        const error = this.auth.signUp(firstName, lastName, email, password);
-        switch (error) {
-            case 'Firebase: Error (auth/email-already-in-use).':
-                this.firebaseError = 'Email is already in use.';
-                break;
-        }
+        this.auth.signUp(firstName, lastName, email, password).then((user) => {
+            if (user) {
+                // Sign in
+                this.auth.signIn(email, password).then((user) => {
+                    if (user) {
+                        // Redirect to home
+                        this.router.navigate(['/']);
+                    }
+                });
+            }
+        }).catch((error) => {
+            this.firebaseError = error.message;
+        });
     }
 
-    googleSignUp() {
-        this.auth.signInWithPopup('google');
-    }
-
-    facebookSignUp() {
-        this.auth.signInWithPopup('facebook');
-    }
-
-    githubSignUp() {
-        this.auth.signInWithPopup('github');
+    async signInWithPopup(type: string) {
+        this.auth.signInWithPopup(type).then((user) => {
+            if (user) {
+                this.router.navigate(['conversation/ZsPWwcDMASeNVjYMk4kc']);
+            }
+        }).catch((error) => {
+            this.firebaseError = error.message;
+        });
     }
 
     viewPassword() {

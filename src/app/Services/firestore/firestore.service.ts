@@ -34,6 +34,37 @@ export class FirestoreService {
         }, 2000);
     }
 
+    async getUserById(userId: string) {
+        const docRef = doc(this.db, 'users', userId);
+        const docSnap = await getDoc(docRef);
+        let user: User;
+
+        if (docSnap.exists()) {
+            const id = docSnap.id;
+            const {
+                firstName,
+                lastName,
+                email,
+                profilePicture,
+                dateCreation,
+            } = docSnap.data();
+
+            user = new User(
+                id,
+                firstName,
+                lastName,
+                email,
+                profilePicture,
+                dateCreation,
+            );
+        } else {
+            // doc.data() will be undefined in this case
+            console.log('No such document!');
+        }
+
+        return user;
+    }
+
     async getMessages(conversationId: string = 'ZsPWwcDMASeNVjYMk4kc'): Promise<Message[]> {
         const q = query(collection(this.db, 'conversations'));
         // Listen for new messages
@@ -49,7 +80,7 @@ export class FirestoreService {
 
                         for (let userId in dataObject) {
                             // Get user id
-                            await this.auth.getById(userId).then((user) => {
+                            await this.getUserById(userId).then((user) => {
 
                                 // Get id message
                                 const idMessage = Object.keys(dataObject[userId]);
@@ -218,7 +249,7 @@ export class FirestoreService {
             for (let userId in dataObject) {
 
                 if (userId !== this.user.id) {
-                    await this.auth.getById(userId).then((user) => {
+                    await this.getUserById(userId).then((user) => {
                         contactName = user;
                     });
                 }

@@ -28,13 +28,13 @@ export class AppComponent implements OnInit {
         // Check connection
         if (email && password) {
             const hashPassword = this.cryptoService.decrypt(password);
-            this.auth.signIn(email, hashPassword);
+            this.auth.signIn(email, hashPassword).then((user) => {
+                if (user) {
+                    this.router.navigate([url]);
+                }
+            });
         } else {
-            if (url == '/sign-up') {
-                await this.router.navigate(['/sign-up']);
-            } else {
-                await this.router.navigate(['sign-in']);
-            }
+            await this.router.navigateByUrl('/sign-in');
         }
     }
 }
