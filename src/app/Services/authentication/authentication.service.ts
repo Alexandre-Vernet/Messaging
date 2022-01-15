@@ -118,6 +118,7 @@ export class AuthenticationService {
 
     signInWithPopup(type: string) {
         return new Promise((resolve, reject) => {
+            // Get provider
             let provider;
             switch (type) {
                 case'google':
@@ -131,6 +132,7 @@ export class AuthenticationService {
                     break;
             }
 
+            // Sign in
             signInWithPopup(this.auth, provider)
                 .then(async (result) => {
                     const user = result.user;

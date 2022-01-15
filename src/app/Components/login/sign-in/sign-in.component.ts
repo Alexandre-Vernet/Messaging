@@ -41,32 +41,9 @@ export class SignInComponent {
         });
     }
 
-    async googleSignUp() {
-        this.auth.signInWithPopup('google').then((user) => {
+    async signInWithPopup(type: string) {
+        this.auth.signInWithPopup(type).then((user) => {
             if (user) {
-
-                this.router.navigate(['home']);
-            }
-        }).catch((error) => {
-            this.firebaseError = error.message;
-        });
-    }
-
-    async facebookSignUp() {
-        this.auth.signInWithPopup('facebook').then((user) => {
-            if (user) {
-
-                this.router.navigate(['home']);
-            }
-        }).catch((error) => {
-            this.firebaseError = error.message;
-        });
-    }
-
-    async githubSignUp() {
-        this.auth.signInWithPopup('github').then((user) => {
-            if (user) {
-
                 this.router.navigate(['home']);
             }
         }).catch((error) => {
