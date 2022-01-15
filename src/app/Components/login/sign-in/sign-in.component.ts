@@ -41,16 +41,37 @@ export class SignInComponent {
         });
     }
 
-    googleSignUp() {
-        this.auth.signInWithPopup('google');
+    async googleSignUp() {
+        this.auth.signInWithPopup('google').then((user) => {
+            if (user) {
+
+                this.router.navigate(['home']);
+            }
+        }).catch((error) => {
+            this.firebaseError = error.message;
+        });
     }
 
-    facebookSignUp() {
-        this.auth.signInWithPopup('facebook');
+    async facebookSignUp() {
+        this.auth.signInWithPopup('facebook').then((user) => {
+            if (user) {
+
+                this.router.navigate(['home']);
+            }
+        }).catch((error) => {
+            this.firebaseError = error.message;
+        });
     }
 
-    githubSignUp() {
-        this.auth.signInWithPopup('github');
+    async githubSignUp() {
+        this.auth.signInWithPopup('github').then((user) => {
+            if (user) {
+
+                this.router.navigate(['home']);
+            }
+        }).catch((error) => {
+            this.firebaseError = error.message;
+        });
     }
 
     viewPassword() {

@@ -80,7 +80,6 @@ export class AuthenticationService {
                     resolve(this.user);
                 })
                 .catch((error) => {
-                    console.error(error);
                     reject(error);
                 });
         });
@@ -108,72 +107,69 @@ export class AuthenticationService {
                             resolve(user);
                         })
                         .catch((error) => {
-                            console.error(error);
                             reject(error);
                         });
                 })
                 .catch((error) => {
-                    console.error(error);
                     reject(error);
                 });
         });
     }
 
     signInWithPopup(type: string) {
-        let provider;
-        switch (type) {
-            case'google':
-                provider = new GoogleAuthProvider();
-                break;
-            case'facebook':
-                provider = new FacebookAuthProvider();
-                break;
-            case 'github':
-                provider = new GithubAuthProvider();
-                break;
-        }
+        return new Promise((resolve, reject) => {
+            let provider;
+            switch (type) {
+                case'google':
+                    provider = new GoogleAuthProvider();
+                    break;
+                case'facebook':
+                    provider = new FacebookAuthProvider();
+                    break;
+                case 'github':
+                    provider = new GithubAuthProvider();
+                    break;
+            }
 
-        signInWithPopup(this.auth, provider)
-            .then(async (result) => {
-                const user = result.user;
+            signInWithPopup(this.auth, provider)
+                .then(async (result) => {
+                    const user = result.user;
 
-                // Get data from account
-                const firstName = result.user?.displayName?.split(' ')[0];
-                const lastName = result.user?.displayName?.split(' ')[1];
-                const email = result.user?.email;
-                const profilePicture = result.user?.photoURL;
+                    // Get data from account
+                    const firstName = result.user?.displayName?.split(' ')[0];
+                    const lastName = result.user?.displayName?.split(' ')[1];
+                    const email = result.user?.email;
+                    const profilePicture = result.user?.photoURL;
 
-                // Set users data
-                this.user = new User(
-                    user.uid,
-                    firstName,
-                    lastName,
-                    email,
-                    profilePicture,
-                    new Date(),
-                );
+                    // Set users data
+                    this.user = new User(
+                        user.uid,
+                        firstName,
+                        lastName,
+                        email,
+                        profilePicture,
+                        new Date(),
+                    );
 
-                // Save user in firestore
-                await setDoc(doc(this.db, 'users', user.uid), {
-                    firstName: firstName,
-                    lastName: lastName,
-                    email: email,
-                    dateCreation: new Date(),
-                    profilePicture: profilePicture
-                })
-                    .then(() => {
-                        // Navigate to home
-                        this.router.navigate(['home']);
+                    // Save user in firestore
+                    await setDoc(doc(this.db, 'users', user.uid), {
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email,
+                        dateCreation: new Date(),
+                        profilePicture: profilePicture
                     })
-                    .catch((error) => {
-                        console.error(error);
-                        Toast.error('An error occurred, please sign in with your email and password');
-                    });
-            })
-            .catch((error) => {
-                console.error(error);
-                Toast.error('An error occurred, please sign in with your email and password');
-            });
+                        .then(() => {
+                            resolve(user);
+                        })
+                        .catch((error) => {
+                            reject(error);
+                        });
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
     }
 
     resetPassword(emailAddress: string) {
