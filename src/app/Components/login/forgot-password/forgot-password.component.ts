@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../../Services/authentication/authentication.service';
 
@@ -18,21 +18,16 @@ export class ForgotPasswordComponent {
 
     firebaseError: string = '';
 
-    @ViewChild('modalResetPassword') modalResetPassword;
-
     constructor(
         private auth: AuthenticationService
     ) {
     }
 
-    resetPassword = () => {
-        // Hide modalResetPassword
-        this.modalResetPassword.nativeElement.click();
-
+    resetPassword() {
         // Get email
         const emailAddress = this.formReset.value.emailReset;
 
         // Send email reset password
         this.auth.resetPassword(emailAddress);
-    };
+    }
 }
