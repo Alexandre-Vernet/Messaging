@@ -1,9 +1,9 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { StorageService } from '../../../Services/storage/storage.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { FirestoreService } from '../../../Services/firestore/firestore.service';
 import { User } from '../../../class/user';
-import { AuthenticationService } from '../../../Services/authentication/authentication.service';
+import { FirestoreService } from '../../../services/firestore/firestore.service';
+import { AuthenticationService } from '../../../services/authentication/authentication.service';
+import { StorageService } from '../../../services/storage/storage.service';
 
 @Component({
     selector: 'app-editor',

@@ -1,8 +1,8 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthenticationService } from './Services/authentication/authentication.service';
-import { CryptoService } from './Services/crypto/crypto.service';
+import { AuthenticationService } from './services/authentication/authentication.service';
+import { CryptoService } from './services/crypto/crypto.service';
 
 @Component({
     selector: 'app-root',

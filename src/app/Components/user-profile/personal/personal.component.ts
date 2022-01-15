@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { User } from '../../../class/user';
-import { StorageService } from '../../../Services/storage/storage.service';
-import { AuthenticationService } from '../../../Services/authentication/authentication.service';
+import { AuthenticationService } from '../../../services/authentication/authentication.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { StorageService } from '../../../services/storage/storage.service';
 
 @Component({
     selector: 'app-personal',

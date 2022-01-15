@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthenticationService } from '../../../Services/authentication/authentication.service';
 import { User } from '../../../class/user';
+import { AuthenticationService } from '../../../services/authentication/authentication.service';
 
 @Component({
     selector: 'app-security',

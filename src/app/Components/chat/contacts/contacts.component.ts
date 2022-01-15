@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FirestoreService } from '../../../Services/firestore/firestore.service';
 import { User } from '../../../class/user';
+import { FirestoreService } from '../../../services/firestore/firestore.service';
 
 @Component({
     selector: 'app-contacts',
