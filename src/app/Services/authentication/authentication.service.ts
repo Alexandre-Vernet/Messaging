@@ -26,7 +26,6 @@ export class AuthenticationService {
     user: User;
     db = getFirestore();
     auth = getAuth();
-    firebaseError: string = '';
 
     constructor(
         private router: Router,
@@ -163,22 +162,17 @@ export class AuthenticationService {
                     profilePicture: profilePicture
                 })
                     .then(() => {
-                        // Clear error
-                        this.firebaseError = '';
-
                         // Navigate to home
                         this.router.navigate(['home']);
                     })
                     .catch((error) => {
                         console.error(error);
                         Toast.error('An error occurred, please sign in with your email and password');
-                        this.firebaseError = error.message;
                     });
             })
             .catch((error) => {
                 console.error(error);
                 Toast.error('An error occurred, please sign in with your email and password');
-                this.firebaseError = error.message;
             });
     }
 
@@ -282,7 +276,11 @@ export class AuthenticationService {
                     .then(async () => {
                         Toast.success('Your account has been successfully deleted');
 
-                        await this.router.navigate(['/sign-up']);
+                        // Clear local storage
+                        localStorage.clear();
+
+                        // Sign-out
+                        await this.signOut();
                     })
                     .catch((error) => {
                         console.error(error);

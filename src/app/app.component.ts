@@ -33,12 +33,6 @@ export class AppComponent implements OnInit {
                     this.router.navigate([url]);
                 }
             });
-        } else {
-            if (url === '/sign-up') {
-                await this.router.navigate(['/sign-up']);
-            } else {
-                await this.router.navigate(['sign-in']);
-            }
         }
     }
 }
