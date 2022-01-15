@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../../Services/authentication/authentication.service';
 
@@ -7,7 +7,9 @@ import { AuthenticationService } from '../../../Services/authentication/authenti
     templateUrl: './forgot-password.component.html',
     styleUrls: ['./forgot-password.component.scss']
 })
-export class ForgotPasswordComponent {
+export class ForgotPasswordComponent implements OnChanges {
+
+    @Input() emailAddress;
 
     formReset = new FormGroup({
         emailReset: new FormControl('', [
@@ -21,6 +23,13 @@ export class ForgotPasswordComponent {
     constructor(
         private auth: AuthenticationService
     ) {
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        // Fill the form with the email address
+        if (changes.emailAddress) {
+            this.formReset.controls['emailReset'].setValue(changes.emailAddress.currentValue);
+        }
     }
 
     resetPassword() {
