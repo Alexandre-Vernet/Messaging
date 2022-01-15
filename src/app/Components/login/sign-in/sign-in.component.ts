@@ -44,7 +44,7 @@ export class SignInComponent {
     async signInWithPopup(type: string) {
         this.auth.signInWithPopup(type).then((user) => {
             if (user) {
-                this.router.navigate(['home']);
+                this.router.navigate(['conversation/ZsPWwcDMASeNVjYMk4kc']);
             }
         }).catch((error) => {
             this.firebaseError = error.message;

@@ -32,7 +32,6 @@ export class SignUpComponent {
     ) {
     }
 
-
     async signUp() {
         // Get value from form
         const firstName = this.form.value.firstName;
@@ -54,19 +53,16 @@ export class SignUpComponent {
         }).catch((error) => {
             this.firebaseError = error.message;
         });
-
     }
 
-    googleSignUp() {
-        this.auth.signInWithPopup('google');
-    }
-
-    facebookSignUp() {
-        this.auth.signInWithPopup('facebook');
-    }
-
-    githubSignUp() {
-        this.auth.signInWithPopup('github');
+    async signInWithPopup(type: string) {
+        this.auth.signInWithPopup(type).then((user) => {
+            if (user) {
+                this.router.navigate(['conversation/ZsPWwcDMASeNVjYMk4kc']);
+            }
+        }).catch((error) => {
+            this.firebaseError = error.message;
+        });
     }
 
     viewPassword() {
