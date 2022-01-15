@@ -18,8 +18,8 @@ export class AuthGuard implements CanActivate {
                 if (user) {
                     resolve(true);
                 } else {
+                    this.router.createUrlTree(['/sign-in']);
                     resolve(false);
-                    await this.router.createUrlTree(['/sign-in']);
                 }
             });
         });
