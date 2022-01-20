@@ -1,25 +1,21 @@
 import { File } from './file';
+import { User } from './user';
 
 export class Message {
 
     private _id: string;
-    private _email: string;
-    private _firstName: string;
-    private _lastName: string;
     private _message: string;
     private _file: File;
     private _date: Date;
+    private _user: User;
 
-    constructor(id: string, email: string, firstName: string, lastName: string, message: string, file: File, date: Date) {
+    constructor(id: string, message: string, file: File, date: Date, user: User) {
         this._id = id;
-        this._email = email;
-        this._firstName = firstName;
-        this._lastName = lastName;
         this._message = message;
         this._file = file;
         this._date = date;
+        this._user = user;
     }
-
 
     get id(): string {
         return this._id;
@@ -29,34 +25,6 @@ export class Message {
         this._id = value;
     }
 
-
-    get email(): string {
-        return this._email;
-    }
-
-    set email(value: string) {
-        this._email = value;
-    }
-
-
-    get firstName(): string {
-        return this._firstName;
-    }
-
-    set firstName(value: string) {
-        this._firstName = value;
-    }
-
-
-    get lastName(): string {
-        return this._lastName;
-    }
-
-    set lastName(value: string) {
-        this._lastName = value;
-    }
-
-
     get message(): string {
         return this._message;
     }
@@ -64,7 +32,6 @@ export class Message {
     set message(value: string) {
         this._message = value;
     }
-
 
     get file(): File {
         return this._file;
@@ -74,12 +41,19 @@ export class Message {
         this._file = value;
     }
 
-
     get date(): Date {
         return this._date;
     }
 
     set date(value: Date) {
         this._date = value;
+    }
+
+    get user(): User {
+        return this._user;
+    }
+
+    set user(value: User) {
+        this._user = value;
     }
 }
