@@ -16,8 +16,8 @@ import {
     updatePassword
 } from 'firebase/auth';
 import { deleteDoc, doc, getDoc, getFirestore, setDoc, updateDoc, } from 'firebase/firestore';
-import { CryptoService } from '../crypto/crypto.service';
 import { Toast } from '../../class/toast';
+import { CryptoService } from '../crypto/crypto.service';
 
 @Injectable({
     providedIn: 'root',

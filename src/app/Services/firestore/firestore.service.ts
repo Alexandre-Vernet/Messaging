@@ -5,18 +5,15 @@ import {
     getDoc,
     getDocs,
     getFirestore,
-    limit,
     onSnapshot,
-    orderBy,
     query,
     setDoc,
     updateDoc,
-    where,
 } from 'firebase/firestore';
 import { Message } from 'src/app/class/message';
 import { User } from 'src/app/class/user';
-import { AuthenticationService } from '../authentication/authentication.service';
 import { Toast } from '../../class/toast';
+import { AuthenticationService } from '../authentication/authentication.service';
 
 @Injectable({
     providedIn: 'root',
@@ -89,7 +86,7 @@ export class FirestoreService {
                                     const { message, file, date } = dataObject[userId][msgId];
 
                                     // Create message
-                                    const messageObject = new Message(msgId, user.email, user.firstName, user.lastName, message, file, date);
+                                    const messageObject = new Message(msgId, message, file, date, user);
 
                                     // If message doesn't exist, add it to array
                                     // Else, update it
@@ -152,7 +149,7 @@ export class FirestoreService {
                     idMessage.forEach((msgId) => {
                         if (msgId === messageId) {
                             const { message, file, date } = dataObject[userId][msgId];
-                            messageToEdit = new Message(msgId, this.user.email, this.user.firstName, this.user.lastName, message, file, date);
+                            messageToEdit = new Message(msgId, message, file, date, this.user);
                         }
                     });
                 }
@@ -165,26 +162,23 @@ export class FirestoreService {
 
     // Get last message send by user
     async getLastMessage() {
-        const messageRef = query(collection(this.db, 'messages'));
 
-        // Get message with the highest date
-        const q = query(
-            messageRef,
-            where('email', '==', this.user.email),
-            orderBy('date', 'desc'),
-            limit(1)
-        );
+        const messages: Message[] = [];
 
-        const querySnapshot = await getDocs(q);
-
-        let lastMessage: Message;
-
-        querySnapshot.forEach((docRef) => {
-            const id = docRef.id;
-            const { email, firstName, lastName, message, file, date } = docRef.data();
-            lastMessage = new Message(id, email, firstName, lastName, message, file, date);
+        // Get messages of users
+        this.messages.forEach((message) => {
+            if (message.user.id === this.user.id) {
+                messages.push(message);
+            }
         });
-        return lastMessage;
+
+        // Sort messages by date
+        messages.sort((a: any, b: any) => {
+            return a.date - b.date;
+        });
+
+        // Return last message send by user
+        return messages[messages.length - 1];
     }
 
     // Edit message

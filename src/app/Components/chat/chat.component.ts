@@ -3,9 +3,9 @@ import { User } from '../../class/user';
 import { Message } from '../../class/message';
 import { File } from '../../class/file';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthenticationService } from '../../Services/authentication/authentication.service';
-import { FirestoreService } from '../../Services/firestore/firestore.service';
+import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { ActivatedRoute } from '@angular/router';
+import { FirestoreService } from '../../services/firestore/firestore.service';
 
 @Component({
     selector: 'app-chat',
