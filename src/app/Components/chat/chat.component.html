@@ -44,14 +44,14 @@
 
                                             <!-- Get all messages -->
                                             <div *ngFor="let message of messages">
-                                                <div *ngIf="message?.email !== user?.email">
+                                                <div *ngIf="message?.user.email !== user?.email">
 
                                                     <!-- Other's messages -->
                                                     <div class="chat is-you">
                                                         <div class="chat-avatar">
                                                             <div class="user-avatar bg-purple">
-                                                                <span> {{message.firstName.charAt(0) + "" +
-                                                                message.lastName.charAt(0)}} </span>
+                                                                <span> {{message.user.firstName.charAt(0) + "" +
+                                                                message.user.lastName.charAt(0)}} </span>
                                                             </div>
                                                         </div>
                                                         <div class="chat-content">
@@ -112,12 +112,12 @@
                                                                             </a>
                                                                         </ng-container>
                                                                     </ng-container>
-                                                                    
+
                                                                 </div>
                                                             </div>
                                                             <!-- User & Date -->
                                                             <ul class="chat-meta">
-                                                                <li> {{message.firstName + " " + message.lastName}}
+                                                                <li> {{message.user.firstName + " " + message.user.lastName}}
                                                                 </li>
                                                                 <li> {{formatDate(message.date)}} </li>
                                                             </ul>
@@ -126,7 +126,7 @@
                                                 </div>
 
                                                 <!-- User's messages -->
-                                                <div *ngIf="message?.email === user?.email">
+                                                <div *ngIf="message?.user.email === user?.email">
 
                                                     <div class="chat is-me">
                                                         <div class="chat-content">
