@@ -133,10 +133,15 @@
             <ul *ngFor="let user of users" class="chat-list">
                 <li class="chat-item is-unread">
                     <a [routerLink]="['/conversation/ZsPWwcDMASeNVjYMk4kc']" class="chat-link chat-open">
-                        <div class="chat-media user-avatar">
-                            <span>AB</span>
-                            <span class="status dot dot-lg dot-gray"></span>
-                        </div>
+                        <ng-container *ngIf="user.profilePicture; else elseBlock">
+                            <img [src]="user.profilePicture" alt="profile picture" class="profilePicture">
+                        </ng-container>
+                        <ng-template #elseBlock>
+                            <div class="chat-media user-avatar">
+                                <span>{{user.firstName.charAt(0)}}{{user.lastName.charAt(0)}}</span>
+                                <span class="status dot dot-lg dot-gray"></span>
+                            </div>
+                        </ng-template>
                         <div class="chat-info">
                             <div class="chat-from">
                                 <div class="name">{{user.firstName}} {{user.lastName}}</div>
