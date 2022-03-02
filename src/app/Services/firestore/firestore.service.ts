@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
+    addDoc,
     collection,
     doc,
     getDoc,
@@ -110,6 +111,13 @@ export class FirestoreService {
         });
 
         return this.messages;
+    }
+
+    async createConversation(userId) {
+        await addDoc(collection(this.db, 'conversations'), {
+            [this.user.id]: {},
+            [userId]: {}
+        });
     }
 
     async sendMessage(conversationId: string, newMessage: string, isAFile?) {

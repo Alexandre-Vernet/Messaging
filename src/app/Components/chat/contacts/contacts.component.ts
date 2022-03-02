@@ -19,4 +19,8 @@ export class ContactsComponent implements OnInit {
             this.users = users;
         });
     }
+
+    createConversation(userId: string): void {
+        this.firestore.createConversation(userId);
+    }
 }
