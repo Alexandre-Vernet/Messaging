@@ -113,7 +113,7 @@ export class FirestoreService {
         return this.messages;
     }
 
-    async createConversation(userId) {
+    async createConversation(userId: string) {
         return new Promise(async (resolve) => {
             const docRef = await addDoc(collection(this.db, 'conversations'), {
                 [this.user.id]: {},
