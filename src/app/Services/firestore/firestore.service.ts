@@ -113,14 +113,20 @@ export class FirestoreService {
         return this.messages;
     }
 
-    async createConversation(userId: string) {
+    async createConversation(user: User) {
+        console.log(user.id);
         return new Promise(async (resolve) => {
-            const docRef = await addDoc(collection(this.db, 'conversations'), {
-                [this.user.id]: {},
-                [userId]: {}
+            // If conversation with user doesn't exist, create it
+            const querySnapshot = await getDocs(collection(this.db, 'conversations'));
+            querySnapshot.forEach((doc) => {
+                const usersId = Object.keys(doc.data());
+                console.log(usersId);
             });
 
-            resolve(docRef.id);
+            const docRef = await addDoc(collection(this.db, 'conversations'), {
+                [this.user.id]: {},
+                [user.id]: {}
+            });
         });
     }
 

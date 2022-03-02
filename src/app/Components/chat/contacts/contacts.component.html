@@ -57,8 +57,8 @@
         <div class="nk-chat-list">
             <h6 class="title overline-title-alt">Messages</h6>
             <ul *ngFor="let user of users" class="chat-list">
-                <li class="chat-item is-unread" (click)="createConversation(user.id)">
-                    <a [routerLink]="['/conversation/ZsPWwcDMASeNVjYMk4kc']" class="chat-link chat-open">
+                <li class="chat-item is-unread" (click)="createConversation(user)">
+                    <a class="chat-link chat-open">
                         <ng-container *ngIf="user.profilePicture; else noProfilePicture">
                             <img [src]="user.profilePicture" alt="profile picture" class="profilePicture">
                         </ng-container>

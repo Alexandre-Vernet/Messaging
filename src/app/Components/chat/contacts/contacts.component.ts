@@ -25,8 +25,8 @@ export class ContactsComponent implements OnInit {
         });
     }
 
-    createConversation(userId: string): void {
-        this.firestore.createConversation(userId).then(async (conversationId) => {
+    createConversation(user: User): void {
+        this.firestore.createConversation(user).then(async (conversationId) => {
             await this.router.navigate(['/conversation/' + conversationId]);
         }).catch((error) => {
             console.error(error);
