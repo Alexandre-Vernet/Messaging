@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { User } from '../../../class/user';
 import { FirestoreService } from '../../../services/firestore/firestore.service';
+import { Toast } from '../../../class/toast';
 
 @Component({
     selector: 'app-contacts',
@@ -11,7 +13,10 @@ export class ContactsComponent implements OnInit {
 
     users: User[] = [];
 
-    constructor(private firestore: FirestoreService) {
+    constructor(
+        private firestore: FirestoreService,
+        private router: Router
+    ) {
     }
 
     ngOnInit(): void {
@@ -21,6 +26,11 @@ export class ContactsComponent implements OnInit {
     }
 
     createConversation(userId: string): void {
-        this.firestore.createConversation(userId);
+        this.firestore.createConversation(userId).then(async (conversationId) => {
+            await this.router.navigate(['/conversation/' + conversationId]);
+        }).catch((error) => {
+            console.error(error);
+            Toast.error('Error creating conversation', error.message);
+        });
     }
 }
